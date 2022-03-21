@@ -1,9 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
 using System.Collections.Generic;
-
 
 namespace Jokemon_Team_1
 {
@@ -12,58 +10,52 @@ namespace Jokemon_Team_1
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        private Player playerSprite;
-        private Player playerSprite2;
-
-        private Building home1;
-        private Building home2;
-
-        private Building lab;
+        private Tree[,] bigTreeTypeSide = new Tree[2, 10];
+        private Tree[,] bigTreeTypeBottom = new Tree[2, 10];
+        private Tree[,] smallTrees = new Tree[2, 6];
+        private List<Tree> treeObjectList = new List<Tree>();
 
 
+        private Building[] houses = new Building[2];
+        private Building laboratory;
+        private List<Building> buildingObjectList = new List<Building>();
 
-        private ReadableObject sign1;
-        private ReadableObject sign2;
-        private ReadableObject sign3;
-        private ReadableObject postbox1;
-        private ReadableObject postbox2;
+        private Player player;
 
-        private Sprite[] flowerRow = new Sprite[8];
+        private Sprite flowers = new Sprite();
 
-        private Tree[] hedgeRow1 = new Tree[8];
-        private Tree[] hedgeRow2 = new Tree[8];
+        private ReadableObject[] signPosts = new ReadableObject[2];
+        private ReadableObject[] postBoxes = new ReadableObject[3];
+        private List<ReadableObject> readablesObjectList = new List<ReadableObject>();
 
-        private Tree[] treeColumn1 = new Tree[10];
-        private Tree[] treeColumn2 = new Tree[10];
-        private Tree[] treeRow1 = new Tree[6];
-        private Tree[] treeRow2 = new Tree[6];
-        private Tree[] treeRow3 = new Tree[14];
 
-        private List<Tree> treeObjects = new List<Tree>();
-        private List<Building> buildings = new List<Building>();
-        private Texture2D loadTexture;
-
-        private InputManager iManager = new InputManager();
         private PhysicsManager pManager = new PhysicsManager();
+        private InputManager iManager = new InputManager();
 
-
-
-
+        private Texture2D labTexture;
+        private Texture2D bigTreeTexture;
+        private Texture2D houseTexture;
+        private Texture2D playerTexture;
+        private Texture2D smallTreeTexture;
+        private Texture2D signTextureWood;
+        private Texture2D postBoxTexture;
 
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-
         }
 
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            _graphics.PreferredBackBufferWidth = 800;  // set this value to the desired width of your window
-            _graphics.PreferredBackBufferHeight = 800;   // set this value to the desired height of your window
+            _graphics.PreferredBackBufferWidth = 800;
+            _graphics.PreferredBackBufferHeight = 800;
+            //It's supposed to be 800, 800
             _graphics.ApplyChanges();
+
+
 
             base.Initialize();
         }
@@ -72,170 +64,101 @@ namespace Jokemon_Team_1
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            loadTexture = Content.Load<Texture2D>("Player_M");
-            playerSprite = new Player(loadTexture, new Vector2(400, 400), new Vector2(30, 50));
-            playerSprite2 = new Player(loadTexture, new Vector2(430, 400), new Vector2(30, 50));
+            // TODO: use this.Content to load your game content here
 
-            loadTexture = Content.Load<Texture2D>("House");
-            home1 = new Building(loadTexture, new Vector2(150, 150), new Vector2(150, 150));
-            home2 = new Building(loadTexture, new Vector2(500, 150), new Vector2(150, 150));
-            buildings.Add(home1);
-            buildings.Add(home2);
-            loadTexture = Content.Load<Texture2D>("Lab");
-            lab = new Building(loadTexture, new Vector2(475, 400), new Vector2(200, 150));
-            buildings.Add(lab);
+            labTexture = Content.Load<Texture2D>("Lab");
+            bigTreeTexture = Content.Load<Texture2D>("Tree_Big");
+            houseTexture = Content.Load<Texture2D>("house");
+            playerTexture = Content.Load<Texture2D>("Player_F");
+            smallTreeTexture = Content.Load<Texture2D>("Tree_Little");
+            signTextureWood = Content.Load<Texture2D>("Sign_Little");
+            postBoxTexture = Content.Load<Texture2D>("Postbox");
 
 
-            loadTexture = Content.Load<Texture2D>("Sign_Little");
-            sign1 = new ReadableObject(loadTexture, new Vector2(150, 550), new Vector2(25, 25));
-
-
-
-
-            loadTexture = Content.Load<Texture2D>("Sign_Big");
-            sign2 = new ReadableObject(loadTexture, new Vector2(290, 475), new Vector2(25, 25));
-            sign3 = new ReadableObject(loadTexture, new Vector2(565, 600), new Vector2(25, 25));
-
-
-            loadTexture = Content.Load<Texture2D>("Postbox");
-            postbox1 = new ReadableObject(loadTexture, new Vector2(115, 265), new Vector2(25, 35));
-            postbox2 = new ReadableObject(loadTexture, new Vector2(465, 265), new Vector2(25, 35));
-
-
-
-
-
-            int posX = 0;
-            int posY = 500;
-            int xOffset = 150;
-            int yOffset = 20;
-            loadTexture = Content.Load<Texture2D>("Flower_Red");
-
-
-            for (int i = 0; i < flowerRow.Length; i++)
+            //The following are TREES
+            for (int i = 0; i <= bigTreeTypeSide.GetUpperBound(0); i++)
             {
-
-                if (i % 2 != 0)
+                for (int j = 0; j <= bigTreeTypeSide.GetUpperBound(1); j++)
                 {
-                    posY = posY + yOffset;
-                    posX = ((i - 1) * 12) + xOffset;
+                    if (i == 0)
+                    {
+                        bigTreeTypeSide[i, j] = new Tree(bigTreeTexture, new Vector2(0, j * bigTreeTexture.Height * 2), new Vector2(bigTreeTexture.Width * 2, bigTreeTexture.Height * 2));
+                    }
+                    else
+                    {
+                        bigTreeTypeSide[i, j] = new Tree(bigTreeTexture, new Vector2(Window.ClientBounds.Width - bigTreeTexture.Width * 2, j * bigTreeTexture.Height * 2), new Vector2(bigTreeTexture.Width * 2, bigTreeTexture.Height * 2));
+                    }
+
+                    treeObjectList.Add(bigTreeTypeSide[i, j]);
                 }
-                else
+            }
+
+            for (int i = 0; i <= bigTreeTypeBottom.GetUpperBound(0); i++)
+            {
+                for (int j = 0; j <= bigTreeTypeBottom.GetUpperBound(1); j++)
                 {
-                    posY = 500;
-                    posX = (i * 12) + xOffset;
+                    if (i == 0)
+                    {
+                        bigTreeTypeBottom[i, j] = new Tree(bigTreeTexture, new Vector2(j * bigTreeTexture.Width * 2, 0), new Vector2(bigTreeTexture.Width * 2, bigTreeTexture.Height * 2));
+                    }
+                    else
+                    {
+                        bigTreeTypeBottom[i, j] = new Tree(bigTreeTexture, new Vector2(j * bigTreeTexture.Width * 2, Window.ClientBounds.Height - bigTreeTexture.Height * 2), new Vector2(bigTreeTexture.Width * 2, bigTreeTexture.Height * 2));
+                    }
 
+                    treeObjectList.Add(bigTreeTypeBottom[i, j]);
                 }
-
-                flowerRow[i] = new Sprite(loadTexture, new Vector2(posX, posY), new Vector2(25, 25));
-
-
-
             }
 
-
-            posX = 0;
-            posY = 475;
-            xOffset = 150;
-
-            loadTexture = Content.Load<Texture2D>("Tree_Little");
-
-
-            for (int i = 0; i < hedgeRow1.Length; i++)
+            for (int i = 0; i <= smallTrees.GetUpperBound(0); i++)
             {
-                posX = (i * 20) + xOffset;
+                for (int j = 0; j <= smallTrees.GetUpperBound(1); j++)
+                {
+                    if (i == 0)
+                    {
+                        smallTrees[i, j] = new Tree(smallTreeTexture, new Vector2(140 + j * smallTreeTexture.Width * 2, 460), new Vector2(smallTreeTexture.Width * 2, smallTreeTexture.Height));
+                    }
+                    else
+                    {
+                        smallTrees[i, j] = new Tree(smallTreeTexture, new Vector2(440 + j * smallTreeTexture.Width * 2, 660), new Vector2(smallTreeTexture.Width * 2, smallTreeTexture.Height));
+                    }
 
-                hedgeRow1[i] = new Tree(loadTexture, new Vector2(posX, posY), new Vector2(25, 25));
-
-
+                    treeObjectList.Add(smallTrees[i, j]);
+                }
             }
+            //Trees end HERE
 
-            posX = 0;
-            posY = 600;
-            xOffset = 475;
+            //The following are BUILDINGS
+            laboratory = new Building(labTexture, new Vector2(400, 500), new Vector2(labTexture.Width * 2, labTexture.Height * 2));
+            buildingObjectList.Add(laboratory);
 
-            for (int i = 0; i < hedgeRow2.Length; i++)
+            for (int i = 0; i <= houses.GetUpperBound(0); i++)
             {
-                posX = (i * 20) + xOffset;
-
-                hedgeRow2[i] = new Tree(loadTexture, new Vector2(posX, posY), new Vector2(25, 25));
-
-
+                houses[i] = new Building(houseTexture, new Vector2(), new Vector2(houseTexture.Width * 2, houseTexture.Height * 2));
+                buildingObjectList.Add(houses[i]);
             }
+            houses[0].spritePosition = new Vector2(Window.ClientBounds.Width / 3 - houses[0].spriteTexture.Width, 200);
+            houses[1].spritePosition = new Vector2(2 * Window.ClientBounds.Width / 3 - houses[1].spriteTexture.Width, 200);
+            //Buildings end HERE
 
-
-            posX = 0;
-            posY = 0;
-            loadTexture = Content.Load<Texture2D>("Tree_Big");
-
-            for (int i = 0; i < treeColumn1.Length; i++)
+            //The following are READABLE OBJECTS
+            for (int i = 0; i <= signPosts.GetUpperBound(0); i++)
             {
-
-                posX = 0;
-                posY = (i * 80);
-                treeColumn1[i] = new Tree(loadTexture, new Vector2(posX, posY), new Vector2(60, 100));
-                treeObjects.Add(treeColumn1[i]);
+                signPosts[i] = new ReadableObject(signTextureWood, new Vector2(), new Vector2(signTextureWood.Width * 2, signTextureWood.Height * 2));
+                readablesObjectList.Add(signPosts[i]);
             }
+            signPosts[0].spritePosition = new Vector2(smallTrees[0, smallTrees.GetUpperBound(1)].spritePosition.X + signPosts[0].spriteTexture.Width * 2, smallTrees[0, smallTrees.GetUpperBound(1)].spritePosition.Y);
+            signPosts[1].spritePosition = new Vector2(smallTrees[1, smallTrees.GetUpperBound(1)].spritePosition.X + signPosts[1].spriteTexture.Width * 2, smallTrees[1, smallTrees.GetUpperBound(1)].spritePosition.Y);
 
-            posX = 0;
-            posY = 0;
-            xOffset = 740;
-
-            for (int i = 0; i < treeColumn2.Length; i++)
+            for (int i = 0; i <= postBoxes.GetUpperBound(0); i++)
             {
-                posX = xOffset;
-                posY = (i * 80);
-
-                treeColumn2[i] = new Tree(loadTexture, new Vector2(posX, posY), new Vector2(60, 100));
-                treeObjects.Add(treeColumn2[i]);
-
-
+                postBoxes[i] = new ReadableObject(postBoxTexture, new Vector2(), new Vector2(postBoxTexture.Width * 2, postBoxTexture.Height * 2));
+                readablesObjectList.Add(postBoxes[i]);
             }
+            postBoxes[0].spritePosition = new Vector2(houses[1].spritePosition.X - postBoxes[1].spriteTexture.Width);
+            //Readable Objects end HERE
 
-            posX = 50;
-            posY = 0;
-            xOffset = 50;
-
-            for (int i = 0; i < treeRow1.Length; i++)
-            {
-
-                posX = xOffset + (i * 50);
-
-                treeRow1[i] = new Tree(loadTexture, new Vector2(posX, posY), new Vector2(60, 100));
-                treeObjects.Add(treeRow1[i]);
-
-
-            }
-
-            posX = 50;
-            posY = 0;
-            xOffset = 440;
-
-            for (int i = 0; i < treeRow2.Length; i++)
-            {
-
-                posX = xOffset + (i * 50);
-
-                treeRow2[i] = new Tree(loadTexture, new Vector2(posX, posY), new Vector2(60, 100));
-                treeObjects.Add(treeRow2[i]);
-
-
-            }
-
-            posX = 50;
-            posY = 740;
-            xOffset = 475;
-
-            for (int i = 0; i < treeRow3.Length; i++)
-            {
-
-                posX = 50 + (i * 50);
-
-                treeRow3[i] = new Tree(loadTexture, new Vector2(posX, posY), new Vector2(60, 100));
-                treeObjects.Add(treeRow3[i]);
-
-
-            }
+            player = new Player(playerTexture, new Vector2(200, 100), new Vector2(playerTexture.Width * 2, playerTexture.Height * 2));
 
         }
 
@@ -244,76 +167,64 @@ namespace Jokemon_Team_1
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            iManager.checkKeyboard(playerSprite);
-            iManager.checkKeyboard(playerSprite2);
+            // TODO: Add your update logic here
 
-            foreach (Tree t in treeObjects)
+            iManager.checkKeyboard(player);
+
+            foreach (Tree t in treeObjectList)
             {
-                pManager.checkCollision(playerSprite, t);
-            }
-            foreach (Building b in buildings)
-            {
-                pManager.checkCollision(playerSprite, b);
-            }
-            if (playerSprite.clone == true)
-            {
-                foreach (Tree t in treeObjects)
-                {
-                    pManager.checkCollision(playerSprite2, t);
-                }
+                pManager.checkCollision(player, t);
             }
 
+            foreach (Building b in buildingObjectList)
+            {
+                pManager.checkCollision(player, b);
+            }
 
-
+            foreach (ReadableObject r in readablesObjectList)
+            {
+                pManager.checkCollision(player, r);
+            }
 
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.MediumSpringGreen);
+            GraphicsDevice.Clear(Color.LawnGreen);
 
-            foreach (Tree t in treeObjects)
+            // TODO: Add your drawing code here
+
+            player.DrawSprite(_spriteBatch, player.spriteTexture);
+
+            foreach (Tree t in bigTreeTypeSide)
             {
                 t.DrawSprite(_spriteBatch, t.spriteTexture);
             }
 
-
-            foreach (Tree t in hedgeRow1)
-            {
-                t.DrawSprite(_spriteBatch, t.spriteTexture);
-            }
-            foreach (Tree t in hedgeRow2)
+            foreach (Tree t in bigTreeTypeBottom)
             {
                 t.DrawSprite(_spriteBatch, t.spriteTexture);
             }
 
-            foreach (Sprite f in flowerRow)
+            foreach (Building b in houses)
             {
-                f.DrawSprite(_spriteBatch, f.spriteTexture);
+                b.DrawSprite(_spriteBatch, b.spriteTexture);
             }
 
-
-
-            home1.DrawSprite(_spriteBatch, home1.spriteTexture);
-            home2.DrawSprite(_spriteBatch, home2.spriteTexture);
-            lab.DrawSprite(_spriteBatch, lab.spriteTexture);
-            sign1.DrawSprite(_spriteBatch, sign1.spriteTexture);
-            sign2.DrawSprite(_spriteBatch, sign2.spriteTexture);
-            sign3.DrawSprite(_spriteBatch, sign3.spriteTexture);
-            postbox1.DrawSprite(_spriteBatch, postbox1.spriteTexture);
-            postbox2.DrawSprite(_spriteBatch, postbox2.spriteTexture);
-
-            playerSprite.DrawSprite(_spriteBatch, playerSprite.spriteTexture);
-            if (playerSprite.clone == true)
+            foreach (Tree t in smallTrees)
             {
-                playerSprite2.DrawSprite(_spriteBatch, playerSprite.spriteTexture);
-
+                t.DrawSprite(_spriteBatch, t.spriteTexture);
             }
+
+            foreach (ReadableObject r in signPosts)
+            {
+                r.DrawSprite(_spriteBatch, r.spriteTexture);
+            }
+
+            laboratory.DrawSprite(_spriteBatch, laboratory.spriteTexture);
 
             base.Draw(gameTime);
         }
-
-
     }
 }
