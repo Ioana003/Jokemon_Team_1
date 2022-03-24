@@ -67,12 +67,12 @@ namespace Jokemon_Team_1
             // TODO: use this.Content to load your game content here
 
             labTexture = Content.Load<Texture2D>("Lab");
-            bigTreeTexture = Content.Load<Texture2D>("Tree_Big");
+            bigTreeTexture = Content.Load<Texture2D>("Tree");
             houseTexture = Content.Load<Texture2D>("house");
             playerTexture = Content.Load<Texture2D>("Player_F");
-            smallTreeTexture = Content.Load<Texture2D>("Tree_Little");
-            signTextureWood = Content.Load<Texture2D>("Sign_Little");
-            postBoxTexture = Content.Load<Texture2D>("Postbox");
+            smallTreeTexture = Content.Load<Texture2D>("Tree");
+            //signTextureWood = Content.Load<Texture2D>("Sign_Little");
+            //postBoxTexture = Content.Load<Texture2D>("Postbox");
 
 
             //The following are TREES
@@ -142,20 +142,20 @@ namespace Jokemon_Team_1
             //Buildings end HERE
 
             //The following are READABLE OBJECTS
-            for (int i = 0; i <= signPosts.GetUpperBound(0); i++)
-            {
-                signPosts[i] = new ReadableObject(signTextureWood, new Vector2(), new Vector2(signTextureWood.Width * 2, signTextureWood.Height * 2));
-                readablesObjectList.Add(signPosts[i]);
-            }
-            signPosts[0].spritePosition = new Vector2(smallTrees[0, smallTrees.GetUpperBound(1)].spritePosition.X + signPosts[0].spriteTexture.Width * 2, smallTrees[0, smallTrees.GetUpperBound(1)].spritePosition.Y);
-            signPosts[1].spritePosition = new Vector2(smallTrees[1, smallTrees.GetUpperBound(1)].spritePosition.X + signPosts[1].spriteTexture.Width * 2, smallTrees[1, smallTrees.GetUpperBound(1)].spritePosition.Y);
+            //for (int i = 0; i <= signPosts.GetUpperBound(0); i++)
+            //{
+            //    signPosts[i] = new ReadableObject(signTextureWood, new Vector2(), new Vector2(signTextureWood.Width * 2, signTextureWood.Height * 2));
+            //    readablesObjectList.Add(signPosts[i]);
+            //}
+            //signPosts[0].spritePosition = new Vector2(smallTrees[0, smallTrees.GetUpperBound(1)].spritePosition.X + signPosts[0].spriteTexture.Width * 2, smallTrees[0, smallTrees.GetUpperBound(1)].spritePosition.Y);
+            //signPosts[1].spritePosition = new Vector2(smallTrees[1, smallTrees.GetUpperBound(1)].spritePosition.X + signPosts[1].spriteTexture.Width * 2, smallTrees[1, smallTrees.GetUpperBound(1)].spritePosition.Y);
 
-            for (int i = 0; i <= postBoxes.GetUpperBound(0); i++)
-            {
-                postBoxes[i] = new ReadableObject(postBoxTexture, new Vector2(), new Vector2(postBoxTexture.Width * 2, postBoxTexture.Height * 2));
-                readablesObjectList.Add(postBoxes[i]);
-            }
-            postBoxes[0].spritePosition = new Vector2(houses[1].spritePosition.X - postBoxes[1].spriteTexture.Width);
+            //for (int i = 0; i <= postBoxes.GetUpperBound(0); i++)
+            //{
+            //    postBoxes[i] = new ReadableObject(postBoxTexture, new Vector2(), new Vector2(postBoxTexture.Width * 2, postBoxTexture.Height * 2));
+            //    readablesObjectList.Add(postBoxes[i]);
+            //}
+            //postBoxes[0].spritePosition = new Vector2(houses[1].spritePosition.X - postBoxes[1].spriteTexture.Width);
             //Readable Objects end HERE
 
             player = new Player(playerTexture, new Vector2(200, 100), new Vector2(playerTexture.Width * 2, playerTexture.Height * 2));
