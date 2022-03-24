@@ -69,7 +69,7 @@ namespace Jokemon_Team_1
             labTexture = Content.Load<Texture2D>("Lab");
             bigTreeTexture = Content.Load<Texture2D>("Tree");
             houseTexture = Content.Load<Texture2D>("house");
-            playerTexture = Content.Load<Texture2D>("Player_F");
+            playerTexture = Content.Load<Texture2D>("test_Player");
             smallTreeTexture = Content.Load<Texture2D>("Tree");
             //signTextureWood = Content.Load<Texture2D>("Sign_Little");
             //postBoxTexture = Content.Load<Texture2D>("Postbox");
