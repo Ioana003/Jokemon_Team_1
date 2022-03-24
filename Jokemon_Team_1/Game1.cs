@@ -181,10 +181,12 @@ namespace Jokemon_Team_1
                 pManager.checkCollision(player, b);
             }
 
-            foreach (ReadableObject r in readablesObjectList)
-            {
-                pManager.checkCollision(player, r);
-            }
+            //foreach (ReadableObject r in readablesObjectList)
+            //{
+            //    pManager.checkCollision(player, r);
+            //}
+
+            //Semi-broken, for now.
 
             base.Update(gameTime);
         }
@@ -217,10 +219,10 @@ namespace Jokemon_Team_1
                 t.DrawSprite(_spriteBatch, t.spriteTexture);
             }
 
-            foreach (ReadableObject r in signPosts)
-            {
-                r.DrawSprite(_spriteBatch, r.spriteTexture);
-            }
+            //foreach (ReadableObject r in signPosts)
+            //{
+            //    r.DrawSprite(_spriteBatch, r.spriteTexture);
+            //}
 
             laboratory.DrawSprite(_spriteBatch, laboratory.spriteTexture);
 
