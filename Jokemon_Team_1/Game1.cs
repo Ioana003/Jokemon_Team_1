@@ -68,7 +68,7 @@ namespace Jokemon_Team_1
 
             labTexture = Content.Load<Texture2D>("Lab");
             bigTreeTexture = Content.Load<Texture2D>("Tree");
-            houseTexture = Content.Load<Texture2D>("House");
+            houseTexture = Content.Load<Texture2D>("HouseFixed");
             playerTexture = Content.Load<Texture2D>("test_Player");
             smallTreeTexture = Content.Load<Texture2D>("Tree");
             //signTextureWood = Content.Load<Texture2D>("Sign_Little");
@@ -99,11 +99,12 @@ namespace Jokemon_Team_1
                 {
                     if (i == 0)
                     {
-                        bigTreeTypeBottom[i, j] = new Tree(bigTreeTexture, new Vector2(j * bigTreeTexture.Width * 2, 0), new Vector2(bigTreeTexture.Width * 2, bigTreeTexture.Height * 2));
+                        bigTreeTypeBottom[i, j] = new Tree(bigTreeTexture, new Vector2(j * bigTreeTexture.Width * 2 + j * (bigTreeTexture.Height * 2 - bigTreeTexture.Width * 2), 0), new Vector2(bigTreeTexture.Width * 2, bigTreeTexture.Height * 2));
+
                     }
                     else
                     {
-                        bigTreeTypeBottom[i, j] = new Tree(bigTreeTexture, new Vector2(j * bigTreeTexture.Width * 2, Window.ClientBounds.Height - bigTreeTexture.Height * 2), new Vector2(bigTreeTexture.Width * 2, bigTreeTexture.Height * 2));
+                        bigTreeTypeBottom[i, j] = new Tree(bigTreeTexture, new Vector2(j * bigTreeTexture.Width * 2 + j * (bigTreeTexture.Height * 2 - bigTreeTexture.Width * 2), Window.ClientBounds.Height - bigTreeTexture.Height * 2), new Vector2(bigTreeTexture.Width * 2, bigTreeTexture.Height * 2));
                     }
 
                     treeObjectList.Add(bigTreeTypeBottom[i, j]);
@@ -193,7 +194,7 @@ namespace Jokemon_Team_1
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.White);
+            GraphicsDevice.Clear(Color.LawnGreen);
 
             // TODO: Add your drawing code here
 
