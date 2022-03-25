@@ -10,8 +10,8 @@ namespace Jokemon_Team_1
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        private Tree[,] bigTreeTypeSide = new Tree[2, 10];
-        private Tree[,] bigTreeTypeBottom = new Tree[2, 10];
+        private Tree[,] bigTreeTypeSide = new Tree[2, 15];
+        private Tree[,] bigTreeTypeBottom = new Tree[2, 15];
         private Tree[,] smallTrees = new Tree[2, 6];
         private List<Tree> treeObjectList = new List<Tree>();
 
@@ -193,7 +193,7 @@ namespace Jokemon_Team_1
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.LawnGreen);
+            GraphicsDevice.Clear(Color.White);
 
             // TODO: Add your drawing code here
 
