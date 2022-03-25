@@ -10,10 +10,19 @@ namespace Jokemon_Team_1
     {
         public int health { get; set; }
         public int catchrate { get; set; }
+        public int defense { get; set; }
+        public int attack { get; set; }
+        public int specialdefense { get; set; }
+        public int specialattack { get; set; }
+        public int speed { get; set; }
         public JokemonSkills skill1 { get; set; }
         public JokemonSkills skill2 { get; set; }
         public JokemonSkills skill3 { get; set; }
         public JokemonSkills skill4 { get; set; }
+
+        public bool attacked { get; set; } = false;
+
+        public bool attacking { get; set; } = false;
 
         public Jokemon(Texture2D tex, Vector2 pos, Vector2 size) : base(tex, pos, size)
         {
@@ -25,6 +34,27 @@ namespace Jokemon_Team_1
             return skill1;  // might not need
         }
 
+        public void Battle(JokemonSkills jokemonskills, JokemonSkills enemyjokemonskills, Jokemon enemyjokemon)
+        {
+            if (attacked == true)
+            {
+                health -= enemyjokemonskills.NormalAttack();
+            }
+            if( health <= 0)
+            {
+                //jokemon died
+            }
+            if (attacking == true)
+            {
+                //let player choose skills
+                enemyjokemon.attacked = true;
+            }
+        }
+
+        public void Catching()
+        {
+            //higher catchrate the easier to catch
+        }
 
     }
 }
