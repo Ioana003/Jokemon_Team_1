@@ -23,6 +23,7 @@ namespace Jokemon_Team_1
         private Player player;
 
         private Sprite flowers = new Sprite();
+        private Grass[,] jokemonGrass = new Grass[2, 6];
 
         private ReadableObject[] signPosts = new ReadableObject[2];
         private ReadableObject[] postBoxes = new ReadableObject[3];
@@ -39,6 +40,7 @@ namespace Jokemon_Team_1
         private Texture2D smallTreeTexture;
         private Texture2D signTextureWood;
         private Texture2D postBoxTexture;
+        private Texture2D grassTexture;
 
         public Game1()
         {
@@ -71,6 +73,7 @@ namespace Jokemon_Team_1
             houseTexture = Content.Load<Texture2D>("HouseFixed");
             playerTexture = Content.Load<Texture2D>("test_Player");
             smallTreeTexture = Content.Load<Texture2D>("TreeFixed");
+            grassTexture = Content.Load<Texture2D>("GrassFixed");
             //signTextureWood = Content.Load<Texture2D>("Sign_Little");
             //postBoxTexture = Content.Load<Texture2D>("Postbox");
 
@@ -159,6 +162,18 @@ namespace Jokemon_Team_1
             //postBoxes[0].spritePosition = new Vector2(houses[1].spritePosition.X - postBoxes[1].spriteTexture.Width);
             //Readable Objects end HERE
 
+            //Grass goes HERE
+
+            for(int i = 0; i <= jokemonGrass.GetUpperBound(0); i++)
+            {
+                for(int j = 0; j <= jokemonGrass.GetUpperBound(1); j++)
+                {
+                    jokemonGrass[i, j] = new Grass(grassTexture, new Vector2(Window.ClientBounds.Width / 2 - grassTexture.Width * i, j * grassTexture.Height), new Vector2(grassTexture.Width, grassTexture.Height));
+                }
+            }
+
+            //Grass ends HERE
+
             player = new Player(playerTexture, new Vector2(200, 100), new Vector2(playerTexture.Width * 2, playerTexture.Height * 2));
 
         }
@@ -189,6 +204,7 @@ namespace Jokemon_Team_1
 
             //Semi-broken, for now.
 
+
             base.Update(gameTime);
         }
 
@@ -198,7 +214,6 @@ namespace Jokemon_Team_1
 
             // TODO: Add your drawing code here
 
-            player.DrawSprite(_spriteBatch, player.spriteTexture);
 
             foreach (Tree t in bigTreeTypeSide)
             {
@@ -225,7 +240,15 @@ namespace Jokemon_Team_1
             //    r.DrawSprite(_spriteBatch, r.spriteTexture);
             //}
 
+            foreach(Grass g in jokemonGrass)
+            {
+                g.DrawSprite(_spriteBatch, grassTexture);
+            }
+
             laboratory.DrawSprite(_spriteBatch, laboratory.spriteTexture);
+
+
+            player.DrawSprite(_spriteBatch, player.spriteTexture);
 
             base.Draw(gameTime);
         }
