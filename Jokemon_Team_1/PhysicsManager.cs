@@ -9,6 +9,10 @@ namespace Jokemon_Team_1
     {
         private float speed = 0.05f;
         private int collisionOffset = 3;
+        private Random randomJokemon;
+        private int holdRandom;
+        private bool jokemonAttack;
+
         public void checkCollision(Player p, Tree t)
         {
             Rectangle treeRec = new Rectangle((int)t.spritePosition.X, (int)t.spritePosition.Y, (int)t.spriteSize.X, (int)t.spriteSize.Y);
@@ -141,6 +145,29 @@ namespace Jokemon_Team_1
                 }
 
             }
+        }
+
+        public bool checkCollision(Player p, Grass g)
+        {
+            Rectangle grassRect = new Rectangle((int)g.spritePosition.X, (int)g.spritePosition.Y, (int)g.spriteSize.X, (int)g.spriteSize.Y);
+
+            Rectangle projectedPlayerRect = new Rectangle((int)p.spritePosition.X, (int)p.spritePosition.Y, (int)p.spriteSize.X, (int)p.spriteSize.Y);
+
+            if(projectedPlayerRect.Intersects(grassRect))
+            {
+                holdRandom = randomJokemon.Next(0, 100);
+
+                if(holdRandom >= 50)
+                {
+                    jokemonAttack = true;
+                }
+                else
+                {
+                    jokemonAttack = false;
+                }
+            }
+
+            return jokemonAttack;
         }
 
         public void goLeft(Player playerSprite)
