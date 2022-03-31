@@ -79,7 +79,7 @@
 /processorParam:Quality=Best
 /build:Nintendo Wii  Mii Channel Theme.mp3
 
-#begin test_Player.png
+#begin PlayerFixed.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -89,7 +89,19 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:test_Player.png
+/build:PlayerFixed.png
+
+#begin PokeballFinal.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:PokeballFinal.png
 
 #begin Tree.png
 /importer:TextureImporter
