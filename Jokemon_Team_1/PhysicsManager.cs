@@ -157,7 +157,7 @@ namespace Jokemon_Team_1
             {
                 holdRandom = randomJokemon.Next(0, 100);
 
-                if(holdRandom >= 0)
+                if(holdRandom >= 90)
                 {
                     jokemonAttack = true;
                 }
