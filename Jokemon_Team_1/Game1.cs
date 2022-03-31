@@ -41,7 +41,10 @@ namespace Jokemon_Team_1
         private Texture2D signTextureWood;
         private Texture2D postBoxTexture;
         private Texture2D grassTexture;
+        private Texture2D pikaachuback;
 
+        private Jokemon PikaAchu = new Jokemon();
+        private Jokemon Enemy = new Jokemon();
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -71,12 +74,12 @@ namespace Jokemon_Team_1
             labTexture = Content.Load<Texture2D>("Lab");
             bigTreeTexture = Content.Load<Texture2D>("TreeFixed");
             houseTexture = Content.Load<Texture2D>("HouseFixed");
-            playerTexture = Content.Load<Texture2D>("test_Player");
+            playerTexture = Content.Load<Texture2D>("HouseFixed");  //playertexture here
             smallTreeTexture = Content.Load<Texture2D>("TreeFixed");
             grassTexture = Content.Load<Texture2D>("GrassFixed");
             //signTextureWood = Content.Load<Texture2D>("Sign_Little");
             //postBoxTexture = Content.Load<Texture2D>("Postbox");
-
+            pikaachuback = Content.Load<Texture2D>("HouseFixed");  //pikaachu texture here
 
             //The following are TREES
             for (int i = 0; i <= bigTreeTypeSide.GetUpperBound(0); i++)
@@ -131,6 +134,8 @@ namespace Jokemon_Team_1
                 }
             }
             //Trees end HERE
+            // Jokemon                            - by charles(just in case of merging error, ignore)
+            PikaAchu = new Jokemon(pikaachuback, new Vector2(50, 400), new Vector2(250, 250));
 
             //The following are BUILDINGS
             laboratory = new Building(labTexture, new Vector2(400, 500), new Vector2(labTexture.Width * 2, labTexture.Height * 2));
@@ -143,7 +148,7 @@ namespace Jokemon_Team_1
             }
             houses[0].spritePosition = new Vector2(Window.ClientBounds.Width / 3 - houses[0].spriteTexture.Width, 200);
             houses[1].spritePosition = new Vector2(2 * Window.ClientBounds.Width / 3 - houses[1].spriteTexture.Width, 200);
-            //Buildings end HERE
+            //Buildings end HERE -- RIGHT HERE!
 
             //The following are READABLE OBJECTS
             //for (int i = 0; i <= signPosts.GetUpperBound(0); i++)
@@ -185,7 +190,7 @@ namespace Jokemon_Team_1
 
             // TODO: Add your update logic here
 
-            iManager.checkKeyboard(player);
+            iManager.checkKeyboard(player,PikaAchu);
 
             foreach (Tree t in treeObjectList)
             {
@@ -249,6 +254,11 @@ namespace Jokemon_Team_1
 
 
             player.DrawSprite(_spriteBatch, player.spriteTexture);
+
+            if (PikaAchu.attacking == true || PikaAchu.attacked == true)
+            {
+                PikaAchu.DrawSprite(_spriteBatch, PikaAchu.spriteTexture);
+            }
 
             base.Draw(gameTime);
         }

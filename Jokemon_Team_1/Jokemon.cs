@@ -24,6 +24,10 @@ namespace Jokemon_Team_1
 
         public bool attacking { get; set; } = false;
 
+        public Jokemon()
+        {
+
+        }
         public Jokemon(Texture2D tex, Vector2 pos, Vector2 size) : base(tex, pos, size)
         {
 
