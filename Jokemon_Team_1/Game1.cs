@@ -24,6 +24,7 @@ namespace Jokemon_Team_1
 
         private Sprite flowers = new Sprite();
         private Grass[,] jokemonGrass = new Grass[2, 6];
+        private List<Grass> grassObjectList = new List<Grass>();
 
         private ReadableObject[] signPosts = new ReadableObject[2];
         private ReadableObject[] postBoxes = new ReadableObject[3];
@@ -41,6 +42,8 @@ namespace Jokemon_Team_1
         private Texture2D signTextureWood;
         private Texture2D postBoxTexture;
         private Texture2D grassTexture;
+
+        private bool inJokemonBattle;
 
         public Game1()
         {
@@ -68,7 +71,7 @@ namespace Jokemon_Team_1
 
             // TODO: use this.Content to load your game content here
 
-            labTexture = Content.Load<Texture2D>("Lab");
+            labTexture = Content.Load<Texture2D>("LabFixed");
             bigTreeTexture = Content.Load<Texture2D>("TreeFixed");
             houseTexture = Content.Load<Texture2D>("HouseFixed");
             playerTexture = Content.Load<Texture2D>("test_Player");
@@ -169,6 +172,7 @@ namespace Jokemon_Team_1
                 for(int j = 0; j <= jokemonGrass.GetUpperBound(1); j++)
                 {
                     jokemonGrass[i, j] = new Grass(grassTexture, new Vector2(Window.ClientBounds.Width / 2 - grassTexture.Width * i, j * grassTexture.Height), new Vector2(grassTexture.Width, grassTexture.Height));
+                    grassObjectList.Add(jokemonGrass[i,j]);
                 }
             }
 
@@ -203,6 +207,14 @@ namespace Jokemon_Team_1
             //}
 
             //Semi-broken, for now.
+
+            foreach(Grass g in grassObjectList)
+            {
+                if(pManager.checkCollision(player, g) == true)
+                {
+                    inJokemonBattle = true;
+                }
+            }
 
 
             base.Update(gameTime);

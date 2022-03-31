@@ -9,7 +9,7 @@ namespace Jokemon_Team_1
     {
         private float speed = 0.05f;
         private int collisionOffset = 3;
-        private Random randomJokemon;
+        private Random randomJokemon = new Random();
         private int holdRandom;
         private bool jokemonAttack;
 
@@ -157,7 +157,7 @@ namespace Jokemon_Team_1
             {
                 holdRandom = randomJokemon.Next(0, 100);
 
-                if(holdRandom >= 50)
+                if(holdRandom >= 0)
                 {
                     jokemonAttack = true;
                 }
