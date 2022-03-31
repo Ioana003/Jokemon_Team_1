@@ -42,7 +42,7 @@ namespace Jokemon_Team_1
         private Texture2D postBoxTexture;
         private Texture2D grassTexture;
         private Texture2D pikaachuback;
-
+        private Texture2D pikaachufront;
         private Jokemon PikaAchu = new Jokemon();
         private Jokemon Enemy = new Jokemon();
         public Game1()
@@ -77,10 +77,10 @@ namespace Jokemon_Team_1
             playerTexture = Content.Load<Texture2D>("HouseFixed");  //playertexture here
             smallTreeTexture = Content.Load<Texture2D>("TreeFixed");
             grassTexture = Content.Load<Texture2D>("GrassFixed");
-            //signTextureWood = Content.Load<Texture2D>("Sign_Little");
+            //signTextureWood = Content.Load<Texture2D>("Sign_Little");   
             //postBoxTexture = Content.Load<Texture2D>("Postbox");
             pikaachuback = Content.Load<Texture2D>("HouseFixed");  //pikaachu texture here
-
+            pikaachufront = Content.Load<Texture2D>("HouseFixed");
             //The following are TREES
             for (int i = 0; i <= bigTreeTypeSide.GetUpperBound(0); i++)
             {
@@ -136,6 +136,7 @@ namespace Jokemon_Team_1
             //Trees end HERE
             // Jokemon                            - by charles(just in case of merging error, ignore)
             PikaAchu = new Jokemon(pikaachuback, new Vector2(50, 400), new Vector2(250, 250));
+            Enemy = new Jokemon(pikaachufront, new Vector2(500, 50), new Vector2(250, 250));
 
             //The following are BUILDINGS
             laboratory = new Building(labTexture, new Vector2(400, 500), new Vector2(labTexture.Width * 2, labTexture.Height * 2));
@@ -258,6 +259,7 @@ namespace Jokemon_Team_1
             if (PikaAchu.attacking == true || PikaAchu.attacked == true)
             {
                 PikaAchu.DrawSprite(_spriteBatch, PikaAchu.spriteTexture);
+                Enemy.DrawSprite(_spriteBatch, PikaAchu.spriteTexture);
             }
 
             base.Draw(gameTime);
