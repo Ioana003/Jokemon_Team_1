@@ -30,6 +30,7 @@ namespace Jokemon_Team_1
         private ReadableObject[] postBoxes = new ReadableObject[3];
         private List<ReadableObject> readablesObjectList = new List<ReadableObject>();
 
+        private Jokemon[] showJokemonInBattle = new Jokemon[2];
 
         private PhysicsManager pManager = new PhysicsManager();
         private InputManager iManager = new InputManager();
@@ -43,7 +44,7 @@ namespace Jokemon_Team_1
         private Texture2D postBoxTexture;
         private Texture2D grassTexture;
 
-        private bool inJokemonBattle;
+        private bool inJokemonBattle = false;
         private int countFrames = 0;
 
         public Game1()
@@ -190,37 +191,54 @@ namespace Jokemon_Team_1
 
             // TODO: Add your update logic here
 
-            iManager.checkKeyboard(player);
-
-            foreach (Tree t in treeObjectList)
+            if (inJokemonBattle == false)
             {
-                pManager.checkCollision(player, t);
-            }
 
-            foreach (Building b in buildingObjectList)
-            {
-                pManager.checkCollision(player, b);
-            }
+                iManager.checkKeyboard(player);
 
-            //foreach (ReadableObject r in readablesObjectList)
-            //{
-            //    pManager.checkCollision(player, r);
-            //}
-
-            //Semi-broken, for now.
-
-            foreach(Grass g in grassObjectList)
-            {
-                if(countFrames % 10 == 0)
+                foreach (Tree t in treeObjectList)
                 {
-                    if (pManager.checkCollision(player, g) == true)
+                    pManager.checkCollision(player, t);
+                }
+
+                foreach (Building b in buildingObjectList)
+                {
+                    pManager.checkCollision(player, b);
+                }
+
+                //foreach (ReadableObject r in readablesObjectList)
+                //{
+                //    pManager.checkCollision(player, r);
+                //}
+
+                //Semi-broken, for now.
+
+                foreach (Grass g in grassObjectList)
+                {
+                    if (countFrames % 10 == 0)
                     {
-                        inJokemonBattle = true;
+                        if (pManager.checkCollision(player, g) == true)
+                        {
+                            inJokemonBattle = true;
+                        }
                     }
+                }
+
+                countFrames = countFrames + 1;
+
+                if(countFrames >= 60)
+                {
+                    countFrames = 0;
                 }
             }
 
-            countFrames = countFrames + 1;
+            else if (inJokemonBattle == true)
+            {
+                if (Keyboard.GetState().IsKeyDown(Keys.X))
+                {
+                    inJokemonBattle = false;
+                }
+            }
 
             base.Update(gameTime);
         }
