@@ -38,7 +38,7 @@ namespace Jokemon_Team_1
         private Texture2D bigTreeTexture;
         private Texture2D houseTexture;
         private Texture2D playerTexture;
-        private Texture2D smallTreeTexture;
+        private Texture2D smallTreeTexture; //Comment here please work oh my god
         private Texture2D signTextureWood;
         private Texture2D postBoxTexture;
         private Texture2D grassTexture;
