@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace Jokemon_Team_1
 {
     public class Game1 : Game
-    {
+    { //Plrease work
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
