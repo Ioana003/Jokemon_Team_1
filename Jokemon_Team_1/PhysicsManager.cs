@@ -11,7 +11,7 @@ namespace Jokemon_Team_1
         private int collisionOffset = 3;
         private Random randomJokemon = new Random();
         private int holdRandom;
-        private bool jokemonAttack;
+        private bool jokemonAttack { get; set; }
 
         public void checkCollision(Player p, Tree t)
         {
@@ -157,7 +157,7 @@ namespace Jokemon_Team_1
             {
                 holdRandom = randomJokemon.Next(0, 100);
 
-                if(holdRandom >= 90)
+                if(holdRandom >= 99)
                 {
                     jokemonAttack = true;
                 }
