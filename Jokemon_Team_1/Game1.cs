@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Jokemon_Team_1
 {
@@ -74,7 +75,7 @@ namespace Jokemon_Team_1
             labTexture = Content.Load<Texture2D>("LabFixed");
             bigTreeTexture = Content.Load<Texture2D>("TreeFixed");
             houseTexture = Content.Load<Texture2D>("HouseFixed");
-            playerTexture = Content.Load<Texture2D>("test_Player");
+            playerTexture = Content.Load<Texture2D>("PlayerFixed");
             smallTreeTexture = Content.Load<Texture2D>("TreeFixed");
             grassTexture = Content.Load<Texture2D>("GrassFixed");
             //signTextureWood = Content.Load<Texture2D>("Sign_Little");
