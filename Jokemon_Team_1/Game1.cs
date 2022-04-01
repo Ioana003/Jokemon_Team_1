@@ -44,6 +44,8 @@ namespace Jokemon_Team_1
         private Texture2D signTextureWood;
         private Texture2D postBoxTexture;
         private Texture2D grassTexture;
+        private Texture2D pikaAchuTextureBack;
+        private Texture2D pikaAchyTextureFront;
 
         private bool inJokemonBattle = false;
         private int countFrames = 0;
@@ -82,6 +84,9 @@ namespace Jokemon_Team_1
             grassTexture = Content.Load<Texture2D>("GrassFixed");
             //signTextureWood = Content.Load<Texture2D>("Sign_Little");
             //postBoxTexture = Content.Load<Texture2D>("Postbox");
+
+            pikaAchuTextureBack = Content.Load<Texture2D>("Pika_Back");
+            pikaAchyTextureFront = Content.Load<Texture2D>("Pika-A-chu");
 
 
             //The following are TREES
@@ -181,6 +186,11 @@ namespace Jokemon_Team_1
 
             //Grass ends HERE
 
+                for(int i = 0; i <= showJokemonInBattle.GetUpperBound(0); i++)
+                {
+                    showJokemonInBattle[i] = new Jokemon(playerTexture, new Vector2(), new Vector2(100, 100));
+                }
+
             player = new Player(playerTexture, new Vector2(200, 100), new Vector2(playerTexture.Width * 2, playerTexture.Height * 2));
 
         }
@@ -239,6 +249,11 @@ namespace Jokemon_Team_1
                 {
                     inJokemonBattle = false;
                 }
+
+                for(int i = 0; i <= showJokemonInBattle.GetUpperBound(0); i++)
+                {
+                    showJokemonInBattle[i].ShowJokemon(pikaAchuTextureBack, pikaAchyTextureFront, Window);
+                }
             }
 
             base.Update(gameTime);
@@ -288,6 +303,11 @@ namespace Jokemon_Team_1
             else if(inJokemonBattle == true)
             {
                 GraphicsDevice.Clear(Color.Black);
+
+                for(int i = 0; i <= showJokemonInBattle.GetUpperBound(0); i++)
+                {
+                    showJokemonInBattle[i].DrawSprite(_spriteBatch, houseTexture);
+                }
             }
 
             // TODO: Add your drawing code here
