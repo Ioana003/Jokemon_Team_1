@@ -19,10 +19,16 @@ namespace Jokemon_Team_1
         public JokemonSkills skill2 { get; set; }
         public JokemonSkills skill3 { get; set; }
         public JokemonSkills skill4 { get; set; }
+        private bool isPlayerJokemon { get; set; }
 
         public bool attacked { get; set; } = false;
 
         public bool attacking { get; set; } = false;
+
+        public Jokemon() : base ()
+        {
+
+        }
 
         public Jokemon(Texture2D tex, Vector2 pos, Vector2 size) : base(tex, pos, size)
         {
@@ -54,6 +60,19 @@ namespace Jokemon_Team_1
         public void Catching()
         {
             //higher catchrate the easier to catch
+        }
+
+        public void ShowJokemon(Texture2D playerJokemonTexture, Texture2D opposingJokemon)
+        {
+            if(isPlayerJokemon == true)
+            {
+                spriteTexture = playerJokemonTexture;
+                spritePosition = new Vector2();
+            }
+            else
+            {
+                spriteTexture = opposingJokemon;
+            }
         }
 
     }

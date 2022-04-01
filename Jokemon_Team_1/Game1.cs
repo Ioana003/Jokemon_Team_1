@@ -2,11 +2,12 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Jokemon_Team_1
 {
     public class Game1 : Game
-    {
+    { //Plrease work
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
@@ -30,6 +31,7 @@ namespace Jokemon_Team_1
         private ReadableObject[] postBoxes = new ReadableObject[3];
         private List<ReadableObject> readablesObjectList = new List<ReadableObject>();
 
+        private Jokemon[] showJokemonInBattle = new Jokemon[2];
 
         private PhysicsManager pManager = new PhysicsManager();
         private InputManager iManager = new InputManager();
@@ -43,7 +45,8 @@ namespace Jokemon_Team_1
         private Texture2D postBoxTexture;
         private Texture2D grassTexture;
 
-        private bool inJokemonBattle;
+        private bool inJokemonBattle = false;
+        private int countFrames = 0;
 
         public Game1()
         {
@@ -74,7 +77,7 @@ namespace Jokemon_Team_1
             labTexture = Content.Load<Texture2D>("LabFixed");
             bigTreeTexture = Content.Load<Texture2D>("TreeFixed");
             houseTexture = Content.Load<Texture2D>("HouseFixed");
-            playerTexture = Content.Load<Texture2D>("test_Player");
+            playerTexture = Content.Load<Texture2D>("PlayerFixed");
             smallTreeTexture = Content.Load<Texture2D>("TreeFixed");
             grassTexture = Content.Load<Texture2D>("GrassFixed");
             //signTextureWood = Content.Load<Texture2D>("Sign_Little");
@@ -189,78 +192,108 @@ namespace Jokemon_Team_1
 
             // TODO: Add your update logic here
 
-            iManager.checkKeyboard(player);
-
-            foreach (Tree t in treeObjectList)
+            if (inJokemonBattle == false)
             {
-                pManager.checkCollision(player, t);
-            }
 
-            foreach (Building b in buildingObjectList)
-            {
-                pManager.checkCollision(player, b);
-            }
+                iManager.checkKeyboard(player);
 
-            //foreach (ReadableObject r in readablesObjectList)
-            //{
-            //    pManager.checkCollision(player, r);
-            //}
-
-            //Semi-broken, for now.
-
-            foreach(Grass g in grassObjectList)
-            {
-                if(pManager.checkCollision(player, g) == true)
+                foreach (Tree t in treeObjectList)
                 {
-                    inJokemonBattle = true;
+                    pManager.checkCollision(player, t);
+                }
+
+                foreach (Building b in buildingObjectList)
+                {
+                    pManager.checkCollision(player, b);
+                }
+
+                //foreach (ReadableObject r in readablesObjectList)
+                //{
+                //    pManager.checkCollision(player, r);
+                //}
+
+                //Semi-broken, for now.
+
+                foreach (Grass g in grassObjectList)
+                {
+                    if (countFrames % 10 == 0)
+                    {
+                        if (pManager.checkCollision(player, g) == true)
+                        {
+                            inJokemonBattle = true;
+                        }
+                    }
+                }
+
+                countFrames = countFrames + 1;
+
+                if(countFrames >= 60)
+                {
+                    countFrames = 0;
                 }
             }
 
+            else if (inJokemonBattle == true)
+            {
+                if (Keyboard.GetState().IsKeyDown(Keys.X))
+                {
+                    inJokemonBattle = false;
+                }
+            }
 
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.LawnGreen);
+            if (inJokemonBattle == false)
+            {
+                GraphicsDevice.Clear(Color.LawnGreen);
+
+                foreach (Tree t in bigTreeTypeSide)
+                {
+                    t.DrawSprite(_spriteBatch, t.spriteTexture);
+                }
+
+                foreach (Tree t in bigTreeTypeBottom)
+                {
+                    t.DrawSprite(_spriteBatch, t.spriteTexture);
+                }
+
+                foreach (Building b in houses)
+                {
+                    b.DrawSprite(_spriteBatch, b.spriteTexture);
+                }
+
+                foreach (Tree t in smallTrees)
+                {
+                    t.DrawSprite(_spriteBatch, t.spriteTexture);
+                }
+
+                //foreach (ReadableObject r in signPosts)
+                //{
+                //    r.DrawSprite(_spriteBatch, r.spriteTexture);
+                //}
+
+                foreach (Grass g in jokemonGrass)
+                {
+                    g.DrawSprite(_spriteBatch, grassTexture);
+                }
+
+                laboratory.DrawSprite(_spriteBatch, laboratory.spriteTexture);
+
+
+                player.DrawSprite(_spriteBatch, player.spriteTexture);
+            }
+            else if(inJokemonBattle == true)
+            {
+                GraphicsDevice.Clear(Color.Black);
+            }
 
             // TODO: Add your drawing code here
 
 
-            foreach (Tree t in bigTreeTypeSide)
-            {
-                t.DrawSprite(_spriteBatch, t.spriteTexture);
-            }
-
-            foreach (Tree t in bigTreeTypeBottom)
-            {
-                t.DrawSprite(_spriteBatch, t.spriteTexture);
-            }
-
-            foreach (Building b in houses)
-            {
-                b.DrawSprite(_spriteBatch, b.spriteTexture);
-            }
-
-            foreach (Tree t in smallTrees)
-            {
-                t.DrawSprite(_spriteBatch, t.spriteTexture);
-            }
-
-            //foreach (ReadableObject r in signPosts)
-            //{
-            //    r.DrawSprite(_spriteBatch, r.spriteTexture);
-            //}
-
-            foreach(Grass g in jokemonGrass)
-            {
-                g.DrawSprite(_spriteBatch, grassTexture);
-            }
-
-            laboratory.DrawSprite(_spriteBatch, laboratory.spriteTexture);
-
-
-            player.DrawSprite(_spriteBatch, player.spriteTexture);
+            
 
             base.Draw(gameTime);
         }
