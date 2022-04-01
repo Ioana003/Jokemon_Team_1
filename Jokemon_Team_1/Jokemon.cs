@@ -62,16 +62,19 @@ namespace Jokemon_Team_1
             //higher catchrate the easier to catch
         }
 
-        public void ShowJokemon(Texture2D playerJokemonTexture, Texture2D opposingJokemon)
+        public void ShowJokemon(Texture2D playerJokemonTexture, Texture2D opposingJokemon, GameWindow window)
         {
+            
+
             if(isPlayerJokemon == true)
             {
                 spriteTexture = playerJokemonTexture;
-                spritePosition = new Vector2();
+                spritePosition = new Vector2(window.ClientBounds.Width / 5, window.ClientBounds.Height / 4 * 3);
             }
             else
             {
                 spriteTexture = opposingJokemon;
+                spritePosition = new Vector2(window.ClientBounds.Width - window.ClientBounds.Width / 5, window.ClientBounds.Height / 4);
             }
         }
 
