@@ -46,6 +46,7 @@ namespace Jokemon_Team_1
         private Texture2D grassTexture;
 
         private bool inJokemonBattle = false;
+        private bool pausemenu = false;
         private int countFrames = 0;
 
         public Game1()
@@ -192,7 +193,7 @@ namespace Jokemon_Team_1
 
             // TODO: Add your update logic here
 
-            if (inJokemonBattle == false)
+            if (inJokemonBattle == false || pausemenu == false)
             {
 
                 iManager.checkKeyboard(player);
@@ -230,6 +231,12 @@ namespace Jokemon_Team_1
                 if(countFrames >= 60)
                 {
                     countFrames = 0;
+                }
+
+                if (Keyboard.GetState().IsKeyDown(Keys.P))
+                {
+                    pausemenu = true;
+
                 }
             }
 
