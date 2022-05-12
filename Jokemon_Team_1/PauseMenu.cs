@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Jokemon_Team_1
 {
-    class PauseMenu
+    class PauseMenu ()
     {
     }
 }
