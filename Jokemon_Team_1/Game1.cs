@@ -11,8 +11,8 @@ namespace Jokemon_Team_1
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        private Tree[,] bigTreeTypeSide = new Tree[2, 15];
-        private Tree[,] bigTreeTypeBottom = new Tree[2, 15];
+        private Tree[,] bigTreeTypeSide = new Tree[2, 14];
+        private Tree[,] bigTreeTypeBottom = new Tree[2, 16];
         private Tree[,] smallTrees = new Tree[2, 6];
         private List<Tree> treeObjectList = new List<Tree>();
 
@@ -96,11 +96,11 @@ namespace Jokemon_Team_1
                 {
                     if (i == 0)
                     {
-                        bigTreeTypeSide[i, j] = new Tree(bigTreeTexture, new Vector2(0, j * bigTreeTexture.Height * 2), new Vector2(bigTreeTexture.Width * 2, bigTreeTexture.Height * 2));
+                        bigTreeTypeSide[i, j] = new Tree(bigTreeTexture, new Vector2(0, j * Window.ClientBounds.Height / bigTreeTypeSide.GetUpperBound(1)), new Vector2(bigTreeTexture.Width * 2, bigTreeTexture.Height * 2));
                     }
                     else
                     {
-                        bigTreeTypeSide[i, j] = new Tree(bigTreeTexture, new Vector2(Window.ClientBounds.Width - bigTreeTexture.Width * 2, j * bigTreeTexture.Height * 2), new Vector2(bigTreeTexture.Width * 2, bigTreeTexture.Height * 2));
+                        bigTreeTypeSide[i, j] = new Tree(bigTreeTexture, new Vector2(Window.ClientBounds.Width - bigTreeTexture.Width * 2, j * Window.ClientBounds.Height / bigTreeTypeSide.GetUpperBound(1)), new Vector2(bigTreeTexture.Width * 2, bigTreeTexture.Height * 2));
                     }
 
                     treeObjectList.Add(bigTreeTypeSide[i, j]);
@@ -113,15 +113,18 @@ namespace Jokemon_Team_1
                 {
                     if (i == 0)
                     {
-                        bigTreeTypeBottom[i, j] = new Tree(bigTreeTexture, new Vector2(j * bigTreeTexture.Width * 2 + j * (bigTreeTexture.Height * 2 - bigTreeTexture.Width * 2), 0), new Vector2(bigTreeTexture.Width * 2, bigTreeTexture.Height * 2));
+                        bigTreeTypeBottom[i, j] = new Tree(bigTreeTexture, new Vector2(j * Window.ClientBounds.Width / bigTreeTypeBottom.GetUpperBound(1), 0), new Vector2(bigTreeTexture.Width * 2, bigTreeTexture.Height * 2));
 
                     }
                     else
                     {
-                        bigTreeTypeBottom[i, j] = new Tree(bigTreeTexture, new Vector2(j * bigTreeTexture.Width * 2 + j * (bigTreeTexture.Height * 2 - bigTreeTexture.Width * 2), Window.ClientBounds.Height - bigTreeTexture.Height * 2), new Vector2(bigTreeTexture.Width * 2, bigTreeTexture.Height * 2));
+                        bigTreeTypeBottom[i, j] = new Tree(bigTreeTexture, new Vector2(j * Window.ClientBounds.Width / bigTreeTypeBottom.GetUpperBound(1), Window.ClientBounds.Height - bigTreeTexture.Height * 2), new Vector2(bigTreeTexture.Width * 2, bigTreeTexture.Height * 2));
                     }
 
-                    treeObjectList.Add(bigTreeTypeBottom[i, j]);
+                    if(j != 8)
+                    {
+                        treeObjectList.Add(bigTreeTypeBottom[i, j]);
+                    }
                 }
             }
 
@@ -228,9 +231,12 @@ namespace Jokemon_Team_1
                 {
                     if (countFrames % 10 == 0)
                     {
-                        if (pManager.checkCollision(player, g) == true)
+                        if (player.goingDown == true || player.goingLeft == true || player.goingRight == true || player.goingUp == true)
                         {
-                            inJokemonBattle = true;
+                            if (pManager.checkCollision(player, g) == true)
+                            {
+                                inJokemonBattle = true;
+                            }
                         }
                     }
                 }
