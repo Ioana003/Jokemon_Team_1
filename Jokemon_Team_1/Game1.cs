@@ -220,47 +220,54 @@ namespace Jokemon_Team_1
 
             // TODO: Add your drawing code here
 
-
-            foreach (Tree t in bigTreeTypeSide)
-            {
-                t.DrawSprite(_spriteBatch, t.spriteTexture);
-            }
-
-            foreach (Tree t in bigTreeTypeBottom)
-            {
-                t.DrawSprite(_spriteBatch, t.spriteTexture);
-            }
-
-            foreach (Building b in houses)
-            {
-                b.DrawSprite(_spriteBatch, b.spriteTexture);
-            }
-
-            foreach (Tree t in smallTrees)
-            {
-                t.DrawSprite(_spriteBatch, t.spriteTexture);
-            }
-
-            //foreach (ReadableObject r in signPosts)
-            //{
-            //    r.DrawSprite(_spriteBatch, r.spriteTexture);
-            //}
-
-            foreach(Grass g in jokemonGrass)
-            {
-                g.DrawSprite(_spriteBatch, grassTexture);
-            }
-
-            laboratory.DrawSprite(_spriteBatch, laboratory.spriteTexture);
-
-
-            player.DrawSprite(_spriteBatch, player.spriteTexture);
-
             if (PikaAchu.attacking == true || PikaAchu.attacked == true)
             {
                 PikaAchu.DrawSprite(_spriteBatch, PikaAchu.spriteTexture);
                 Enemy.DrawSprite(_spriteBatch, PikaAchu.spriteTexture);
             }
+            else
+            {
+
+
+                foreach (Tree t in bigTreeTypeSide)
+                {
+                    t.DrawSprite(_spriteBatch, t.spriteTexture);
+                }
+
+                foreach (Tree t in bigTreeTypeBottom)
+                {
+                    t.DrawSprite(_spriteBatch, t.spriteTexture);
+                }
+
+                foreach (Building b in houses)
+                {
+                    b.DrawSprite(_spriteBatch, b.spriteTexture);
+                }
+
+                foreach (Tree t in smallTrees)
+                {
+                    t.DrawSprite(_spriteBatch, t.spriteTexture);
+                }
+
+                //foreach (ReadableObject r in signPosts)
+                //{
+                //    r.DrawSprite(_spriteBatch, r.spriteTexture);
+                //}
+
+                foreach (Grass g in jokemonGrass)
+                {
+                    g.DrawSprite(_spriteBatch, grassTexture);
+                }
+
+                laboratory.DrawSprite(_spriteBatch, laboratory.spriteTexture);
+
+
+                player.DrawSprite(_spriteBatch, player.spriteTexture);
+            }
+
+           
+                
+            
 
             base.Draw(gameTime);
         }
