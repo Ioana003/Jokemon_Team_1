@@ -49,6 +49,8 @@ namespace Jokemon_Team_1
         private bool pausemenu = false;
         private int countFrames = 0;
 
+        private Stream music;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -84,6 +86,7 @@ namespace Jokemon_Team_1
             //signTextureWood = Content.Load<Texture2D>("Sign_Little");
             //postBoxTexture = Content.Load<Texture2D>("Postbox");
 
+            music = Content.Load<Stream>("Music.mp3");
 
             //The following are TREES
             for (int i = 0; i <= bigTreeTypeSide.GetUpperBound(0); i++)
