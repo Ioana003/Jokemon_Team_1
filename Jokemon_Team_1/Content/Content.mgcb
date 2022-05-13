@@ -73,12 +73,6 @@
 /processorParam:TextureFormat=Color
 /build:LabFixed.png
 
-#begin Nintendo Wii  Mii Channel Theme.mp3
-/importer:Mp3Importer
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:Nintendo Wii  Mii Channel Theme.mp3
-
 #begin PlayerFixed.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -102,6 +96,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:PokeballFinal.png
+
+#begin square.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:square.jpg
 
 #begin Tree.png
 /importer:TextureImporter

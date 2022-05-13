@@ -33,6 +33,8 @@ namespace Jokemon_Team_1
 
         private Jokemon[] showJokemonInBattle = new Jokemon[2];
 
+        private StartMenu startMenu = new StartMenu();
+
         private PhysicsManager pManager = new PhysicsManager();
         private InputManager iManager = new InputManager();
 
@@ -47,8 +49,6 @@ namespace Jokemon_Team_1
 
         private bool inJokemonBattle = false;
         private int countFrames = 0;
-
-        private Stream music;
 
         public Game1()
         {
@@ -85,7 +85,7 @@ namespace Jokemon_Team_1
             //signTextureWood = Content.Load<Texture2D>("Sign_Little");
             //postBoxTexture = Content.Load<Texture2D>("Postbox");
 
-            music = Content.Load<Stream>("Music.mp3");
+            startMenu.hasStarted = false;
 
             //The following are TREES
             for (int i = 0; i <= bigTreeTypeSide.GetUpperBound(0); i++)
@@ -194,109 +194,120 @@ namespace Jokemon_Team_1
                 Exit();
 
             // TODO: Add your update logic here
-
-            if (inJokemonBattle == false)
+            if (startMenu.hasStarted == false)
             {
-
-                iManager.checkKeyboard(player);
-
-                foreach (Tree t in treeObjectList)
+                if (Keyboard.GetState().IsKeyDown(Keys.Space))
                 {
-                    pManager.checkCollision(player, t);
+                    startMenu.hasStarted = true;
                 }
-
-                foreach (Building b in buildingObjectList)
+            }
+            else if (startMenu.hasStarted == true)
+            {
+                if (inJokemonBattle == false)
                 {
-                    pManager.checkCollision(player, b);
-                }
 
-                //foreach (ReadableObject r in readablesObjectList)
-                //{
-                //    pManager.checkCollision(player, r);
-                //}
+                    iManager.checkKeyboard(player);
 
-                //Semi-broken, for now.
-
-                foreach (Grass g in grassObjectList)
-                {
-                    if (countFrames % 10 == 0)
+                    foreach (Tree t in treeObjectList)
                     {
-                        if (pManager.checkCollision(player, g) == true)
+                        pManager.checkCollision(player, t);
+                    }
+
+                    foreach (Building b in buildingObjectList)
+                    {
+                        pManager.checkCollision(player, b);
+                    }
+
+                    //foreach (ReadableObject r in readablesObjectList)
+                    //{
+                    //    pManager.checkCollision(player, r);
+                    //}
+
+                    //Semi-broken, for now.
+
+                    foreach (Grass g in grassObjectList)
+                    {
+                        if (countFrames % 10 == 0)
                         {
-                            inJokemonBattle = true;
+                            if (pManager.checkCollision(player, g) == true)
+                            {
+                                inJokemonBattle = true;
+                            }
                         }
+                    }
+
+                    countFrames = countFrames + 1;
+
+                    if (countFrames >= 60)
+                    {
+                        countFrames = 0;
                     }
                 }
 
-                countFrames = countFrames + 1;
-
-                if(countFrames >= 60)
+                else if (inJokemonBattle == true)
                 {
-                    countFrames = 0;
+                    if (Keyboard.GetState().IsKeyDown(Keys.X))
+                    {
+                        inJokemonBattle = false;
+                    }
                 }
             }
-
-            else if (inJokemonBattle == true)
-            {
-                if (Keyboard.GetState().IsKeyDown(Keys.X))
-                {
-                    inJokemonBattle = false;
-                }
-            }
-
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            if (inJokemonBattle == false)
+            if (startMenu.hasStarted == true)
             {
-                GraphicsDevice.Clear(Color.LawnGreen);
-
-                foreach (Tree t in bigTreeTypeSide)
+                if (inJokemonBattle == false)
                 {
-                    t.DrawSprite(_spriteBatch, t.spriteTexture);
-                }
+                    GraphicsDevice.Clear(Color.LawnGreen);
 
-                foreach (Tree t in bigTreeTypeBottom)
+                    foreach (Tree t in bigTreeTypeSide)
+                    {
+                        t.DrawSprite(_spriteBatch, t.spriteTexture);
+                    }
+
+                    foreach (Tree t in bigTreeTypeBottom)
+                    {
+                        t.DrawSprite(_spriteBatch, t.spriteTexture);
+                    }
+
+                    foreach (Building b in houses)
+                    {
+                        b.DrawSprite(_spriteBatch, b.spriteTexture);
+                    }
+
+                    foreach (Tree t in smallTrees)
+                    {
+                        t.DrawSprite(_spriteBatch, t.spriteTexture);
+                    }
+
+                    //foreach (ReadableObject r in signPosts)
+                    //{
+                    //    r.DrawSprite(_spriteBatch, r.spriteTexture);
+                    //}
+
+                    foreach (Grass g in jokemonGrass)
+                    {
+                        g.DrawSprite(_spriteBatch, grassTexture);
+                    }
+
+                    laboratory.DrawSprite(_spriteBatch, laboratory.spriteTexture);
+
+                    player.DrawSprite(_spriteBatch, player.spriteTexture);
+                }
+                else if (inJokemonBattle == true)
                 {
-                    t.DrawSprite(_spriteBatch, t.spriteTexture);
+                    GraphicsDevice.Clear(Color.Black);
                 }
-
-                foreach (Building b in houses)
-                {
-                    b.DrawSprite(_spriteBatch, b.spriteTexture);
-                }
-
-                foreach (Tree t in smallTrees)
-                {
-                    t.DrawSprite(_spriteBatch, t.spriteTexture);
-                }
-
-                //foreach (ReadableObject r in signPosts)
-                //{
-                //    r.DrawSprite(_spriteBatch, r.spriteTexture);
-                //}
-
-                foreach (Grass g in jokemonGrass)
-                {
-                    g.DrawSprite(_spriteBatch, grassTexture);
-                }
-
-                laboratory.DrawSprite(_spriteBatch, laboratory.spriteTexture);
-
-
-                player.DrawSprite(_spriteBatch, player.spriteTexture);
             }
-            else if(inJokemonBattle == true)
+            if (startMenu.hasStarted == false)
             {
-                GraphicsDevice.Clear(Color.Black);
+                GraphicsDevice.Clear(Color.Purple);
+                startMenu.DrawStartMenu(_spriteBatch);
             }
-
             // TODO: Add your drawing code here
-
-
-            
 
             base.Draw(gameTime);
         }
