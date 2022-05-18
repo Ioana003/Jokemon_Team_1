@@ -11,10 +11,15 @@ namespace Jokemon_Team_1
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
+        private Camera camera;
+
         private Tree[,] bigTreeTypeSide = new Tree[2, 15];
         private Tree[,] bigTreeTypeBottom = new Tree[2, 15];
         private Tree[,] smallTrees = new Tree[2, 6];
         private List<Tree> treeObjectList = new List<Tree>();
+
+        public static int screenWidth;
+        public static int screenHeight;
 
 
         private Building[] houses = new Building[2];
@@ -48,7 +53,7 @@ namespace Jokemon_Team_1
         private bool inJokemonBattle = false;
         private int countFrames = 0;
 
-        private Stream music;
+       // private Stream music;
 
         public Game1()
         {
@@ -62,6 +67,8 @@ namespace Jokemon_Team_1
             // TODO: Add your initialization logic here
             _graphics.PreferredBackBufferWidth = 800;
             _graphics.PreferredBackBufferHeight = 800;
+            screenWidth = _graphics.PreferredBackBufferWidth;
+            screenHeight = _graphics.PreferredBackBufferHeight;
             //It's supposed to be 800, 800
             _graphics.ApplyChanges();
 
@@ -76,6 +83,8 @@ namespace Jokemon_Team_1
 
             // TODO: use this.Content to load your game content here
 
+            camera = new Camera();
+
             labTexture = Content.Load<Texture2D>("LabFixed");
             bigTreeTexture = Content.Load<Texture2D>("TreeFixed");
             houseTexture = Content.Load<Texture2D>("HouseFixed");
@@ -85,7 +94,8 @@ namespace Jokemon_Team_1
             //signTextureWood = Content.Load<Texture2D>("Sign_Little");
             //postBoxTexture = Content.Load<Texture2D>("Postbox");
 
-            music = Content.Load<Stream>("Music.mp3");
+
+           // music = Content.Load<Stream>("Music.mp3");
 
             //The following are TREES
             for (int i = 0; i <= bigTreeTypeSide.GetUpperBound(0); i++)
@@ -195,6 +205,8 @@ namespace Jokemon_Team_1
 
             // TODO: Add your update logic here
 
+            camera.Follow(player);
+
             if (inJokemonBattle == false)
             {
 
@@ -255,22 +267,22 @@ namespace Jokemon_Team_1
 
                 foreach (Tree t in bigTreeTypeSide)
                 {
-                    t.DrawSprite(_spriteBatch, t.spriteTexture);
+                    t.DrawSprite(_spriteBatch, t.spriteTexture, camera);
                 }
 
                 foreach (Tree t in bigTreeTypeBottom)
                 {
-                    t.DrawSprite(_spriteBatch, t.spriteTexture);
+                    t.DrawSprite(_spriteBatch, t.spriteTexture, camera);
                 }
 
                 foreach (Building b in houses)
                 {
-                    b.DrawSprite(_spriteBatch, b.spriteTexture);
+                    b.DrawSprite(_spriteBatch, b.spriteTexture, camera);
                 }
 
                 foreach (Tree t in smallTrees)
                 {
-                    t.DrawSprite(_spriteBatch, t.spriteTexture);
+                    t.DrawSprite(_spriteBatch, t.spriteTexture, camera);
                 }
 
                 //foreach (ReadableObject r in signPosts)
@@ -280,13 +292,13 @@ namespace Jokemon_Team_1
 
                 foreach (Grass g in jokemonGrass)
                 {
-                    g.DrawSprite(_spriteBatch, grassTexture);
+                    g.DrawSprite(_spriteBatch, grassTexture, camera);
                 }
 
-                laboratory.DrawSprite(_spriteBatch, laboratory.spriteTexture);
+                laboratory.DrawSprite(_spriteBatch, laboratory.spriteTexture, camera);
 
 
-                player.DrawSprite(_spriteBatch, player.spriteTexture);
+                player.DrawSprite(_spriteBatch, player.spriteTexture, camera);
             }
             else if(inJokemonBattle == true)
             {

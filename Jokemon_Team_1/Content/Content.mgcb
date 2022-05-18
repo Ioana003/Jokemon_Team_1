@@ -73,12 +73,6 @@
 /processorParam:TextureFormat=Color
 /build:LabFixed.png
 
-#begin Nintendo Wii  Mii Channel Theme.mp3
-/importer:Mp3Importer
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:Nintendo Wii  Mii Channel Theme.mp3
-
 #begin PlayerFixed.png
 /importer:TextureImporter
 /processor:TextureProcessor
