@@ -49,6 +49,7 @@ namespace Jokemon_Team_1
         private Texture2D pausemenuTexture;
 
         private bool inJokemonBattle = false;
+        private bool inPauseMenu = false;
         private int countFrames = 0;
 
         public Game1()
@@ -83,7 +84,7 @@ namespace Jokemon_Team_1
             playerTexture = Content.Load<Texture2D>("PlayerFixed");
             smallTreeTexture = Content.Load<Texture2D>("TreeFixed");
             grassTexture = Content.Load<Texture2D>("GrassFixed");
-            pausemenuTexture = Content.Load<Texture2D>("pause_menu_box");
+            pausemenuTexture = Content.Load<Texture2D>("PauseMenuBox");
             //signTextureWood = Content.Load<Texture2D>("Sign_Little");
             //postBoxTexture = Content.Load<Texture2D>("Postbox");
 
@@ -186,7 +187,7 @@ namespace Jokemon_Team_1
             //Grass ends HERE
 
             player = new Player(playerTexture, new Vector2(200, 100), new Vector2(playerTexture.Width * 2, playerTexture.Height * 2));
-            pausemenu = new PauseMenu(pausemenuTexture, new Vector2(), new Vector2(pausemenuTexture.Width, pausemenuTexture.Height), false);
+            pausemenu = new PauseMenu(pausemenuTexture, new Vector2(400-pausemenuTexture.Width/2, 400-pausemenuTexture.Height/2), new Vector2(pausemenuTexture.Width, pausemenuTexture.Height), false);
 
         }
 
@@ -196,8 +197,12 @@ namespace Jokemon_Team_1
                 Exit();
 
             // TODO: Add your update logic here
+            if (inPauseMenu == true)
+            {
 
-            if (inJokemonBattle == false || pausemenu.shown == false)
+            }
+
+            if (inJokemonBattle == false ||inPauseMenu == false)
             {
 
                 iManager.checkKeyboard(player);
@@ -240,7 +245,11 @@ namespace Jokemon_Team_1
                 if (Keyboard.GetState().IsKeyDown(Keys.P))
                 {
                     pausemenu.shown = true;
-
+                    inPauseMenu = true;
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.T))
+                {
+                    pausemenu.spritePosition=new Vector2(10, 10);
                 }
             }
 
@@ -251,14 +260,7 @@ namespace Jokemon_Team_1
                     inJokemonBattle = false;
                 }
             }
-            else if (pausemenu.shown == true)
-            {
-
-                if (Keyboard.GetState().IsKeyDown(Keys.P))
-                {
-                    pausemenu.shown = false;
-                }
-            }
+            
 
             base.Update(gameTime);
         }
@@ -316,7 +318,7 @@ namespace Jokemon_Team_1
             // TODO: Add your drawing code here
 
 
-            
+
 
             base.Draw(gameTime);
         }
