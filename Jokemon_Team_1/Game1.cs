@@ -11,6 +11,8 @@ namespace Jokemon_Team_1
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
+        private PauseMenu pausemenu;
+
         private Tree[,] bigTreeTypeSide = new Tree[2, 15];
         private Tree[,] bigTreeTypeBottom = new Tree[2, 15];
         private Tree[,] smallTrees = new Tree[2, 6];
@@ -44,9 +46,10 @@ namespace Jokemon_Team_1
         private Texture2D signTextureWood;
         private Texture2D postBoxTexture;
         private Texture2D grassTexture;
+        private Texture2D pausemenuTexture;
 
         private bool inJokemonBattle = false;
-        private bool pausemenu = false;
+        private bool inPauseMenu = false;
         private int countFrames = 0;
 
         private Stream music;
@@ -83,6 +86,7 @@ namespace Jokemon_Team_1
             playerTexture = Content.Load<Texture2D>("PlayerFixed");
             smallTreeTexture = Content.Load<Texture2D>("TreeFixed");
             grassTexture = Content.Load<Texture2D>("GrassFixed");
+            pausemenuTexture = Content.Load<Texture2D>("PauseMenuBox");
             //signTextureWood = Content.Load<Texture2D>("Sign_Little");
             //postBoxTexture = Content.Load<Texture2D>("Postbox");
 
@@ -186,6 +190,7 @@ namespace Jokemon_Team_1
             //Grass ends HERE
 
             player = new Player(playerTexture, new Vector2(200, 100), new Vector2(playerTexture.Width * 2, playerTexture.Height * 2));
+            pausemenu = new PauseMenu(pausemenuTexture, new Vector2(400-pausemenuTexture.Width/2, 400-pausemenuTexture.Height/2), new Vector2(pausemenuTexture.Width, pausemenuTexture.Height), false);
 
         }
 
@@ -195,8 +200,12 @@ namespace Jokemon_Team_1
                 Exit();
 
             // TODO: Add your update logic here
+            if (inPauseMenu == true)
+            {
 
-            if (inJokemonBattle == false || pausemenu == false)
+            }
+
+            if (inJokemonBattle == false ||inPauseMenu == false)
             {
 
                 iManager.checkKeyboard(player);
@@ -238,8 +247,12 @@ namespace Jokemon_Team_1
 
                 if (Keyboard.GetState().IsKeyDown(Keys.P))
                 {
-                    pausemenu = true;
-
+                    pausemenu.shown = true;
+                    inPauseMenu = true;
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.T))
+                {
+                    pausemenu.spritePosition=new Vector2(10, 10);
                 }
             }
 
@@ -250,6 +263,7 @@ namespace Jokemon_Team_1
                     inJokemonBattle = false;
                 }
             }
+            
 
             base.Update(gameTime);
         }
@@ -299,11 +313,15 @@ namespace Jokemon_Team_1
             {
                 GraphicsDevice.Clear(Color.Black);
             }
+            if (pausemenu.shown == true)
+            {
+                pausemenu.DrawSprite(_spriteBatch, pausemenu.spriteTexture);
+            }
 
             // TODO: Add your drawing code here
 
 
-            
+
 
             base.Draw(gameTime);
         }
