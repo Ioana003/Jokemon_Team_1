@@ -145,6 +145,9 @@ namespace Jokemon_Team_1
                 }
             }
             //Trees end HERE
+            // Jokemon                            - by charles(just in case of merging error, ignore)
+            PikaAchu = new Jokemon(pikaachuback, new Vector2(50, 400), new Vector2(250, 250));
+            Enemy = new Jokemon(pikaachufront, new Vector2(500, 50), new Vector2(250, 250));
 
             //The following are BUILDINGS
             laboratory = new Building(labTexture, new Vector2(400, 500), new Vector2(labTexture.Width * 2, labTexture.Height * 2));
@@ -157,7 +160,7 @@ namespace Jokemon_Team_1
             }
             houses[0].spritePosition = new Vector2(Window.ClientBounds.Width / 3 - houses[0].spriteTexture.Width, 200);
             houses[1].spritePosition = new Vector2(2 * Window.ClientBounds.Width / 3 - houses[1].spriteTexture.Width, 200);
-            //Buildings end HERE
+            //Buildings end HERE -- RIGHT HERE!
 
             //The following are READABLE OBJECTS
             //for (int i = 0; i <= signPosts.GetUpperBound(0); i++)
