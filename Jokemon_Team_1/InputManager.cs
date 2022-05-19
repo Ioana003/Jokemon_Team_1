@@ -10,7 +10,7 @@ namespace Jokemon_Team_1
     {
         KeyboardState state;
 
-        public void checkKeyboard(Player playerSprite)
+        public void checkKeyboard(Player playerSprite, Jokemon jokemon)
         {
             state = Keyboard.GetState();
             playerSprite.goingLeft = false;
@@ -37,14 +37,8 @@ namespace Jokemon_Team_1
             {
                 playerSprite.goingDown = true;
             }
-            if (state.IsKeyDown(Keys.C))
-            {
-                playerSprite.clone = true;
-            }
-            if (state.IsKeyDown(Keys.N))
-            {
-                playerSprite.clone = false;
-            }
+  
+            
         }
 
 
