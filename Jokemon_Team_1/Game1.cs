@@ -15,8 +15,8 @@ namespace Jokemon_Team_1
         private const int screenWidth = 800;
         private const int screenHeight = 800;
 
-        private Tree[,] bigTreeTypeSide = new Tree[2, 15];
-        private Tree[,] bigTreeTypeBottom = new Tree[2, 15];
+        private Tree[,] bigTreeTypeSide = new Tree[2, 14];
+        private Tree[,] bigTreeTypeBottom = new Tree[2, 16];
         private Tree[,] smallTrees = new Tree[2, 6];
         private List<Tree> treeObjectList = new List<Tree>();
 
@@ -54,9 +54,15 @@ namespace Jokemon_Team_1
         private Texture2D grassTexture;
         private Texture2D squareTexture;
 
-        private bool inJokemonBattle = false;
+        public bool inJokemonBattle = false;
         private bool inPauseMenu = false;
         private int countFrames = 0;
+
+        private Jokemon PikaAchu;
+        private Jokemon Enemy;
+        private Stream music;
+        private Texture2D pikaachuback;
+        private Texture2D pikaachufront;
 
         public Game1()
         {
@@ -83,13 +89,14 @@ namespace Jokemon_Team_1
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-
+            font = Content.Load<SpriteFont>("File");
             labTexture = Content.Load<Texture2D>("LabFixed");
             bigTreeTexture = Content.Load<Texture2D>("TreeFixed");
             houseTexture = Content.Load<Texture2D>("HouseFixed");
             playerTexture = Content.Load<Texture2D>("PlayerFixed");
             smallTreeTexture = Content.Load<Texture2D>("TreeFixed");
             grassTexture = Content.Load<Texture2D>("GrassFixed");
+            //pausemenuTexture = Content.Load<Texture2D>("PauseMenuBox");
             //signTextureWood = Content.Load<Texture2D>("Sign_Little");
             //postBoxTexture = Content.Load<Texture2D>("Postbox");
 
@@ -107,11 +114,11 @@ namespace Jokemon_Team_1
                 {
                     if (i == 0)
                     {
-                        bigTreeTypeSide[i, j] = new Tree(bigTreeTexture, new Vector2(0, j * bigTreeTexture.Height * 2), new Vector2(bigTreeTexture.Width * 2, bigTreeTexture.Height * 2));
+                        bigTreeTypeSide[i, j] = new Tree(bigTreeTexture, new Vector2(0, j * Window.ClientBounds.Height / bigTreeTypeSide.GetUpperBound(1)), new Vector2(bigTreeTexture.Width * 2, bigTreeTexture.Height * 2));
                     }
                     else
                     {
-                        bigTreeTypeSide[i, j] = new Tree(bigTreeTexture, new Vector2(Window.ClientBounds.Width - bigTreeTexture.Width * 2, j * bigTreeTexture.Height * 2), new Vector2(bigTreeTexture.Width * 2, bigTreeTexture.Height * 2));
+                        bigTreeTypeSide[i, j] = new Tree(bigTreeTexture, new Vector2(Window.ClientBounds.Width - bigTreeTexture.Width * 2, j * Window.ClientBounds.Height / bigTreeTypeSide.GetUpperBound(1)), new Vector2(bigTreeTexture.Width * 2, bigTreeTexture.Height * 2));
                     }
 
                     treeObjectList.Add(bigTreeTypeSide[i, j]);
@@ -124,15 +131,18 @@ namespace Jokemon_Team_1
                 {
                     if (i == 0)
                     {
-                        bigTreeTypeBottom[i, j] = new Tree(bigTreeTexture, new Vector2(j * bigTreeTexture.Width * 2 + j * (bigTreeTexture.Height * 2 - bigTreeTexture.Width * 2), 0), new Vector2(bigTreeTexture.Width * 2, bigTreeTexture.Height * 2));
+                        bigTreeTypeBottom[i, j] = new Tree(bigTreeTexture, new Vector2(j * Window.ClientBounds.Width / bigTreeTypeBottom.GetUpperBound(1), 0), new Vector2(bigTreeTexture.Width * 2, bigTreeTexture.Height * 2));
 
                     }
                     else
                     {
-                        bigTreeTypeBottom[i, j] = new Tree(bigTreeTexture, new Vector2(j * bigTreeTexture.Width * 2 + j * (bigTreeTexture.Height * 2 - bigTreeTexture.Width * 2), Window.ClientBounds.Height - bigTreeTexture.Height * 2), new Vector2(bigTreeTexture.Width * 2, bigTreeTexture.Height * 2));
+                        bigTreeTypeBottom[i, j] = new Tree(bigTreeTexture, new Vector2(j * Window.ClientBounds.Width / bigTreeTypeBottom.GetUpperBound(1), Window.ClientBounds.Height - bigTreeTexture.Height * 2), new Vector2(bigTreeTexture.Width * 2, bigTreeTexture.Height * 2));
                     }
 
-                    treeObjectList.Add(bigTreeTypeBottom[i, j]);
+                    if(j != 8)
+                    {
+                        treeObjectList.Add(bigTreeTypeBottom[i, j]);
+                    }
                 }
             }
 
@@ -154,8 +164,8 @@ namespace Jokemon_Team_1
             }
             //Trees end HERE
             // Jokemon                            - by charles(just in case of merging error, ignore)
-            PikaAchu = new Jokemon(pikaachuback, new Vector2(50, 400), new Vector2(250, 250));
-            Enemy = new Jokemon(pikaachufront, new Vector2(500, 50), new Vector2(250, 250));
+            PikaAchu = new Jokemon(pikaachuback, new Vector2(-50, 375), new Vector2(500, 500),100,10,10,10,10,5,"Iron Tail","Nuzzle","Normal Attack","Sneeze");
+            Enemy = new Jokemon(pikaachufront, new Vector2(325, -30), new Vector2(500, 500), 100, 10, 10, 10, 10, 5, "Iron Tail", "Nuzzle", "Normal Attack", "Sneeze");
 
             //The following are BUILDINGS
             laboratory = new Building(labTexture, new Vector2(400, 500), new Vector2(labTexture.Width * 2, labTexture.Height * 2));
@@ -200,8 +210,13 @@ namespace Jokemon_Team_1
 
             //Grass ends HERE
 
+                for(int i = 0; i <= showJokemonInBattle.GetUpperBound(0); i++)
+                {
+                    showJokemonInBattle[i] = new Jokemon(playerTexture, new Vector2(), new Vector2(100, 100), 0, 0, 0, 0, 0, 0, "this", "might", "break", "everything");
+                }
+
             player = new Player(playerTexture, new Vector2(200, 100), new Vector2(playerTexture.Width * 2, playerTexture.Height * 2));
-            pausemenu = new PauseMenu(pausemenuTexture, new Vector2(400-pausemenuTexture.Width/2, 400-pausemenuTexture.Height/2), new Vector2(pausemenuTexture.Width, pausemenuTexture.Height), false);
+            //pausemenu = new PauseMenu(pausemenuTexture, new Vector2(400-pausemenuTexture.Width/2, 400-pausemenuTexture.Height/2), new Vector2(pausemenuTexture.Width, pausemenuTexture.Height), false);
 
         }
 
@@ -223,17 +238,31 @@ namespace Jokemon_Team_1
                 if (inJokemonBattle == false)
                 {
 
-                    iManager.checkKeyboard(player);
+                iManager.checkKeyboard(player,PikaAchu);
 
                     foreach (Tree t in treeObjectList)
                     {
                         pManager.checkCollision(player, t);
                     }
 
-                    foreach (Building b in buildingObjectList)
+                foreach (Building b in buildingObjectList)
+                {
+                    pManager.checkCollision(player, b);
+                }
+                if (!inJokemonBattle)
+                {
+                    if (Keyboard.GetState().IsKeyDown(Keys.T))
                     {
-                        pManager.checkCollision(player, b);
+                        inJokemonBattle = true;
                     }
+                }
+                else if (inJokemonBattle)
+                {
+                    if (Keyboard.GetState().IsKeyDown(Keys.Y))
+                    {
+                        inJokemonBattle = false;
+                    }
+                }
 
                     //foreach (ReadableObject r in readablesObjectList)
                     //{
@@ -242,9 +271,11 @@ namespace Jokemon_Team_1
 
                     //Semi-broken, for now.
 
-                    foreach (Grass g in grassObjectList)
+                foreach (Grass g in grassObjectList)
+                {
+                    if (countFrames % 10 == 0)
                     {
-                        if (countFrames % 10 == 0)
+                        if (player.goingDown == true || player.goingLeft == true || player.goingRight == true || player.goingUp == true)
                         {
                             if (pManager.checkCollision(player, g) == true)
                             {
@@ -252,6 +283,7 @@ namespace Jokemon_Team_1
                             }
                         }
                     }
+                }
 
                     countFrames = countFrames + 1;
 
