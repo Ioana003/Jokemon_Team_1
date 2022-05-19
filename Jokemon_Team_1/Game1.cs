@@ -10,8 +10,10 @@ namespace Jokemon_Team_1
     { //Plrease work
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        private SpriteFont font;
 
-        private PauseMenu pausemenu;
+        private const int screenWidth = 800;
+        private const int screenHeight = 800;
 
         private Tree[,] bigTreeTypeSide = new Tree[2, 15];
         private Tree[,] bigTreeTypeBottom = new Tree[2, 15];
@@ -35,6 +37,10 @@ namespace Jokemon_Team_1
 
         private Jokemon[] showJokemonInBattle = new Jokemon[2];
 
+        private StartMenu startMenu = new StartMenu();
+        private Sprite playButton = new Sprite();
+        private Text playText = new Text();
+
         private PhysicsManager pManager = new PhysicsManager();
         private InputManager iManager = new InputManager();
 
@@ -46,13 +52,11 @@ namespace Jokemon_Team_1
         private Texture2D signTextureWood;
         private Texture2D postBoxTexture;
         private Texture2D grassTexture;
-        private Texture2D pausemenuTexture;
+        private Texture2D squareTexture;
 
         private bool inJokemonBattle = false;
         private bool inPauseMenu = false;
         private int countFrames = 0;
-
-        private Stream music;
 
         public Game1()
         {
@@ -64,9 +68,9 @@ namespace Jokemon_Team_1
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            _graphics.PreferredBackBufferWidth = 800;
-            _graphics.PreferredBackBufferHeight = 800;
-            //It's supposed to be 800, 800
+            _graphics.PreferredBackBufferWidth = screenWidth;
+            _graphics.PreferredBackBufferHeight = screenHeight;
+            //It's supposed to be 800, 800 // is now a constant go got line 14 & 15
             _graphics.ApplyChanges();
 
 
@@ -86,11 +90,15 @@ namespace Jokemon_Team_1
             playerTexture = Content.Load<Texture2D>("PlayerFixed");
             smallTreeTexture = Content.Load<Texture2D>("TreeFixed");
             grassTexture = Content.Load<Texture2D>("GrassFixed");
-            pausemenuTexture = Content.Load<Texture2D>("PauseMenuBox");
             //signTextureWood = Content.Load<Texture2D>("Sign_Little");
             //postBoxTexture = Content.Load<Texture2D>("Postbox");
 
-            music = Content.Load<Stream>("Music.mp3");
+            SpriteFont font = Content.Load<SpriteFont>("File");
+
+            startMenu.hasStarted = false; //makes start menu show when game starts
+            playButton = new Sprite(grassTexture, new Vector2((screenWidth / 2) - 200, screenHeight / 3), new Vector2(400, 100));
+            playText = new Text(font, "Play", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 25), Color.Black);
+
 
             //The following are TREES
             for (int i = 0; i <= bigTreeTypeSide.GetUpperBound(0); i++)
@@ -203,125 +211,121 @@ namespace Jokemon_Team_1
                 Exit();
 
             // TODO: Add your update logic here
-            if (inPauseMenu == true && Keyboard.GetState().IsKeyDown(Keys.P))
+            if (startMenu.hasStarted == false) //wont show anything until space bar is pressed
             {
-                pausemenu.shown = false;
-                inPauseMenu = false;
+                if (Keyboard.GetState().IsKeyDown(Keys.Space))
+                {
+                    startMenu.hasStarted = true;
+                }
             }
-
-            if (inJokemonBattle == false ||inPauseMenu == false)
+            else if (startMenu.hasStarted == true) //start menu will disappear
             {
-
-                iManager.checkKeyboard(player);
-
-                foreach (Tree t in treeObjectList)
+                if (inJokemonBattle == false)
                 {
-                    pManager.checkCollision(player, t);
-                }
 
-                foreach (Building b in buildingObjectList)
-                {
-                    pManager.checkCollision(player, b);
-                }
+                    iManager.checkKeyboard(player);
 
-                //foreach (ReadableObject r in readablesObjectList)
-                //{
-                //    pManager.checkCollision(player, r);
-                //}
-
-                //Semi-broken, for now.
-
-                foreach (Grass g in grassObjectList)
-                {
-                    if (countFrames % 10 == 0)
+                    foreach (Tree t in treeObjectList)
                     {
-                        if (pManager.checkCollision(player, g) == true)
+                        pManager.checkCollision(player, t);
+                    }
+
+                    foreach (Building b in buildingObjectList)
+                    {
+                        pManager.checkCollision(player, b);
+                    }
+
+                    //foreach (ReadableObject r in readablesObjectList)
+                    //{
+                    //    pManager.checkCollision(player, r);
+                    //}
+
+                    //Semi-broken, for now.
+
+                    foreach (Grass g in grassObjectList)
+                    {
+                        if (countFrames % 10 == 0)
                         {
-                            inJokemonBattle = true;
+                            if (pManager.checkCollision(player, g) == true)
+                            {
+                                inJokemonBattle = true;
+                            }
                         }
+                    }
+
+                    countFrames = countFrames + 1;
+
+                    if (countFrames >= 60)
+                    {
+                        countFrames = 0;
                     }
                 }
 
-                countFrames = countFrames + 1;
-
-                if(countFrames >= 60)
+                else if (inJokemonBattle == true)
                 {
-                    countFrames = 0;
-                }
-
-                if (Keyboard.GetState().IsKeyDown(Keys.P))
-                {
-                    pausemenu.shown = true;
-                    inPauseMenu = true;
-                }
-                if (Keyboard.GetState().IsKeyDown(Keys.T))
-                {
-                    pausemenu.spritePosition=new Vector2(10, 10); //to check
+                    if (Keyboard.GetState().IsKeyDown(Keys.X))
+                    {
+                        inJokemonBattle = false;
+                    }
                 }
             }
-
-            else if (inJokemonBattle == true)
-            {
-                if (Keyboard.GetState().IsKeyDown(Keys.X))
-                {
-                    inJokemonBattle = false;
-                }
-            }
-            
-
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            if (inJokemonBattle == false)
+            if (startMenu.hasStarted == true) //only drwas everything else when the tart menu disappears
             {
-                GraphicsDevice.Clear(Color.LawnGreen);
-
-                foreach (Tree t in bigTreeTypeSide)
+                if (inJokemonBattle == false)
                 {
-                    t.DrawSprite(_spriteBatch, t.spriteTexture);
-                }
+                    GraphicsDevice.Clear(Color.LawnGreen);
 
-                foreach (Tree t in bigTreeTypeBottom)
+                    foreach (Tree t in bigTreeTypeSide)
+                    {
+                        t.DrawSprite(_spriteBatch, t.spriteTexture);
+                    }
+
+                    foreach (Tree t in bigTreeTypeBottom)
+                    {
+                        t.DrawSprite(_spriteBatch, t.spriteTexture);
+                    }
+
+                    foreach (Building b in houses)
+                    {
+                        b.DrawSprite(_spriteBatch, b.spriteTexture);
+                    }
+
+                    foreach (Tree t in smallTrees)
+                    {
+                        t.DrawSprite(_spriteBatch, t.spriteTexture);
+                    }
+
+                    //foreach (ReadableObject r in signPosts)
+                    //{
+                    //    r.DrawSprite(_spriteBatch, r.spriteTexture);
+                    //}
+
+                    foreach (Grass g in jokemonGrass)
+                    {
+                        g.DrawSprite(_spriteBatch, grassTexture);
+                    }
+
+                    laboratory.DrawSprite(_spriteBatch, laboratory.spriteTexture);
+
+                    player.DrawSprite(_spriteBatch, player.spriteTexture);
+                }
+                else if (inJokemonBattle == true)
                 {
-                    t.DrawSprite(_spriteBatch, t.spriteTexture);
+                    GraphicsDevice.Clear(Color.Black);
                 }
-
-                foreach (Building b in houses)
-                {
-                    b.DrawSprite(_spriteBatch, b.spriteTexture);
-                }
-
-                foreach (Tree t in smallTrees)
-                {
-                    t.DrawSprite(_spriteBatch, t.spriteTexture);
-                }
-
-                //foreach (ReadableObject r in signPosts)
-                //{
-                //    r.DrawSprite(_spriteBatch, r.spriteTexture);
-                //}
-
-                foreach (Grass g in jokemonGrass)
-                {
-                    g.DrawSprite(_spriteBatch, grassTexture);
-                }
-
-                laboratory.DrawSprite(_spriteBatch, laboratory.spriteTexture);
-
-
-                player.DrawSprite(_spriteBatch, player.spriteTexture);
             }
-            else if(inJokemonBattle == true)
+            if (startMenu.hasStarted == false) //draws start menu
             {
-                GraphicsDevice.Clear(Color.Black);
+                GraphicsDevice.Clear(Color.Purple);
+                startMenu.DrawStartMenu(_spriteBatch);
+                playButton.DrawSprite(_spriteBatch, squareTexture);
+                playText.DrawText(_spriteBatch);
             }
-            if (pausemenu.shown == true)
-            {
-                pausemenu.DrawSprite(_spriteBatch, pausemenu.spriteTexture);
-            }
-
             // TODO: Add your drawing code here
 
 

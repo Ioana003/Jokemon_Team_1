@@ -4,7 +4,6 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-
 namespace Jokemon_Team_1
 {
     class Sprite
@@ -27,7 +26,6 @@ namespace Jokemon_Team_1
             this.spriteSize = size;
         }
 
-
         public void DrawSprite(SpriteBatch s, Texture2D t)
         {
             spriteTexture = t;
@@ -38,12 +36,6 @@ namespace Jokemon_Team_1
 
             s.End();
 
-
         }
-
-
-
-
-
     }
 }
