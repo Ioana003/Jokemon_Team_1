@@ -207,9 +207,10 @@ namespace Jokemon_Team_1
                 Exit();
 
             // TODO: Add your update logic here
-            if (inPauseMenu == true)
+            if (inPauseMenu == true && Keyboard.GetState().IsKeyDown(Keys.P))
             {
-
+                pausemenu.shown = false;
+                inPauseMenu = false;
             }
 
             if (inJokemonBattle == false ||inPauseMenu == false)
@@ -273,7 +274,7 @@ namespace Jokemon_Team_1
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.M))
                 {
-                    pausemenu.spritePosition=new Vector2(10, 10);
+                    pausemenu.spritePosition=new Vector2(10, 10); //to check
                 }
             }
 
