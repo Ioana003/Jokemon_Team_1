@@ -10,7 +10,7 @@ namespace Jokemon_Team_1
     { //Plrease work
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-
+        private SpriteFont font;
         private PauseMenu pausemenu;
 
         private Tree[,] bigTreeTypeSide = new Tree[2, 15];
@@ -48,11 +48,15 @@ namespace Jokemon_Team_1
         private Texture2D grassTexture;
         private Texture2D pausemenuTexture;
 
-        private bool inJokemonBattle = false;
+        public bool inJokemonBattle = false;
         private bool inPauseMenu = false;
         private int countFrames = 0;
 
+        private Jokemon PikaAchu;
+        private Jokemon Enemy;
         private Stream music;
+        private Texture2D pikaachuback;
+        private Texture2D pikaachufront;
 
         public Game1()
         {
@@ -79,7 +83,7 @@ namespace Jokemon_Team_1
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-
+            font = Content.Load<SpriteFont>("File");
             labTexture = Content.Load<Texture2D>("LabFixed");
             bigTreeTexture = Content.Load<Texture2D>("TreeFixed");
             houseTexture = Content.Load<Texture2D>("HouseFixed");
@@ -89,8 +93,8 @@ namespace Jokemon_Team_1
             pausemenuTexture = Content.Load<Texture2D>("PauseMenuBox");
             //signTextureWood = Content.Load<Texture2D>("Sign_Little");
             //postBoxTexture = Content.Load<Texture2D>("Postbox");
-
-            music = Content.Load<Stream>("Music.mp3");
+            pikaachufront = Content.Load<Texture2D>("Pika-A-chu");
+            pikaachuback = Content.Load<Texture2D>("Pika_Back");
 
             //The following are TREES
             for (int i = 0; i <= bigTreeTypeSide.GetUpperBound(0); i++)
@@ -146,8 +150,8 @@ namespace Jokemon_Team_1
             }
             //Trees end HERE
             // Jokemon                            - by charles(just in case of merging error, ignore)
-            PikaAchu = new Jokemon(pikaachuback, new Vector2(50, 400), new Vector2(250, 250));
-            Enemy = new Jokemon(pikaachufront, new Vector2(500, 50), new Vector2(250, 250));
+            PikaAchu = new Jokemon(pikaachuback, new Vector2(-50, 375), new Vector2(500, 500),100,10,10,10,10,5,"Iron Tail","Nuzzle","Normal Attack","Sneeze");
+            Enemy = new Jokemon(pikaachufront, new Vector2(325, -30), new Vector2(500, 500), 100, 10, 10, 10, 10, 5, "Iron Tail", "Nuzzle", "Normal Attack", "Sneeze");
 
             //The following are BUILDINGS
             laboratory = new Building(labTexture, new Vector2(400, 500), new Vector2(labTexture.Width * 2, labTexture.Height * 2));
@@ -211,7 +215,7 @@ namespace Jokemon_Team_1
             if (inJokemonBattle == false ||inPauseMenu == false)
             {
 
-                iManager.checkKeyboard(player);
+                iManager.checkKeyboard(player,PikaAchu);
 
                 foreach (Tree t in treeObjectList)
                 {
@@ -221,6 +225,20 @@ namespace Jokemon_Team_1
                 foreach (Building b in buildingObjectList)
                 {
                     pManager.checkCollision(player, b);
+                }
+                if (!inJokemonBattle)
+                {
+                    if (Keyboard.GetState().IsKeyDown(Keys.T))
+                    {
+                        inJokemonBattle = true;
+                    }
+                }
+                else if (inJokemonBattle)
+                {
+                    if (Keyboard.GetState().IsKeyDown(Keys.Y))
+                    {
+                        inJokemonBattle = false;
+                    }
                 }
 
                 //foreach (ReadableObject r in readablesObjectList)
@@ -253,19 +271,19 @@ namespace Jokemon_Team_1
                     pausemenu.shown = true;
                     inPauseMenu = true;
                 }
-                if (Keyboard.GetState().IsKeyDown(Keys.T))
+                if (Keyboard.GetState().IsKeyDown(Keys.M))
                 {
                     pausemenu.spritePosition=new Vector2(10, 10);
                 }
             }
 
-            else if (inJokemonBattle == true)
-            {
-                if (Keyboard.GetState().IsKeyDown(Keys.X))
-                {
-                    inJokemonBattle = false;
-                }
-            }
+            //else if (inJokemonBattle == true)
+            //{
+            //    if (Keyboard.GetState().IsKeyDown(Keys.X))
+            //    {
+            //        inJokemonBattle = false;
+            //    }
+            //}
             
 
             base.Update(gameTime);
@@ -315,6 +333,8 @@ namespace Jokemon_Team_1
             else if(inJokemonBattle == true)
             {
                 GraphicsDevice.Clear(Color.Black);
+                PikaAchu.DrawSprite(_spriteBatch, pikaachuback);
+                Enemy.DrawSprite(_spriteBatch, pikaachufront);
             }
             if (pausemenu.shown == true)
             {

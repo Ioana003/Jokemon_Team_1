@@ -38,10 +38,7 @@ namespace Jokemon_Team_1
                 playerSprite.goingDown = true;
             }
   
-            if (state.IsKeyDown(Keys.T))
-            {
-                jokemon.attacked = true;
-            }
+            
         }
 
 
