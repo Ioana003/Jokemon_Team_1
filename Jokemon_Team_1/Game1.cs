@@ -10,6 +10,10 @@ namespace Jokemon_Team_1
     { //Plrease work
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        private SpriteFont font;
+
+        private const int screenWidth = 800;
+        private const int screenHeight = 800;
 
         private Tree[,] bigTreeTypeSide = new Tree[2, 15];
         private Tree[,] bigTreeTypeBottom = new Tree[2, 15];
@@ -34,6 +38,8 @@ namespace Jokemon_Team_1
         private Jokemon[] showJokemonInBattle = new Jokemon[2];
 
         private StartMenu startMenu = new StartMenu();
+        private Sprite playButton = new Sprite();
+        private Text playText = new Text();
 
         private PhysicsManager pManager = new PhysicsManager();
         private InputManager iManager = new InputManager();
@@ -46,6 +52,7 @@ namespace Jokemon_Team_1
         private Texture2D signTextureWood;
         private Texture2D postBoxTexture;
         private Texture2D grassTexture;
+        private Texture2D squareTexture;
 
         private bool inJokemonBattle = false;
         private int countFrames = 0;
@@ -60,9 +67,9 @@ namespace Jokemon_Team_1
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            _graphics.PreferredBackBufferWidth = 800;
-            _graphics.PreferredBackBufferHeight = 800;
-            //It's supposed to be 800, 800
+            _graphics.PreferredBackBufferWidth = screenWidth;
+            _graphics.PreferredBackBufferHeight = screenHeight;
+            //It's supposed to be 800, 800 // is now a constant go got line 14 & 15
             _graphics.ApplyChanges();
 
 
@@ -82,10 +89,16 @@ namespace Jokemon_Team_1
             playerTexture = Content.Load<Texture2D>("PlayerFixed");
             smallTreeTexture = Content.Load<Texture2D>("TreeFixed");
             grassTexture = Content.Load<Texture2D>("GrassFixed");
+            squareTexture = Content.Load<Texture2D>("square");
             //signTextureWood = Content.Load<Texture2D>("Sign_Little");
             //postBoxTexture = Content.Load<Texture2D>("Postbox");
 
-            startMenu.hasStarted = false;
+            SpriteFont font = Content.Load<SpriteFont>("File");
+
+            startMenu.hasStarted = false; //makes start menu show when game starts
+            playButton = new Sprite(grassTexture, new Vector2((screenWidth / 2) - 200, screenHeight / 3), new Vector2(400, 100));
+            playText = new Text(font, "Play", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 25), Color.Black);
+
 
             //The following are TREES
             for (int i = 0; i <= bigTreeTypeSide.GetUpperBound(0); i++)
@@ -194,14 +207,14 @@ namespace Jokemon_Team_1
                 Exit();
 
             // TODO: Add your update logic here
-            if (startMenu.hasStarted == false)
+            if (startMenu.hasStarted == false) //wont show anything until space bar is pressed
             {
                 if (Keyboard.GetState().IsKeyDown(Keys.Space))
                 {
                     startMenu.hasStarted = true;
                 }
             }
-            else if (startMenu.hasStarted == true)
+            else if (startMenu.hasStarted == true) //start menu will disappear
             {
                 if (inJokemonBattle == false)
                 {
@@ -257,7 +270,7 @@ namespace Jokemon_Team_1
 
         protected override void Draw(GameTime gameTime)
         {
-            if (startMenu.hasStarted == true)
+            if (startMenu.hasStarted == true) //only drwas everything else when the tart menu disappears
             {
                 if (inJokemonBattle == false)
                 {
@@ -302,10 +315,12 @@ namespace Jokemon_Team_1
                     GraphicsDevice.Clear(Color.Black);
                 }
             }
-            if (startMenu.hasStarted == false)
+            if (startMenu.hasStarted == false) //draws start menu
             {
                 GraphicsDevice.Clear(Color.Purple);
                 startMenu.DrawStartMenu(_spriteBatch);
+                playButton.DrawSprite(_spriteBatch, squareTexture);
+                playText.DrawText(_spriteBatch);
             }
             // TODO: Add your drawing code here
 

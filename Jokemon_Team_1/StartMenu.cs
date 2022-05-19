@@ -21,10 +21,6 @@ namespace Jokemon_Team_1
         {
             hasStarted = inHasStarted;
 
-            if (hasStarted == true)
-            {
-
-            }
         }
 
         public void DrawStartMenu(SpriteBatch s)
