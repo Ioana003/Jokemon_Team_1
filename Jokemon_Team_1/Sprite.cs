@@ -12,6 +12,11 @@ namespace Jokemon_Team_1
         public Vector2 spriteSize { get; set; }
         public Texture2D spriteTexture { get; set; }
 
+        public Rectangle playerRectangle
+        {
+            get { return new Rectangle((int)spritePosition.X, (int)spritePosition.Y, spriteTexture.Width, spriteTexture.Height); }
+        }
+
         public Color spriteColor = Color.White;
 
         public Sprite()
@@ -30,7 +35,7 @@ namespace Jokemon_Team_1
         {
             spriteTexture = t;
 
-            s.Begin();
+            s.Begin(transformMatrix: m.transform);
 
             s.Draw(spriteTexture, new Rectangle((int)spritePosition.X, (int)spritePosition.Y, (int)spriteSize.X, (int)spriteSize.Y), spriteColor);
 
