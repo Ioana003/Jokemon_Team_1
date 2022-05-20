@@ -38,6 +38,7 @@ namespace Jokemon_Team_1
         private Jokemon[] showJokemonInBattle = new Jokemon[2];
 
         private StartMenu startMenu = new StartMenu();
+        //private PauseMenu pauseMenu;
         private Sprite playButton = new Sprite();
         private Text playText = new Text();
 
@@ -236,8 +237,10 @@ namespace Jokemon_Team_1
             }
             else if (startMenu.hasStarted == true) //start menu will disappear
             {
-                if (inJokemonBattle == false)
+                if (inJokemonBattle == false) 
                 {
+                    if (inPauseMenu == false)
+                    {
 
                 iManager.checkKeyboard(player,PikaAchu);
 
@@ -301,6 +304,11 @@ namespace Jokemon_Team_1
                         inJokemonBattle = false;
                     }
                 }
+                else if (inPauseMenu == true || Keyboard.GetState().IsKeyDown(Keys.P))
+                {
+                    inPauseMenu = false;
+                }
+                }
             }
             base.Update(gameTime);
         }
@@ -350,6 +358,10 @@ namespace Jokemon_Team_1
                 else if (inJokemonBattle == true)
                 {
                     GraphicsDevice.Clear(Color.Black);
+                }
+                else if (inPauseMenu == true)
+                {
+                   
                 }
             }
             if (startMenu.hasStarted == false) //draws start menu

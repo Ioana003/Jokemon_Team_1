@@ -6,13 +6,23 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Jokemon_Team_1
 {
-    class PauseMenu : Sprite
+    class PauseMenu
     {
         public bool shown;
 
-        public PauseMenu(Texture2D tex, Vector2 pos, Vector2 size, bool vis) : base(tex, pos, size)
+        public PauseMenu()
         {
-            this.shown = vis;
         }
+
+        public void PauseMenuHappening()
+        { 
+            //when pause menu shown, pause menu fuctions begin
+            //pause menu functions:
+            //Resume game(get out of pause mennu)
+            //exit game
+            //see items
+            //see pokemon
+        }
+
     }
 }
