@@ -20,6 +20,9 @@ namespace Jokemon_Team_1
         private Tree[,] smallTrees = new Tree[2, 6];
         private List<Tree> treeObjectList = new List<Tree>();
 
+        public static int screenWidth;
+        public static int screenHeight;
+
 
         private Building[] houses = new Building[2];
         private Building laboratory;
