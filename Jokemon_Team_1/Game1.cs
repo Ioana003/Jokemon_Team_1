@@ -40,6 +40,13 @@ namespace Jokemon_Team_1
         private StartMenu startMenu = new StartMenu();
         private Sprite playButton = new Sprite();
         private Text playText = new Text();
+        private Text skill1text = new Text();
+        private Text skill2text = new Text();
+        private Text skill3text = new Text();
+        private Text skill4text = new Text();
+        private Text ownhealth = new Text();
+        private Text ownattack = new Text();
+
 
         private PhysicsManager pManager = new PhysicsManager();
         private InputManager iManager = new InputManager();
@@ -100,12 +107,20 @@ namespace Jokemon_Team_1
             //pausemenuTexture = Content.Load<Texture2D>("PauseMenuBox");
             //signTextureWood = Content.Load<Texture2D>("Sign_Little");
             //postBoxTexture = Content.Load<Texture2D>("Postbox");
+            pikaachufront = Content.Load<Texture2D>("Pika-A-chu");
+            pikaachuback= Content.Load<Texture2D>("Pika_Back");
 
             SpriteFont fontPika = Content.Load<SpriteFont>("File");
 
             startMenu.hasStarted = false; //makes start menu show when game starts
             playButton = new Sprite(squareTexture, new Vector2((screenWidth / 2) - 200, screenHeight / 3), new Vector2(400, 100));
             playText = new Text(fontPika, "Play", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 25), Color.Black);
+            skill1text = new Text(fontPika, "Iron Tail", new Vector2(300,500), Color.White);
+            skill2text = new Text(fontPika, "Nuzzle", new Vector2(300,650), Color.White);
+            skill3text = new Text(fontPika, "Normal Attack", new Vector2(500,500), Color.White);
+            skill4text = new Text(fontPika, "Sneeze", new Vector2(500,650), Color.White);
+
+
 
 
             //The following are TREES
@@ -165,8 +180,10 @@ namespace Jokemon_Team_1
             }
             //Trees end HERE
             // Jokemon                            - by charles(just in case of merging error, ignore)
-            PikaAchu = new Jokemon(pikaachuback, new Vector2(-50, 375), new Vector2(500, 500),100,10,10,10,10,5,"Iron Tail","Nuzzle","Normal Attack","Sneeze");
-            Enemy = new Jokemon(pikaachufront, new Vector2(325, -30), new Vector2(500, 500), 100, 10, 10, 10, 10, 5, "Iron Tail", "Nuzzle", "Normal Attack", "Sneeze");
+            PikaAchu = new Jokemon(pikaachuback, new Vector2(-100, 450), new Vector2(500, 500),100,10,5,10,5,5,"Normal Attack","Iron Tail","Nuzzle","Sneeze");
+            Enemy = new Jokemon(pikaachufront, new Vector2(450, -75), new Vector2(500, 500), 100, 10, 5, 10, 5, 5, "Normal Attack", "Iron Tail", "Nuzzle", "Sneeze");
+            ownhealth = new Text(fontPika,"health =" + PikaAchu.health.ToString(), new Vector2(0, 600), Color.Red);
+            ownattack = new Text(fontPika, "atk =" + PikaAchu.attack.ToString(), new Vector2(0, 500), Color.Red);
 
             //The following are BUILDINGS
             laboratory = new Building(labTexture, new Vector2(400, 500), new Vector2(labTexture.Width * 2, labTexture.Height * 2));
@@ -350,6 +367,16 @@ namespace Jokemon_Team_1
                 else if (inJokemonBattle == true)
                 {
                     GraphicsDevice.Clear(Color.Black);
+                    PikaAchu.DrawJokemon(_spriteBatch, pikaachuback);
+                    Enemy.DrawJokemon(_spriteBatch,pikaachufront);
+                    skill4text.DrawText(_spriteBatch);
+                    skill3text.DrawText(_spriteBatch);
+                    skill2text.DrawText(_spriteBatch);
+                    skill1text.DrawText(_spriteBatch);
+                    ownhealth.DrawText(_spriteBatch);
+                    ownattack.DrawText(_spriteBatch);
+
+
                 }
             }
             if (startMenu.hasStarted == false) //draws start menu

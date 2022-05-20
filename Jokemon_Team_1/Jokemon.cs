@@ -82,6 +82,17 @@ namespace Jokemon_Team_1
                 spritePosition = new Vector2(window.ClientBounds.Width - window.ClientBounds.Width / 5, window.ClientBounds.Height / 4);
             }
         }
+        public void DrawJokemon(SpriteBatch s, Texture2D t)
+        {
+            spriteTexture = t;
+
+            s.Begin();
+
+            s.Draw(spriteTexture, new Rectangle((int)spritePosition.X, (int)spritePosition.Y, (int)spriteSize.X, (int)spriteSize.Y), spriteColor);
+
+            s.End();
+
+        }
 
     }
 }
