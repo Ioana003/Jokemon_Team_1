@@ -10,7 +10,21 @@ namespace Jokemon_Team_1
     {
         KeyboardState state;
 
-        public void checkKeyboard(Player playerSprite, Jokemon jokemon)
+        MouseState mouse;
+
+        public bool CheckMouse(int width, int height)
+        {
+            mouse = Mouse.GetState();
+            if (mouse.X <= (width / 2) + 200 && mouse.X >= (width / 2) - 200 && mouse.Y <= height / 3 + 100 && mouse.Y >= height / 3 && mouse.LeftButton == ButtonState.Pressed)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public void checkKeyboard(Player playerSprite)
         {
             state = Keyboard.GetState();
             playerSprite.goingLeft = false;

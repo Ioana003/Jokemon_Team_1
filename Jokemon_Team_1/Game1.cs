@@ -39,7 +39,9 @@ namespace Jokemon_Team_1
 
         private StartMenu startMenu = new StartMenu();
         private Sprite playButton = new Sprite();
+        private Sprite exitButton = new Sprite();
         private Text playText = new Text();
+        private Text exitText = new Text();
 
         private PhysicsManager pManager = new PhysicsManager();
         private InputManager iManager = new InputManager();
@@ -105,7 +107,9 @@ namespace Jokemon_Team_1
 
             startMenu.hasStarted = false; //makes start menu show when game starts
             playButton = new Sprite(squareTexture, new Vector2((screenWidth / 2) - 200, screenHeight / 3), new Vector2(400, 100));
-            playText = new Text(fontPika, "Play", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 25), Color.Black);
+            exitButton = new Sprite(squareTexture, new Vector2((screenWidth / 2) - 100, (screenHeight / 3) + 150), new Vector2(200, 100));
+            playText = new Text(font, "Play", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 25), Color.Black);
+            exitText = new Text(font, "Exit", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 175), Color.Black);
 
 
             //The following are TREES
@@ -229,10 +233,11 @@ namespace Jokemon_Team_1
             // TODO: Add your update logic here
             if (startMenu.hasStarted == false) //wont show anything until space bar is pressed
             {
-                if (Keyboard.GetState().IsKeyDown(Keys.Space))
-                {
-                    startMenu.hasStarted = true;
-                }
+                //if (Keyboard.GetState().IsKeyDown(Keys.Space))
+                //{
+                //    startMenu.hasStarted = true;
+                //}
+                startMenu.hasStarted = iManager.CheckMouse(screenWidth, screenHeight);
             }
             else if (startMenu.hasStarted == true) //start menu will disappear
             {
@@ -357,7 +362,9 @@ namespace Jokemon_Team_1
                 GraphicsDevice.Clear(Color.Purple);
                 startMenu.DrawStartMenu(_spriteBatch);
                 playButton.DrawSprite(_spriteBatch, squareTexture);
+                exitButton.DrawSprite(_spriteBatch, squareTexture);
                 playText.DrawText(_spriteBatch);
+                exitText.DrawText(_spriteBatch);
             }
             // TODO: Add your drawing code here
 
