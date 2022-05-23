@@ -12,17 +12,15 @@ namespace Jokemon_Team_1
         private SpriteBatch _spriteBatch;
         private SpriteFont fontP;
 
-        private const int screenWidth = 800;
-        private const int screenHeight = 800;
+        public const int screenWidth = 800;
+        public const int screenHeight = 800;
 
         private Tree[,] bigTreeTypeSide = new Tree[2, 14];
         private Tree[,] bigTreeTypeBottom = new Tree[2, 16];
         private Tree[,] smallTrees = new Tree[2, 6];
         private List<Tree> treeObjectList = new List<Tree>();
 
-        public static int screenWidth;
-        public static int screenHeight;
-
+        private Camera camera;
 
         private Building[] houses = new Building[2];
         private Building laboratory;
@@ -92,6 +90,7 @@ namespace Jokemon_Team_1
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            
             fontP = Content.Load<SpriteFont>("File");
             labTexture = Content.Load<Texture2D>("LabFixed");
             bigTreeTexture = Content.Load<Texture2D>("TreeFixed");
@@ -100,6 +99,7 @@ namespace Jokemon_Team_1
             smallTreeTexture = Content.Load<Texture2D>("TreeFixed");
             grassTexture = Content.Load<Texture2D>("GrassFixed");
             squareTexture = Content.Load<Texture2D>("square");
+            camera = new Camera();
             //pausemenuTexture = Content.Load<Texture2D>("PauseMenuBox");
             //signTextureWood = Content.Load<Texture2D>("Sign_Little");
             //postBoxTexture = Content.Load<Texture2D>("Postbox");
@@ -226,10 +226,15 @@ namespace Jokemon_Team_1
 
         protected override void Update(GameTime gameTime)
         {
+            
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+
+
             // TODO: Add your update logic here
+           
             if (startMenu.hasStarted == false) //wont show anything until space bar is pressed
             {
                 if (Keyboard.GetState().IsKeyDown(Keys.Space))
@@ -305,6 +310,8 @@ namespace Jokemon_Team_1
                     }
                 }
             }
+            camera.Follow(player);
+
             base.Update(gameTime);
         }
 
@@ -318,22 +325,22 @@ namespace Jokemon_Team_1
 
                     foreach (Tree t in bigTreeTypeSide)
                     {
-                        t.DrawSprite(_spriteBatch, t.spriteTexture);
+                        t.DrawSprite(_spriteBatch, t.spriteTexture, camera);
                     }
 
                     foreach (Tree t in bigTreeTypeBottom)
                     {
-                        t.DrawSprite(_spriteBatch, t.spriteTexture);
+                        t.DrawSprite(_spriteBatch, t.spriteTexture, camera);
                     }
 
                     foreach (Building b in houses)
                     {
-                        b.DrawSprite(_spriteBatch, b.spriteTexture);
+                        b.DrawSprite(_spriteBatch, b.spriteTexture, camera);
                     }
 
                     foreach (Tree t in smallTrees)
                     {
-                        t.DrawSprite(_spriteBatch, t.spriteTexture);
+                        t.DrawSprite(_spriteBatch, t.spriteTexture, camera);
                     }
 
                     //foreach (ReadableObject r in signPosts)
@@ -343,12 +350,12 @@ namespace Jokemon_Team_1
 
                     foreach (Grass g in jokemonGrass)
                     {
-                        g.DrawSprite(_spriteBatch, grassTexture);
+                        g.DrawSprite(_spriteBatch, grassTexture, camera);
                     }
 
-                    laboratory.DrawSprite(_spriteBatch, laboratory.spriteTexture);
+                    laboratory.DrawSprite(_spriteBatch, laboratory.spriteTexture, camera);
 
-                    player.DrawSprite(_spriteBatch, player.spriteTexture);
+                    player.DrawSprite(_spriteBatch, player.spriteTexture, camera);
                 }
                 else if (inJokemonBattle == true)
                 {
@@ -359,7 +366,7 @@ namespace Jokemon_Team_1
             {
                 GraphicsDevice.Clear(Color.Purple);
                 startMenu.DrawStartMenu(_spriteBatch);
-                playButton.DrawSprite(_spriteBatch, squareTexture);
+                playButton.DrawSprite(_spriteBatch, squareTexture, camera);
                 playText.DrawText(_spriteBatch);
             }
             // TODO: Add your drawing code here

@@ -31,7 +31,7 @@ namespace Jokemon_Team_1
             this.spriteSize = size;
         }
 
-        public void DrawSprite(SpriteBatch s, Texture2D t)
+        public void DrawSprite(SpriteBatch s, Texture2D t, Camera m)
         {
             spriteTexture = t;
 
