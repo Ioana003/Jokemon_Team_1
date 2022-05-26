@@ -57,6 +57,7 @@ namespace Jokemon_Team_1
 
         public bool inJokemonBattle = false;
         private bool inPauseMenu = false;
+        private bool inventory = false;
         private int countFrames = 0;
 
         private Jokemon PikaAchu;
@@ -232,7 +233,7 @@ namespace Jokemon_Team_1
                 Exit();
 
 
-
+            
             // TODO: Add your update logic here
            
             if (startMenu.hasStarted == false) //wont show anything until space bar is pressed
