@@ -1,18 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
+﻿using Microsoft.Xna.Framework.Input;
 
 namespace Jokemon_Team_1
 {
     class InputManager
     {
         KeyboardState state;
-
         MouseState mouse;
 
-        public bool CheckMouse(int width, int height)
+        public bool CheckSettings(int width, int height)
+        {
+            mouse = Mouse.GetState();
+            if (mouse.X <= (width / 2) + 150 && mouse.X >= (width / 2) - 150 && mouse.Y <= height / 3 - 50 && mouse.Y >= height / 3 - 150 && mouse.LeftButton == ButtonState.Pressed)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+            public bool CheckEnd(int width, int height)
+        {
+            mouse = Mouse.GetState();
+            if (mouse.X <= (width / 2) + 100 && mouse.X >= (width / 2) - 100 && mouse.Y <= height / 3 + 250 && mouse.Y >= height / 3 + 150 && mouse.LeftButton == ButtonState.Pressed)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public bool CheckStart(int width, int height)
         {
             mouse = Mouse.GetState();
             if (mouse.X <= (width / 2) + 200 && mouse.X >= (width / 2) - 200 && mouse.Y <= height / 3 + 100 && mouse.Y >= height / 3 && mouse.LeftButton == ButtonState.Pressed)
