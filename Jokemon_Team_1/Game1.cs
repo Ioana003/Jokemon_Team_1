@@ -40,7 +40,13 @@ namespace Jokemon_Team_1
 
         private StartMenu startMenu = new StartMenu();
         private Sprite playButton = new Sprite();
+        private Sprite exitButton = new Sprite();
+        private Sprite settingsButton = new Sprite();
         private Text playText = new Text();
+        private Text exitText = new Text();
+        private Text settingsText = new Text();
+
+        private SettingsMenu settingsMenu = new SettingsMenu();
 
         private PhysicsManager pManager = new PhysicsManager();
         private InputManager iManager = new InputManager();
@@ -108,8 +114,13 @@ namespace Jokemon_Team_1
 
             startMenu.hasStarted = false; //makes start menu show when game starts
             playButton = new Sprite(squareTexture, new Vector2((screenWidth / 2) - 200, screenHeight / 3), new Vector2(400, 100));
-            playText = new Text(fontPika, "Play", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 25), Color.Black);
+            exitButton = new Sprite(squareTexture, new Vector2((screenWidth / 2) - 100, (screenHeight / 3) + 150), new Vector2(200, 100));
+            settingsButton = new Sprite(squareTexture, new Vector2((screenWidth / 2) - 150, (screenHeight / 3) - 150), new Vector2(300, 100));
+            playText = new Text(font, "Play", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 25), Color.Black);
+            exitText = new Text(font, "Exit", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 175), Color.Black);
+            settingsText = new Text(font, "Settings", new Vector2((screenWidth / 2) - 85, (screenHeight / 3) -125), Color.Black);
 
+            settingsMenu.settingsHasStarted = false;
 
             //The following are TREES
             for (int i = 0; i <= bigTreeTypeSide.GetUpperBound(0); i++)
@@ -234,15 +245,22 @@ namespace Jokemon_Team_1
 
 
             // TODO: Add your update logic here
-           
-            if (startMenu.hasStarted == false) //wont show anything until space bar is pressed
+
+
+            if (startMenu.hasStarted == false && settingsMenu.settingsHasStarted == false) //wont show anything until space bar is pressed
             {
-                if (Keyboard.GetState().IsKeyDown(Keys.Space))
+                startMenu.hasStarted = iManager.CheckStart(screenWidth, screenHeight);
+                settingsMenu.settingsHasStarted = iManager.CheckSettings(screenWidth, screenHeight);
+                if(iManager.CheckEnd(screenWidth, screenHeight) == true)
                 {
-                    startMenu.hasStarted = true;
+                    Exit();
                 }
             }
-            else if (startMenu.hasStarted == true) //start menu will disappear
+            else if (startMenu.hasStarted == false && settingsMenu.settingsHasStarted == true)
+            {
+
+            }
+            else if (startMenu.hasStarted == true && settingsMenu.settingsHasStarted == false) //start menu will disappear
             {
                 if (inJokemonBattle == false)
                 {
@@ -317,7 +335,7 @@ namespace Jokemon_Team_1
 
         protected override void Draw(GameTime gameTime)
         {
-            if (startMenu.hasStarted == true) //only drwas everything else when the tart menu disappears
+            if (startMenu.hasStarted == true && settingsMenu.settingsHasStarted == false) //only drwas everything else when the tart menu disappears
             {
                 if (inJokemonBattle == false)
                 {
@@ -362,12 +380,19 @@ namespace Jokemon_Team_1
                     GraphicsDevice.Clear(Color.Black);
                 }
             }
-            if (startMenu.hasStarted == false) //draws start menu
+            if(startMenu.hasStarted == false && settingsMenu.settingsHasStarted == true)
+            {
+                GraphicsDevice.Clear(Color.Black);
+            }
+            if (startMenu.hasStarted == false && settingsMenu.settingsHasStarted == false) //draws start menu
             {
                 GraphicsDevice.Clear(Color.Purple);
-                startMenu.DrawStartMenu(_spriteBatch);
-                playButton.DrawSprite(_spriteBatch, squareTexture, camera);
+                playButton.DrawSprite(_spriteBatch, squareTexture);
+                exitButton.DrawSprite(_spriteBatch, squareTexture);
+                settingsButton.DrawSprite(_spriteBatch, squareTexture);
                 playText.DrawText(_spriteBatch);
+                exitText.DrawText(_spriteBatch);
+                settingsText.DrawText(_spriteBatch);
             }
             // TODO: Add your drawing code here
 
