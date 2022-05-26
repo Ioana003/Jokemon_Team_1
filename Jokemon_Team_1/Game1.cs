@@ -11,6 +11,7 @@ namespace Jokemon_Team_1
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private SpriteFont fontP;
+        private SpriteFont battlingfont;
 
         private const int screenWidth = 800;
         private const int screenHeight = 800;
@@ -37,6 +38,8 @@ namespace Jokemon_Team_1
 
         private Jokemon[] showJokemonInBattle = new Jokemon[2];
 
+        private BattleSystem battlesystem = new BattleSystem();
+
         private StartMenu startMenu = new StartMenu();
         private Sprite playButton = new Sprite();
         private Text playText = new Text();
@@ -44,9 +47,14 @@ namespace Jokemon_Team_1
         private Text skill2text = new Text();
         private Text skill3text = new Text();
         private Text skill4text = new Text();
+        private Text eskill1text = new Text();
+        private Text eskill2text = new Text();
+        private Text eskill3text = new Text();
+        private Text eskill4text = new Text();
         private Text ownhealth = new Text();
         private Text ownattack = new Text();
-
+        private Text enemyhealth = new Text();
+        private Text enemyattack = new Text();
 
         private PhysicsManager pManager = new PhysicsManager();
         private InputManager iManager = new InputManager();
@@ -60,6 +68,7 @@ namespace Jokemon_Team_1
         private Texture2D postBoxTexture;
         private Texture2D grassTexture;
         private Texture2D squareTexture;
+        private Texture2D skillbox;
 
         public bool inJokemonBattle = false;
         private bool inPauseMenu = false;
@@ -71,6 +80,10 @@ namespace Jokemon_Team_1
         private Texture2D pikaachuback;
         private Texture2D pikaachufront;
 
+        private Sprite skillbox1,skillbox2,skillbox3,skillbox4, eskillbox1, eskillbox2, eskillbox3, eskillbox4;
+
+        private HealthBar healthbar;
+        private HealthBar enemyhealthbar;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -107,18 +120,15 @@ namespace Jokemon_Team_1
             //pausemenuTexture = Content.Load<Texture2D>("PauseMenuBox");
             //signTextureWood = Content.Load<Texture2D>("Sign_Little");
             //postBoxTexture = Content.Load<Texture2D>("Postbox");
-            pikaachufront = Content.Load<Texture2D>("Pika-A-chu");
+            pikaachufront = Content.Load<Texture2D>("Pika-A-chu-fixed");
             pikaachuback= Content.Load<Texture2D>("Pika_Back");
-
+            skillbox = Content.Load<Texture2D>("box");
+            battlingfont = Content.Load<SpriteFont>("Battling font");
             SpriteFont fontPika = Content.Load<SpriteFont>("File");
 
             startMenu.hasStarted = false; //makes start menu show when game starts
             playButton = new Sprite(squareTexture, new Vector2((screenWidth / 2) - 200, screenHeight / 3), new Vector2(400, 100));
             playText = new Text(fontPika, "Play", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 25), Color.Black);
-            skill1text = new Text(fontPika, "Iron Tail", new Vector2(300,500), Color.White);
-            skill2text = new Text(fontPika, "Nuzzle", new Vector2(300,650), Color.White);
-            skill3text = new Text(fontPika, "Normal Attack", new Vector2(500,500), Color.White);
-            skill4text = new Text(fontPika, "Sneeze", new Vector2(500,650), Color.White);
 
 
 
@@ -180,10 +190,23 @@ namespace Jokemon_Team_1
             }
             //Trees end HERE
             // Jokemon                            - by charles(just in case of merging error, ignore)
-            PikaAchu = new Jokemon(pikaachuback, new Vector2(-100, 450), new Vector2(500, 500),100,10,5,10,5,5,"Normal Attack","Iron Tail","Nuzzle","Sneeze");
+            PikaAchu = new Jokemon(pikaachuback, new Vector2(-100, 400), new Vector2(500, 500),100,10,5,10,5,5,"Normal Attack","Iron Tail","Nuzzle","Sneeze");
             Enemy = new Jokemon(pikaachufront, new Vector2(450, -75), new Vector2(500, 500), 100, 10, 5, 10, 5, 5, "Normal Attack", "Iron Tail", "Nuzzle", "Sneeze");
             ownhealth = new Text(fontPika,"health =" + PikaAchu.health.ToString(), new Vector2(0, 600), Color.Red);
             ownattack = new Text(fontPika, "atk =" + PikaAchu.attack.ToString(), new Vector2(0, 500), Color.Red);
+            enemyhealth = new Text(fontPika, "health =" + Enemy.health.ToString(), new Vector2(550, 200), Color.Red);
+            enemyattack = new Text(fontPika, "atk =" + Enemy.attack.ToString(), new Vector2(600, 300), Color.Red);
+
+
+
+
+
+
+
+
+
+
+
 
             //The following are BUILDINGS
             laboratory = new Building(labTexture, new Vector2(400, 500), new Vector2(labTexture.Width * 2, labTexture.Height * 2));
@@ -236,6 +259,30 @@ namespace Jokemon_Team_1
             player = new Player(playerTexture, new Vector2(200, 100), new Vector2(playerTexture.Width * 2, playerTexture.Height * 2));
             //pausemenu = new PauseMenu(pausemenuTexture, new Vector2(400-pausemenuTexture.Width/2, 400-pausemenuTexture.Height/2), new Vector2(pausemenuTexture.Width, pausemenuTexture.Height), false);
 
+
+            skillbox1 = new Sprite(skillbox, new Vector2(300, 500), new Vector2(150, 50));
+            skillbox2 = new Sprite(skillbox, new Vector2(300, 650), new Vector2(150, 50));
+            skillbox3 = new Sprite(skillbox, new Vector2(500, 500), new Vector2(150, 50));
+            skillbox4 = new Sprite(skillbox, new Vector2(500, 650), new Vector2(150, 50));
+
+            skill1text = new Text(battlingfont, "Iron Tail", new Vector2(300, 500), Color.Black);
+            skill2text = new Text(battlingfont, "Nuzzle", new Vector2(300, 650), Color.Black);
+            skill3text = new Text(battlingfont, "Normal Attack", new Vector2(500, 500), Color.Black);
+            skill4text = new Text(battlingfont, "Sneeze", new Vector2(500, 650), Color.Black);
+
+
+            eskillbox1 = new Sprite(skillbox, new Vector2(50, 50), new Vector2(150, 50));
+            eskillbox2 = new Sprite(skillbox, new Vector2(50, 200), new Vector2(150, 50));
+            eskillbox3 = new Sprite(skillbox, new Vector2(250, 50), new Vector2(150, 50));
+            eskillbox4 = new Sprite(skillbox, new Vector2(250, 200), new Vector2(150, 50));
+
+            eskill1text = new Text(battlingfont, "Iron Tail", new Vector2(50, 50), Color.Black);
+            eskill2text = new Text(battlingfont, "Nuzzle", new Vector2(50, 200), Color.Black);
+            eskill3text = new Text(battlingfont, "Normal Attack", new Vector2(250, 50), Color.Black);
+            eskill4text = new Text(battlingfont, "Sneeze", new Vector2(250, 200), Color.Black);
+
+            healthbar = new HealthBar(skillbox, PikaAchu, new Vector2(10, 400));
+            enemyhealthbar = new HealthBar(skillbox, Enemy, new Vector2(690, 400));
         }
 
         protected override void Update(GameTime gameTime)
@@ -280,6 +327,8 @@ namespace Jokemon_Team_1
                     {
                         inJokemonBattle = false;
                     }
+
+                    battlesystem.Battling(PikaAchu, Enemy, true, skillbox1, skillbox2, skillbox3, skillbox4);
                 }
 
                     //foreach (ReadableObject r in readablesObjectList)
@@ -313,10 +362,41 @@ namespace Jokemon_Team_1
 
                 else if (inJokemonBattle == true)
                 {
+                    enemyhealth.textContent = "health =" + Enemy.health.ToString();
+                    ownhealth.textContent = "health =" + PikaAchu.health.ToString();
+                    Rectangle mouserec = new Rectangle(Mouse.GetState().X, Mouse.GetState().Y, 1, 1);
+                    Rectangle skillbox1rec = new Rectangle((int)skillbox1.spritePosition.X, (int)skillbox1.spritePosition.Y, (int)skillbox1.spriteSize.X, (int)skillbox1.spriteSize.Y);
+                    Rectangle skillbox2rec = new Rectangle((int)skillbox2.spritePosition.X, (int)skillbox2.spritePosition.Y, (int)skillbox2.spriteSize.X, (int)skillbox2.spriteSize.Y);
+                    Rectangle skillbox3rec = new Rectangle((int)skillbox3.spritePosition.X, (int)skillbox3.spritePosition.Y, (int)skillbox3.spriteSize.X, (int)skillbox3.spriteSize.Y);
+                    Rectangle skillbox4rec = new Rectangle((int)skillbox4.spritePosition.X, (int)skillbox4.spritePosition.Y, (int)skillbox4.spriteSize.X, (int)skillbox4.spriteSize.Y);
+                    Rectangle eskillbox1rec = new Rectangle((int)eskillbox1.spritePosition.X, (int)eskillbox1.spritePosition.Y, (int)eskillbox1.spriteSize.X, (int)eskillbox1.spriteSize.Y);
+                    Rectangle eskillbox2rec = new Rectangle((int)eskillbox2.spritePosition.X, (int)eskillbox2.spritePosition.Y, (int)eskillbox2.spriteSize.X, (int)eskillbox2.spriteSize.Y);
+                    Rectangle eskillbox3rec = new Rectangle((int)eskillbox3.spritePosition.X, (int)eskillbox3.spritePosition.Y, (int)eskillbox3.spriteSize.X, (int)eskillbox3.spriteSize.Y);
+                    Rectangle eskillbox4rec = new Rectangle((int)eskillbox4.spritePosition.X, (int)eskillbox4.spritePosition.Y, (int)eskillbox4.spriteSize.X, (int)eskillbox4.spriteSize.Y);
                     if (Keyboard.GetState().IsKeyDown(Keys.X))
                     {
                         inJokemonBattle = false;
                     }
+                    if (mouserec.Intersects(skillbox1rec) || mouserec.Intersects(skillbox2rec) || mouserec.Intersects(skillbox3rec) || mouserec.Intersects(skillbox4rec))
+                    {
+                        if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+                        {
+                            Enemy.health -= 1;
+                     
+
+                        }
+                    }
+                    if (mouserec.Intersects(eskillbox1rec) || mouserec.Intersects(eskillbox2rec) || mouserec.Intersects(eskillbox3rec) || mouserec.Intersects(eskillbox4rec))
+                    {
+                        if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+                        {
+                            PikaAchu.health -= 1;
+
+
+                        }
+                    }
+
+
                 }
             }
             base.Update(gameTime);
@@ -369,13 +449,29 @@ namespace Jokemon_Team_1
                     GraphicsDevice.Clear(Color.Black);
                     PikaAchu.DrawJokemon(_spriteBatch, pikaachuback);
                     Enemy.DrawJokemon(_spriteBatch,pikaachufront);
+                    
+                    ownhealth.DrawText(_spriteBatch);
+                    ownattack.DrawText(_spriteBatch);
+                    enemyhealth.DrawText(_spriteBatch);
+                    enemyattack.DrawText(_spriteBatch);
+                    skillbox1.DrawSprite(_spriteBatch, skillbox);
+                    skillbox2.DrawSprite(_spriteBatch, skillbox);
+                    skillbox3.DrawSprite(_spriteBatch, skillbox);
+                    skillbox4.DrawSprite(_spriteBatch, skillbox);
                     skill4text.DrawText(_spriteBatch);
                     skill3text.DrawText(_spriteBatch);
                     skill2text.DrawText(_spriteBatch);
                     skill1text.DrawText(_spriteBatch);
-                    ownhealth.DrawText(_spriteBatch);
-                    ownattack.DrawText(_spriteBatch);
-
+                    eskillbox1.DrawSprite(_spriteBatch, skillbox);
+                    eskillbox2.DrawSprite(_spriteBatch, skillbox);
+                    eskillbox3.DrawSprite(_spriteBatch, skillbox);
+                    eskillbox4.DrawSprite(_spriteBatch, skillbox);
+                    eskill4text.DrawText(_spriteBatch);
+                    eskill3text.DrawText(_spriteBatch);
+                    eskill2text.DrawText(_spriteBatch);
+                    eskill1text.DrawText(_spriteBatch);
+                    healthbar.DrawHealth(_spriteBatch, PikaAchu);
+                    enemyhealthbar.DrawHealth(_spriteBatch, Enemy);
 
                 }
             }

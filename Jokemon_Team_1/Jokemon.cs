@@ -31,6 +31,7 @@ namespace Jokemon_Team_1
         }
         public Jokemon(Texture2D tex, Vector2 pos, Vector2 size, int HP, int atk, int def, int spAtk, int spDef, int spd, string m1, string m2, string m3, string m4) : base(tex, pos, size)
         {
+            attack = atk;
             health = HP;
             defense = def;
             specialattack = spAtk;
