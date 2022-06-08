@@ -56,6 +56,7 @@ namespace Jokemon_Team_1
         private Text ownattack = new Text();
         private Text enemyhealth = new Text();
         private Text enemyattack = new Text();
+        private Text showattackorder = new Text();
 
         private PhysicsManager pManager = new PhysicsManager();
         private InputManager iManager = new InputManager();
@@ -74,6 +75,8 @@ namespace Jokemon_Team_1
         public bool inJokemonBattle = false;
         private bool inPauseMenu = false;
         private int countFrames = 0;
+        private bool userattacking = true, enemyattacking = false;
+        private bool encounterenemy = false;
 
         private Jokemon PikaAchu;
         private Jokemon Enemy;
@@ -193,10 +196,10 @@ namespace Jokemon_Team_1
             // Jokemon                            - by charles(just in case of merging error, ignore)
             PikaAchu = new Jokemon(pikaachuback, new Vector2(-100, 400), new Vector2(500, 500),100,10,5,10,5,5,"Normal Attack","Iron Tail","Nuzzle","Sneeze");
             Enemy = new Jokemon(pikaachufront, new Vector2(450, -75), new Vector2(500, 500), 100, 10, 5, 10, 5, 5, "Normal Attack", "Iron Tail", "Nuzzle", "Sneeze");
-            ownhealth = new Text(statsfont,"health =" + PikaAchu.health.ToString(), new Vector2(0, 600), Color.White);
+            ownhealth = new Text(statsfont,"health =" + PikaAchu.health.ToString(), new Vector2(0, 550), Color.White);
             ownattack = new Text(statsfont, "atk =" + PikaAchu.attack.ToString(), new Vector2(0, 500), Color.White);
-            enemyhealth = new Text(statsfont, "health =" + Enemy.health.ToString(), new Vector2(550, 200), Color.White);
-            enemyattack = new Text(statsfont, "atk =" + Enemy.attack.ToString(), new Vector2(600, 300), Color.White);
+            enemyhealth = new Text(statsfont, "health =" + Enemy.health.ToString(), new Vector2(600, 300), Color.White);
+            enemyattack = new Text(statsfont, "atk =" + Enemy.attack.ToString(), new Vector2(600, 350), Color.White);
 
 
 
@@ -282,6 +285,7 @@ namespace Jokemon_Team_1
             eskill3text = new Text(battlingfont, "Normal Attack", new Vector2(250, 50), Color.Black);
             eskill4text = new Text(battlingfont, "Sneeze", new Vector2(250, 200), Color.Black);
 
+            showattackorder = new Text(fontPika, "test", new Vector2(300, 350), Color.White);
             healthbar = new HealthBar(skillbox, PikaAchu, new Vector2(10, 400));
             enemyhealthbar = new HealthBar(skillbox, Enemy, new Vector2(690, 400));
         }
@@ -291,7 +295,10 @@ namespace Jokemon_Team_1
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+
+            if (Keyboard.GetState().IsKeyDown(Keys.G))
+                encounterenemy = true;
+                // TODO: Add your update logic here
             if (startMenu.hasStarted == false) //wont show anything until space bar is pressed
             {
                 if (Keyboard.GetState().IsKeyDown(Keys.Space))
@@ -301,103 +308,128 @@ namespace Jokemon_Team_1
             }
             else if (startMenu.hasStarted == true) //start menu will disappear
             {
-                if (inJokemonBattle == false)
+                if (encounterenemy == false)
                 {
-
-                iManager.checkKeyboard(player,PikaAchu);
-
-                    foreach (Tree t in treeObjectList)
+                    if (inJokemonBattle == false)
                     {
-                        pManager.checkCollision(player, t);
-                    }
 
-                foreach (Building b in buildingObjectList)
-                {
-                    pManager.checkCollision(player, b);
-                }
-                if (!inJokemonBattle)
-                {
-                    if (Keyboard.GetState().IsKeyDown(Keys.T))
-                    {
-                        inJokemonBattle = true;
-                    }
-                }
-                else if (inJokemonBattle)
-                {
-                    if (Keyboard.GetState().IsKeyDown(Keys.Y))
-                    {
-                        inJokemonBattle = false;
-                    }
+                        iManager.checkKeyboard(player, PikaAchu);
 
-                    battlesystem.Battling(PikaAchu, Enemy, true, skillbox1, skillbox2, skillbox3, skillbox4);
-                }
-
-                    //foreach (ReadableObject r in readablesObjectList)
-                    //{
-                    //    pManager.checkCollision(player, r);
-                    //}
-
-                    //Semi-broken, for now.
-
-                foreach (Grass g in grassObjectList)
-                {
-                    if (countFrames % 10 == 0)
-                    {
-                        if (player.goingDown == true || player.goingLeft == true || player.goingRight == true || player.goingUp == true)
+                        foreach (Tree t in treeObjectList)
                         {
-                            if (pManager.checkCollision(player, g) == true)
+                            pManager.checkCollision(player, t);
+                        }
+
+                        foreach (Building b in buildingObjectList)
+                        {
+                            pManager.checkCollision(player, b);
+                        }
+                        if (!inJokemonBattle)
+                        {
+                            if (Keyboard.GetState().IsKeyDown(Keys.T))
                             {
                                 inJokemonBattle = true;
                             }
                         }
+                        else if (inJokemonBattle)
+                        {
+                            if (Keyboard.GetState().IsKeyDown(Keys.Y))
+                            {
+                                inJokemonBattle = false;
+                            }
+
+                            battlesystem.Battling(PikaAchu, Enemy, true, skillbox1, skillbox2, skillbox3, skillbox4);
+                        }
+
+                        //foreach (ReadableObject r in readablesObjectList)
+                        //{
+                        //    pManager.checkCollision(player, r);
+                        //}
+
+                        //Semi-broken, for now.
+
+                        foreach (Grass g in grassObjectList)
+                        {
+                            if (countFrames % 10 == 0)
+                            {
+                                if (player.goingDown == true || player.goingLeft == true || player.goingRight == true || player.goingUp == true)
+                                {
+                                    if (pManager.checkCollision(player, g) == true)
+                                    {
+                                        inJokemonBattle = true;
+                                    }
+                                }
+                            }
+                        }
+
+                        countFrames = countFrames + 1;
+
+                        if (countFrames >= 60)
+                        {
+                            countFrames = 0;
+                        }
                     }
-                }
 
-                    countFrames = countFrames + 1;
-
-                    if (countFrames >= 60)
+                    else if (inJokemonBattle == true)
                     {
-                        countFrames = 0;
+                        enemyhealth.textContent = "health =" + Enemy.health.ToString();
+                        ownhealth.textContent = "health =" + PikaAchu.health.ToString();
+                        Rectangle mouserec = new Rectangle(Mouse.GetState().X, Mouse.GetState().Y, 1, 1);
+                        Rectangle skillbox1rec = new Rectangle((int)skillbox1.spritePosition.X, (int)skillbox1.spritePosition.Y, (int)skillbox1.spriteSize.X, (int)skillbox1.spriteSize.Y);
+                        Rectangle skillbox2rec = new Rectangle((int)skillbox2.spritePosition.X, (int)skillbox2.spritePosition.Y, (int)skillbox2.spriteSize.X, (int)skillbox2.spriteSize.Y);
+                        Rectangle skillbox3rec = new Rectangle((int)skillbox3.spritePosition.X, (int)skillbox3.spritePosition.Y, (int)skillbox3.spriteSize.X, (int)skillbox3.spriteSize.Y);
+                        Rectangle skillbox4rec = new Rectangle((int)skillbox4.spritePosition.X, (int)skillbox4.spritePosition.Y, (int)skillbox4.spriteSize.X, (int)skillbox4.spriteSize.Y);
+                        Rectangle eskillbox1rec = new Rectangle((int)eskillbox1.spritePosition.X, (int)eskillbox1.spritePosition.Y, (int)eskillbox1.spriteSize.X, (int)eskillbox1.spriteSize.Y);
+                        Rectangle eskillbox2rec = new Rectangle((int)eskillbox2.spritePosition.X, (int)eskillbox2.spritePosition.Y, (int)eskillbox2.spriteSize.X, (int)eskillbox2.spriteSize.Y);
+                        Rectangle eskillbox3rec = new Rectangle((int)eskillbox3.spritePosition.X, (int)eskillbox3.spritePosition.Y, (int)eskillbox3.spriteSize.X, (int)eskillbox3.spriteSize.Y);
+                        Rectangle eskillbox4rec = new Rectangle((int)eskillbox4.spritePosition.X, (int)eskillbox4.spritePosition.Y, (int)eskillbox4.spriteSize.X, (int)eskillbox4.spriteSize.Y);
+                        if (Keyboard.GetState().IsKeyDown(Keys.X))
+                        {
+                            inJokemonBattle = false;
+                        }
+
+                        if (userattacking)
+                        {
+                            showattackorder = new Text(fontP, "User turn", new Vector2(300, 400), Color.White);
+                            if (mouserec.Intersects(skillbox1rec) || mouserec.Intersects(skillbox2rec) || mouserec.Intersects(skillbox3rec) || mouserec.Intersects(skillbox4rec))
+                            {
+                                if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+                                {
+                                    Enemy.health -= 10;
+
+                                    userattacking = false;
+                                    enemyattacking = true;
+                                }
+                            }
+                        }
+                        else if (enemyattacking)
+                        {
+                            showattackorder = new Text(fontP, "Enemy turn", new Vector2(300, 400), Color.White);
+                            if (mouserec.Intersects(eskillbox1rec) || mouserec.Intersects(eskillbox2rec) || mouserec.Intersects(eskillbox3rec) || mouserec.Intersects(eskillbox4rec))
+                            {
+                                if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+                                {
+                                    PikaAchu.health -= 10;
+                                    userattacking = true;
+                                    enemyattacking = false;
+
+                                }
+                            }
+                        }
+                        if (PikaAchu.health <= 0 || Enemy.health <= 0)
+                        {
+                            inJokemonBattle = false;
+                        }
+
+
                     }
                 }
-
-                else if (inJokemonBattle == true)
+                else if (encounterenemy == true)
                 {
-                    enemyhealth.textContent = "health =" + Enemy.health.ToString();
-                    ownhealth.textContent = "health =" + PikaAchu.health.ToString();
-                    Rectangle mouserec = new Rectangle(Mouse.GetState().X, Mouse.GetState().Y, 1, 1);
-                    Rectangle skillbox1rec = new Rectangle((int)skillbox1.spritePosition.X, (int)skillbox1.spritePosition.Y, (int)skillbox1.spriteSize.X, (int)skillbox1.spriteSize.Y);
-                    Rectangle skillbox2rec = new Rectangle((int)skillbox2.spritePosition.X, (int)skillbox2.spritePosition.Y, (int)skillbox2.spriteSize.X, (int)skillbox2.spriteSize.Y);
-                    Rectangle skillbox3rec = new Rectangle((int)skillbox3.spritePosition.X, (int)skillbox3.spritePosition.Y, (int)skillbox3.spriteSize.X, (int)skillbox3.spriteSize.Y);
-                    Rectangle skillbox4rec = new Rectangle((int)skillbox4.spritePosition.X, (int)skillbox4.spritePosition.Y, (int)skillbox4.spriteSize.X, (int)skillbox4.spriteSize.Y);
-                    Rectangle eskillbox1rec = new Rectangle((int)eskillbox1.spritePosition.X, (int)eskillbox1.spritePosition.Y, (int)eskillbox1.spriteSize.X, (int)eskillbox1.spriteSize.Y);
-                    Rectangle eskillbox2rec = new Rectangle((int)eskillbox2.spritePosition.X, (int)eskillbox2.spritePosition.Y, (int)eskillbox2.spriteSize.X, (int)eskillbox2.spriteSize.Y);
-                    Rectangle eskillbox3rec = new Rectangle((int)eskillbox3.spritePosition.X, (int)eskillbox3.spritePosition.Y, (int)eskillbox3.spriteSize.X, (int)eskillbox3.spriteSize.Y);
-                    Rectangle eskillbox4rec = new Rectangle((int)eskillbox4.spritePosition.X, (int)eskillbox4.spritePosition.Y, (int)eskillbox4.spriteSize.X, (int)eskillbox4.spriteSize.Y);
-                    if (Keyboard.GetState().IsKeyDown(Keys.X))
+                    if (Keyboard.GetState().IsKeyDown(Keys.G))
                     {
-                        inJokemonBattle = false;
+                        encounterenemy = false;
                     }
-                    if (mouserec.Intersects(skillbox1rec) || mouserec.Intersects(skillbox2rec) || mouserec.Intersects(skillbox3rec) || mouserec.Intersects(skillbox4rec))
-                    {
-                        if (Mouse.GetState().LeftButton == ButtonState.Pressed)
-                        {
-                            Enemy.health -= 1;
-                     
-
-                        }
-                    }
-                    if (mouserec.Intersects(eskillbox1rec) || mouserec.Intersects(eskillbox2rec) || mouserec.Intersects(eskillbox3rec) || mouserec.Intersects(eskillbox4rec))
-                    {
-                        if (Mouse.GetState().LeftButton == ButtonState.Pressed)
-                        {
-                            PikaAchu.health -= 1;
-
-
-                        }
-                    }
-
-
                 }
             }
             base.Update(gameTime);
@@ -407,73 +439,83 @@ namespace Jokemon_Team_1
         {
             if (startMenu.hasStarted == true) //only drwas everything else when the tart menu disappears
             {
-                if (inJokemonBattle == false)
+                if (encounterenemy == false)
                 {
-                    GraphicsDevice.Clear(Color.LawnGreen);
-
-                    foreach (Tree t in bigTreeTypeSide)
+                    if (inJokemonBattle == false)
                     {
-                        t.DrawSprite(_spriteBatch, t.spriteTexture);
-                    }
+                        GraphicsDevice.Clear(Color.LawnGreen);
 
-                    foreach (Tree t in bigTreeTypeBottom)
+                        foreach (Tree t in bigTreeTypeSide)
+                        {
+                            t.DrawSprite(_spriteBatch, t.spriteTexture);
+                        }
+
+                        foreach (Tree t in bigTreeTypeBottom)
+                        {
+                            t.DrawSprite(_spriteBatch, t.spriteTexture);
+                        }
+
+                        foreach (Building b in houses)
+                        {
+                            b.DrawSprite(_spriteBatch, b.spriteTexture);
+                        }
+
+                        foreach (Tree t in smallTrees)
+                        {
+                            t.DrawSprite(_spriteBatch, t.spriteTexture);
+                        }
+
+                        //foreach (ReadableObject r in signPosts)
+                        //{
+                        //    r.DrawSprite(_spriteBatch, r.spriteTexture);
+                        //}
+
+                        foreach (Grass g in jokemonGrass)
+                        {
+                            g.DrawSprite(_spriteBatch, grassTexture);
+                        }
+
+                        laboratory.DrawSprite(_spriteBatch, laboratory.spriteTexture);
+
+                        player.DrawSprite(_spriteBatch, player.spriteTexture);
+                    }
+                    else if (inJokemonBattle == true)
                     {
-                        t.DrawSprite(_spriteBatch, t.spriteTexture);
+                        GraphicsDevice.Clear(Color.Black);
+                        PikaAchu.DrawJokemon(_spriteBatch, pikaachuback);
+                        Enemy.DrawJokemon(_spriteBatch, pikaachufront);
+
+                        ownhealth.DrawText(_spriteBatch);
+                        ownattack.DrawText(_spriteBatch);
+                        enemyhealth.DrawText(_spriteBatch);
+                        enemyattack.DrawText(_spriteBatch);
+                        skillbox1.DrawSprite(_spriteBatch, skillbox);
+                        skillbox2.DrawSprite(_spriteBatch, skillbox);
+                        skillbox3.DrawSprite(_spriteBatch, skillbox);
+                        skillbox4.DrawSprite(_spriteBatch, skillbox);
+                        skill4text.DrawText(_spriteBatch);
+                        skill3text.DrawText(_spriteBatch);
+                        skill2text.DrawText(_spriteBatch);
+                        skill1text.DrawText(_spriteBatch);
+                        eskillbox1.DrawSprite(_spriteBatch, skillbox);
+                        eskillbox2.DrawSprite(_spriteBatch, skillbox);
+                        eskillbox3.DrawSprite(_spriteBatch, skillbox);
+                        eskillbox4.DrawSprite(_spriteBatch, skillbox);
+                        eskill4text.DrawText(_spriteBatch);
+                        eskill3text.DrawText(_spriteBatch);
+                        eskill2text.DrawText(_spriteBatch);
+                        eskill1text.DrawText(_spriteBatch);
+                        healthbar.DrawHealth(_spriteBatch, PikaAchu);
+                        enemyhealthbar.DrawHealth(_spriteBatch, Enemy);
+                        showattackorder.DrawText(_spriteBatch);
                     }
-
-                    foreach (Building b in houses)
-                    {
-                        b.DrawSprite(_spriteBatch, b.spriteTexture);
-                    }
-
-                    foreach (Tree t in smallTrees)
-                    {
-                        t.DrawSprite(_spriteBatch, t.spriteTexture);
-                    }
-
-                    //foreach (ReadableObject r in signPosts)
-                    //{
-                    //    r.DrawSprite(_spriteBatch, r.spriteTexture);
-                    //}
-
-                    foreach (Grass g in jokemonGrass)
-                    {
-                        g.DrawSprite(_spriteBatch, grassTexture);
-                    }
-
-                    laboratory.DrawSprite(_spriteBatch, laboratory.spriteTexture);
-
-                    player.DrawSprite(_spriteBatch, player.spriteTexture);
                 }
-                else if (inJokemonBattle == true)
+                else if (encounterenemy == true)
                 {
-                    GraphicsDevice.Clear(Color.Black);
-                    PikaAchu.DrawJokemon(_spriteBatch, pikaachuback);
-                    Enemy.DrawJokemon(_spriteBatch,pikaachufront);
-                    
-                    ownhealth.DrawText(_spriteBatch);
-                    ownattack.DrawText(_spriteBatch);
-                    enemyhealth.DrawText(_spriteBatch);
-                    enemyattack.DrawText(_spriteBatch);
-                    skillbox1.DrawSprite(_spriteBatch, skillbox);
-                    skillbox2.DrawSprite(_spriteBatch, skillbox);
-                    skillbox3.DrawSprite(_spriteBatch, skillbox);
-                    skillbox4.DrawSprite(_spriteBatch, skillbox);
-                    skill4text.DrawText(_spriteBatch);
-                    skill3text.DrawText(_spriteBatch);
-                    skill2text.DrawText(_spriteBatch);
-                    skill1text.DrawText(_spriteBatch);
-                    eskillbox1.DrawSprite(_spriteBatch, skillbox);
-                    eskillbox2.DrawSprite(_spriteBatch, skillbox);
-                    eskillbox3.DrawSprite(_spriteBatch, skillbox);
-                    eskillbox4.DrawSprite(_spriteBatch, skillbox);
-                    eskill4text.DrawText(_spriteBatch);
-                    eskill3text.DrawText(_spriteBatch);
-                    eskill2text.DrawText(_spriteBatch);
-                    eskill1text.DrawText(_spriteBatch);
-                    healthbar.DrawHealth(_spriteBatch, PikaAchu);
-                    enemyhealthbar.DrawHealth(_spriteBatch, Enemy);
+                    {
+                        GraphicsDevice.Clear(Color.Green);
 
+                    }
                 }
             }
             if (startMenu.hasStarted == false) //draws start menu

@@ -72,6 +72,8 @@ namespace Jokemon_Team_1
                 if (jokemon.health <= 0 || enemy.health <= 0)
                 {
                     battleOver = true;
+                    
+                
                 }
 
             
