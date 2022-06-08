@@ -10,7 +10,7 @@ namespace Jokemon_Team_1
     { //Plrease work
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private SpriteFont fontP;
+        private SpriteFont font;
 
         public const int screenWidth = 800;
         public const int screenHeight = 800;
@@ -97,7 +97,7 @@ namespace Jokemon_Team_1
 
             // TODO: use this.Content to load your game content here
             
-            fontP = Content.Load<SpriteFont>("File");
+            font = Content.Load<SpriteFont>("File");
             labTexture = Content.Load<Texture2D>("LabFixed");
             bigTreeTexture = Content.Load<Texture2D>("TreeFixed");
             houseTexture = Content.Load<Texture2D>("HouseFixed");
@@ -265,7 +265,7 @@ namespace Jokemon_Team_1
                 if (inJokemonBattle == false)
                 {
 
-                iManager.checkKeyboard(player,PikaAchu);
+                    iManager.checkKeyboard(player); //,PikaAchu);
 
                     foreach (Tree t in treeObjectList)
                     {
@@ -335,7 +335,7 @@ namespace Jokemon_Team_1
 
         protected override void Draw(GameTime gameTime)
         {
-            if (startMenu.hasStarted == true && settingsMenu.settingsHasStarted == false) //only drwas everything else when the tart menu disappears
+            if (startMenu.hasStarted == true && settingsMenu.settingsHasStarted == false) //only draws everything else when the tart menu disappears
             {
                 if (inJokemonBattle == false)
                 {
@@ -387,9 +387,9 @@ namespace Jokemon_Team_1
             if (startMenu.hasStarted == false && settingsMenu.settingsHasStarted == false) //draws start menu
             {
                 GraphicsDevice.Clear(Color.Purple);
-                playButton.DrawSprite(_spriteBatch, squareTexture);
-                exitButton.DrawSprite(_spriteBatch, squareTexture);
-                settingsButton.DrawSprite(_spriteBatch, squareTexture);
+                playButton.DrawSprite(_spriteBatch, squareTexture, camera);
+                exitButton.DrawSprite(_spriteBatch, squareTexture, camera);
+                settingsButton.DrawSprite(_spriteBatch, squareTexture, camera);
                 playText.DrawText(_spriteBatch);
                 exitText.DrawText(_spriteBatch);
                 settingsText.DrawText(_spriteBatch);
