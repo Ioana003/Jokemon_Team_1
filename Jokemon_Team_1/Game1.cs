@@ -16,7 +16,7 @@ namespace Jokemon_Team_1
         private Tree[,] bigTreeTypeSide = new Tree[2, 14];
         private Tree[,] bigTreeTypeBottom = new Tree[2, 16];
         private Tree[,] smallTrees = new Tree[2, 6];
-        private List<Tree> treeObjectList = new List<Tree>();
+        //All of these are the trees, plus tree collision
 
 
         private Building[] houses = new Building[2];
@@ -48,16 +48,23 @@ namespace Jokemon_Team_1
         private Texture2D grassTexture;
         private Texture2D pikaAchuTextureBack;
         private Texture2D pikaAchyTextureFront;
+        //Various textures to be used later
 
         public bool inJokemonBattle = false;
         private bool inPauseMenu = false;
         private int countFrames = 0;
+        //Different booleans used here
+        //Additionally, countFrames is used to make sure most people don't constantly get harassed by JokeMons
 
         private Jokemon PikaAchu;
         private Jokemon Enemy;
         private Stream music;
         private Texture2D pikaachuback;
         private Texture2D pikaachufront;
+        //Jokemon textures, plus JokeMon stuff
+
+        private List<Rectangle> collisionBoxes = new List<Rectangle>();
+        //List of collision boxes used for collision
 
         public Game1()
         {
@@ -73,6 +80,7 @@ namespace Jokemon_Team_1
             _graphics.PreferredBackBufferHeight = 800;
             //It's supposed to be 800, 800
             _graphics.ApplyChanges();
+            //Changes the size of the window
 
 
 
@@ -107,14 +115,17 @@ namespace Jokemon_Team_1
                     if (i == 0)
                     {
                         bigTreeTypeSide[i, j] = new Tree(bigTreeTexture, new Vector2(0, j * Window.ClientBounds.Height / bigTreeTypeSide.GetUpperBound(1)), new Vector2(bigTreeTexture.Width * 2, bigTreeTexture.Height * 2));
+                        //If we're using the first half of the array, then place it on the left side
                     }
                     else
                     {
                         bigTreeTypeSide[i, j] = new Tree(bigTreeTexture, new Vector2(Window.ClientBounds.Width - bigTreeTexture.Width * 2, j * Window.ClientBounds.Height / bigTreeTypeSide.GetUpperBound(1)), new Vector2(bigTreeTexture.Width * 2, bigTreeTexture.Height * 2));
+                        //If we're using the second half of the array, place the trees on the right side
                     }
-
-                    treeObjectList.Add(bigTreeTypeSide[i, j]);
                 }
+                collisionBoxes.Add(new Rectangle((int)bigTreeTypeSide[i, 0].spritePosition.X, (int)bigTreeTypeSide[i, 0].spritePosition.Y, bigTreeTexture.Width * 2 * bigTreeTypeSide.GetUpperBound(1), bigTreeTexture.Height * 2));
+                //Regardless of which side, make a rectangle box for each column
+                //Add them to the list to be used later for collision
             }
 
             for (int i = 0; i <= bigTreeTypeBottom.GetUpperBound(0); i++)
@@ -124,18 +135,18 @@ namespace Jokemon_Team_1
                     if (i == 0)
                     {
                         bigTreeTypeBottom[i, j] = new Tree(bigTreeTexture, new Vector2(j * Window.ClientBounds.Width / bigTreeTypeBottom.GetUpperBound(1), 0), new Vector2(bigTreeTexture.Width * 2, bigTreeTexture.Height * 2));
+                        //First half, place the trees on the top
 
                     }
                     else
                     {
                         bigTreeTypeBottom[i, j] = new Tree(bigTreeTexture, new Vector2(j * Window.ClientBounds.Width / bigTreeTypeBottom.GetUpperBound(1), Window.ClientBounds.Height - bigTreeTexture.Height * 2), new Vector2(bigTreeTexture.Width * 2, bigTreeTexture.Height * 2));
-                    }
-
-                    if(j != 8)
-                    {
-                        treeObjectList.Add(bigTreeTypeBottom[i, j]);
+                        //Second half, place the trees on the bottom
                     }
                 }
+                collisionBoxes.Add(new Rectangle((int)bigTreeTypeBottom[i, 0].spritePosition.X, (int)bigTreeTypeBottom[i, 0].spritePosition.Y, bigTreeTexture.Width * 2, bigTreeTexture.Height * 2 * bigTreeTypeBottom.GetUpperBound(1)));
+                //Make rectangles of all of the tree rows
+                //Add them to the list so they can be used for collision
             }
 
             for (int i = 0; i <= smallTrees.GetUpperBound(0); i++)
@@ -150,9 +161,8 @@ namespace Jokemon_Team_1
                     {
                         smallTrees[i, j] = new Tree(smallTreeTexture, new Vector2(440 + j * smallTreeTexture.Width * 2, 660), new Vector2(smallTreeTexture.Width * 2, smallTreeTexture.Height));
                     }
-
-                    treeObjectList.Add(smallTrees[i, j]);
                 }
+                collisionBoxes.Add(new Rectangle((int)smallTrees[i, 0].spritePosition.X, (int)smallTrees[i, 0].spritePosition.Y, smallTreeTexture.Width * 2 * smallTrees.GetUpperBound(1), smallTreeTexture.Height));
             }
             //Trees end HERE
             // Jokemon                            - by charles(just in case of merging error, ignore)
@@ -210,6 +220,7 @@ namespace Jokemon_Team_1
             player = new Player(playerTexture, new Vector2(200, 100), new Vector2(playerTexture.Width * 2, playerTexture.Height * 2));
             //pausemenu = new PauseMenu(pausemenuTexture, new Vector2(400-pausemenuTexture.Width/2, 400-pausemenuTexture.Height/2), new Vector2(pausemenuTexture.Width, pausemenuTexture.Height), false);
 
+
         }
 
         protected override void Update(GameTime gameTime)
@@ -224,20 +235,17 @@ namespace Jokemon_Team_1
                 inPauseMenu = false;
             }
 
-            if (inJokemonBattle == false ||inPauseMenu == false)
+            if (inJokemonBattle == false || inPauseMenu == false) //If we are doing NOTHING with menus, then allow the game to work normally!
             {
 
                 iManager.checkKeyboard(player,PikaAchu);
 
-                foreach (Tree t in treeObjectList)
+                foreach (Rectangle boxes in collisionBoxes)
                 {
-                    pManager.checkCollision(player, t);
-                }
+                    player.movePlayer(pManager, player); //Lets the player move
+                    pManager.CheckCollision(player, boxes); //Checks if the player collides with the collision boxes, then stop the player from moving
+                } //Uses the collision code in Physics Manager, plus Player to allow them to move
 
-                foreach (Building b in buildingObjectList)
-                {
-                    pManager.checkCollision(player, b);
-                }
                 if (!inJokemonBattle)
                 {
                     if (Keyboard.GetState().IsKeyDown(Keys.T))
@@ -273,6 +281,7 @@ namespace Jokemon_Team_1
                         }
                     }
                 }
+
 
                 countFrames = countFrames + 1;
 
