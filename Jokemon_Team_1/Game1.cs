@@ -38,7 +38,7 @@ namespace Jokemon_Team_1
         private Jokemon[] showJokemonInBattle = new Jokemon[2];
 
         private StartMenu startMenu = new StartMenu();
-        //private PauseMenu pauseMenu;
+        private PauseMenu pauseMenu;
         private Sprite playButton = new Sprite();
         private Text playText = new Text();
 
@@ -54,6 +54,7 @@ namespace Jokemon_Team_1
         private Texture2D postBoxTexture;
         private Texture2D grassTexture;
         private Texture2D squareTexture;
+        private Texture2D pausemenuTexture;
 
         public bool inJokemonBattle = false;
         private bool inPauseMenu = false;
@@ -98,7 +99,7 @@ namespace Jokemon_Team_1
             smallTreeTexture = Content.Load<Texture2D>("TreeFixed");
             grassTexture = Content.Load<Texture2D>("GrassFixed");
             squareTexture = Content.Load<Texture2D>("square");
-            //pausemenuTexture = Content.Load<Texture2D>("PauseMenuBox");
+            pausemenuTexture = Content.Load<Texture2D>("PauseMenuBox");
             //signTextureWood = Content.Load<Texture2D>("Sign_Little");
             //postBoxTexture = Content.Load<Texture2D>("Postbox");
 
@@ -218,14 +219,21 @@ namespace Jokemon_Team_1
                 }
 
             player = new Player(playerTexture, new Vector2(200, 100), new Vector2(playerTexture.Width * 2, playerTexture.Height * 2));
-            //pausemenu = new PauseMenu(pausemenuTexture, new Vector2(400-pausemenuTexture.Width/2, 400-pausemenuTexture.Height/2), new Vector2(pausemenuTexture.Width, pausemenuTexture.Height), false);
+            pauseMenu = new PauseMenu(pausemenuTexture, 
+                new Vector2(400-pausemenuTexture.Width/2, 
+                400-pausemenuTexture.Height/2), 
+                new Vector2(pausemenuTexture.Width, 
+                pausemenuTexture.Height), 
+                false);
 
         }
 
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
                 Exit();
+            }
 
             // TODO: Add your update logic here
             if (startMenu.hasStarted == false) //wont show anything until space bar is pressed
@@ -237,63 +245,65 @@ namespace Jokemon_Team_1
             }
             else if (startMenu.hasStarted == true) //start menu will disappear
             {
-                if (inJokemonBattle == false) 
+                if (inJokemonBattle == false || inPauseMenu == false) 
                 {
-                    if (inPauseMenu == false)
-                    {
 
-                iManager.checkKeyboard(player,PikaAchu);
+                    iManager.checkKeyboard(player, PikaAchu);
 
                     foreach (Tree t in treeObjectList)
                     {
                         pManager.checkCollision(player, t);
                     }
 
-                foreach (Building b in buildingObjectList)
-                {
-                    pManager.checkCollision(player, b);
-                }
-                if (!inJokemonBattle)
-                {
-                    if (Keyboard.GetState().IsKeyDown(Keys.T))
+                    foreach (Building b in buildingObjectList)
                     {
-                        inJokemonBattle = true;
+                        pManager.checkCollision(player, b);
                     }
-                }
-                else if (inJokemonBattle)
-                {
-                    if (Keyboard.GetState().IsKeyDown(Keys.Y))
+                    if (!inJokemonBattle)
                     {
-                        inJokemonBattle = false;
+                        if (Keyboard.GetState().IsKeyDown(Keys.T))
+                        {
+                            inJokemonBattle = true;
+                        }
                     }
-                }
+                    else if (inJokemonBattle)
+                    {
+                        if (Keyboard.GetState().IsKeyDown(Keys.Y))
+                        {
+                            inJokemonBattle = false;
+                        }
+                    }
 
                     //foreach (ReadableObject r in readablesObjectList)
                     //{
                     //    pManager.checkCollision(player, r);
                     //}
 
-                    //Semi-broken, for now.
+                    //Semi - broken, for now.
 
-                foreach (Grass g in grassObjectList)
-                {
-                    if (countFrames % 10 == 0)
-                    {
-                        if (player.goingDown == true || player.goingLeft == true || player.goingRight == true || player.goingUp == true)
+                        foreach (Grass g in grassObjectList)
                         {
-                            if (pManager.checkCollision(player, g) == true)
+                            if (countFrames % 10 == 0)
                             {
-                                inJokemonBattle = true;
+                                if (player.goingDown == true || player.goingLeft == true || player.goingRight == true || player.goingUp == true)
+                                {
+                                    if (pManager.checkCollision(player, g) == true)
+                                    {
+                                        inJokemonBattle = true;
+                                    }
+                                }
                             }
                         }
-                    }
-                }
 
                     countFrames = countFrames + 1;
 
                     if (countFrames >= 60)
                     {
                         countFrames = 0;
+                    }
+                    if (Keyboard.GetState().IsKeyDown(Keys.P))
+                    {
+                        inPauseMenu = true;
                     }
                 }
 
@@ -304,11 +314,16 @@ namespace Jokemon_Team_1
                         inJokemonBattle = false;
                     }
                 }
-                else if (inPauseMenu == true || Keyboard.GetState().IsKeyDown(Keys.P))
+                if (inPauseMenu == true)
                 {
-                    inPauseMenu = false;
+                    pauseMenu.PauseMenuHappening();
+                    if (Keyboard.GetState().IsKeyDown(Keys.P))
+                    {
+                        inPauseMenu = false;
+                    }
                 }
-                }
+
+
             }
             base.Update(gameTime);
         }
@@ -370,6 +385,10 @@ namespace Jokemon_Team_1
                 startMenu.DrawStartMenu(_spriteBatch);
                 playButton.DrawSprite(_spriteBatch, squareTexture);
                 playText.DrawText(_spriteBatch);
+            }
+            if (pauseMenu.menuShown == true)
+            {
+                pauseMenu.DrawSprite(_spriteBatch, pausemenuTexture);
             }
             // TODO: Add your drawing code here
 
