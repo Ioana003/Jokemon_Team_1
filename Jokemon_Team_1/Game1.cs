@@ -12,6 +12,7 @@ namespace Jokemon_Team_1
         private SpriteBatch _spriteBatch;
         private SpriteFont fontP;
         private SpriteFont battlingfont;
+        private SpriteFont statsfont;
 
         private const int screenWidth = 800;
         private const int screenHeight = 800;
@@ -125,7 +126,7 @@ namespace Jokemon_Team_1
             skillbox = Content.Load<Texture2D>("box");
             battlingfont = Content.Load<SpriteFont>("Battling font");
             SpriteFont fontPika = Content.Load<SpriteFont>("File");
-
+            statsfont = Content.Load<SpriteFont>("FontbyCharles");
             startMenu.hasStarted = false; //makes start menu show when game starts
             playButton = new Sprite(squareTexture, new Vector2((screenWidth / 2) - 200, screenHeight / 3), new Vector2(400, 100));
             playText = new Text(fontPika, "Play", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 25), Color.Black);
@@ -192,10 +193,10 @@ namespace Jokemon_Team_1
             // Jokemon                            - by charles(just in case of merging error, ignore)
             PikaAchu = new Jokemon(pikaachuback, new Vector2(-100, 400), new Vector2(500, 500),100,10,5,10,5,5,"Normal Attack","Iron Tail","Nuzzle","Sneeze");
             Enemy = new Jokemon(pikaachufront, new Vector2(450, -75), new Vector2(500, 500), 100, 10, 5, 10, 5, 5, "Normal Attack", "Iron Tail", "Nuzzle", "Sneeze");
-            ownhealth = new Text(fontPika,"health =" + PikaAchu.health.ToString(), new Vector2(0, 600), Color.Red);
-            ownattack = new Text(fontPika, "atk =" + PikaAchu.attack.ToString(), new Vector2(0, 500), Color.Red);
-            enemyhealth = new Text(fontPika, "health =" + Enemy.health.ToString(), new Vector2(550, 200), Color.Red);
-            enemyattack = new Text(fontPika, "atk =" + Enemy.attack.ToString(), new Vector2(600, 300), Color.Red);
+            ownhealth = new Text(statsfont,"health =" + PikaAchu.health.ToString(), new Vector2(0, 600), Color.White);
+            ownattack = new Text(statsfont, "atk =" + PikaAchu.attack.ToString(), new Vector2(0, 500), Color.White);
+            enemyhealth = new Text(statsfont, "health =" + Enemy.health.ToString(), new Vector2(550, 200), Color.White);
+            enemyattack = new Text(statsfont, "atk =" + Enemy.attack.ToString(), new Vector2(600, 300), Color.White);
 
 
 
