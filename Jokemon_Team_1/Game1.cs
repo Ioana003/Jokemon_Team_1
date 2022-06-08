@@ -11,13 +11,16 @@ namespace Jokemon_Team_1
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private SpriteFont font;
-        private PauseMenu pausemenu;
+
+        public const int screenWidth = 800;
+        public const int screenHeight = 800;
 
         private Tree[,] bigTreeTypeSide = new Tree[2, 14];
         private Tree[,] bigTreeTypeBottom = new Tree[2, 16];
         private Tree[,] smallTrees = new Tree[2, 6];
         //All of these are the trees, plus tree collision
 
+        private Camera camera;
 
         private Building[] houses = new Building[2];
         private Building laboratory;
@@ -35,6 +38,16 @@ namespace Jokemon_Team_1
 
         private Jokemon[] showJokemonInBattle = new Jokemon[2];
 
+        private StartMenu startMenu = new StartMenu();
+        private Sprite playButton = new Sprite();
+        private Sprite exitButton = new Sprite();
+        private Sprite settingsButton = new Sprite();
+        private Text playText = new Text();
+        private Text exitText = new Text();
+        private Text settingsText = new Text();
+
+        private SettingsMenu settingsMenu = new SettingsMenu();
+
         private PhysicsManager pManager = new PhysicsManager();
         private InputManager iManager = new InputManager();
 
@@ -49,6 +62,7 @@ namespace Jokemon_Team_1
         private Texture2D pikaAchuTextureBack;
         private Texture2D pikaAchyTextureFront;
         //Various textures to be used later
+        private Texture2D squareTexture;
 
         public bool inJokemonBattle = false;
         private bool inPauseMenu = false;
@@ -76,9 +90,9 @@ namespace Jokemon_Team_1
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            _graphics.PreferredBackBufferWidth = 800;
-            _graphics.PreferredBackBufferHeight = 800;
-            //It's supposed to be 800, 800
+            _graphics.PreferredBackBufferWidth = screenWidth;
+            _graphics.PreferredBackBufferHeight = screenHeight;
+            //It's supposed to be 800, 800 // is now a constant go got line 14 & 15
             _graphics.ApplyChanges();
             //Changes the size of the window
 
@@ -92,6 +106,7 @@ namespace Jokemon_Team_1
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            
             font = Content.Load<SpriteFont>("File");
             labTexture = Content.Load<Texture2D>("LabFixed");
             bigTreeTexture = Content.Load<Texture2D>("TreeFixed");
@@ -99,13 +114,23 @@ namespace Jokemon_Team_1
             playerTexture = Content.Load<Texture2D>("PlayerFixed");
             smallTreeTexture = Content.Load<Texture2D>("TreeFixed");
             grassTexture = Content.Load<Texture2D>("GrassFixed");
+            squareTexture = Content.Load<Texture2D>("square");
+            camera = new Camera();
             //pausemenuTexture = Content.Load<Texture2D>("PauseMenuBox");
             //signTextureWood = Content.Load<Texture2D>("Sign_Little");
             //postBoxTexture = Content.Load<Texture2D>("Postbox");
 
-            pikaAchuTextureBack = Content.Load<Texture2D>("Pika_Back");
-            pikaAchyTextureFront = Content.Load<Texture2D>("Pika-A-chu");
+            SpriteFont fontPika = Content.Load<SpriteFont>("File");
 
+            startMenu.hasStarted = false; //makes start menu show when game starts
+            playButton = new Sprite(squareTexture, new Vector2((screenWidth / 2) - 200, screenHeight / 3), new Vector2(400, 100));
+            exitButton = new Sprite(squareTexture, new Vector2((screenWidth / 2) - 100, (screenHeight / 3) + 150), new Vector2(200, 100));
+            settingsButton = new Sprite(squareTexture, new Vector2((screenWidth / 2) - 150, (screenHeight / 3) - 150), new Vector2(300, 100));
+            playText = new Text(font, "Play", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 25), Color.Black);
+            exitText = new Text(font, "Exit", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 175), Color.Black);
+            settingsText = new Text(font, "Settings", new Vector2((screenWidth / 2) - 85, (screenHeight / 3) -125), Color.Black);
+
+            settingsMenu.settingsHasStarted = false;
 
             //The following are TREES
             for (int i = 0; i <= bigTreeTypeSide.GetUpperBound(0); i++)
@@ -225,20 +250,34 @@ namespace Jokemon_Team_1
 
         protected override void Update(GameTime gameTime)
         {
+            
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+
+
             // TODO: Add your update logic here
-            if (inPauseMenu == true && Keyboard.GetState().IsKeyDown(Keys.P))
+
+
+            if (startMenu.hasStarted == false && settingsMenu.settingsHasStarted == false) //wont show anything until space bar is pressed
             {
-                pausemenu.shown = false;
-                inPauseMenu = false;
+                startMenu.hasStarted = iManager.CheckStart(screenWidth, screenHeight);
+                settingsMenu.settingsHasStarted = iManager.CheckSettings(screenWidth, screenHeight);
+                if(iManager.CheckEnd(screenWidth, screenHeight) == true)
+                {
+                    Exit();
+                }
             }
+            else if (startMenu.hasStarted == false && settingsMenu.settingsHasStarted == true)
+            {
 
             if (inJokemonBattle == false || inPauseMenu == false) //If we are doing NOTHING with menus, then allow the game to work normally!
             {
+                if (inJokemonBattle == false)
+                {
 
-                iManager.checkKeyboard(player,PikaAchu);
+                    iManager.checkKeyboard(player); //,PikaAchu);
 
                 foreach (Rectangle boxes in collisionBoxes)
                 {
@@ -261,12 +300,12 @@ namespace Jokemon_Team_1
                     }
                 }
 
-                //foreach (ReadableObject r in readablesObjectList)
-                //{
-                //    pManager.checkCollision(player, r);
-                //}
+                    //foreach (ReadableObject r in readablesObjectList)
+                    //{
+                    //    pManager.checkCollision(player, r);
+                    //}
 
-                //Semi-broken, for now.
+                    //Semi-broken, for now.
 
                 foreach (Grass g in grassObjectList)
                 {
@@ -282,93 +321,88 @@ namespace Jokemon_Team_1
                     }
                 }
 
+                    countFrames = countFrames + 1;
 
-                countFrames = countFrames + 1;
-
-                if(countFrames >= 60)
-                {
-                    countFrames = 0;
+                    if (countFrames >= 60)
+                    {
+                        countFrames = 0;
+                    }
                 }
 
-                if (Keyboard.GetState().IsKeyDown(Keys.P))
+                else if (inJokemonBattle == true)
                 {
-                    pausemenu.shown = true;
-                    inPauseMenu = true;
-                }
-                if (Keyboard.GetState().IsKeyDown(Keys.M))
-                {
-                    pausemenu.spritePosition=new Vector2(10, 10); //to check
-                }
-
-                for(int i = 0; i <= showJokemonInBattle.GetUpperBound(0); i++)
-                {
-                    showJokemonInBattle[i].ShowJokemon(pikaAchuTextureBack, pikaAchyTextureFront, Window);
+                    if (Keyboard.GetState().IsKeyDown(Keys.X))
+                    {
+                        inJokemonBattle = false;
+                    }
                 }
             }
-
-            //else if (inJokemonBattle == true)
-            //{
-            //    if (Keyboard.GetState().IsKeyDown(Keys.X))
-            //    {
-            //        inJokemonBattle = false;
-            //    }
-            //}
-            
+            camera.Follow(player);
 
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            if (inJokemonBattle == false)
+            if (startMenu.hasStarted == true && settingsMenu.settingsHasStarted == false) //only draws everything else when the tart menu disappears
             {
-                GraphicsDevice.Clear(Color.LawnGreen);
-
-                foreach (Tree t in bigTreeTypeSide)
+                if (inJokemonBattle == false)
                 {
-                    t.DrawSprite(_spriteBatch, t.spriteTexture);
-                }
+                    GraphicsDevice.Clear(Color.LawnGreen);
 
-                foreach (Tree t in bigTreeTypeBottom)
+                    foreach (Tree t in bigTreeTypeSide)
+                    {
+                        t.DrawSprite(_spriteBatch, t.spriteTexture, camera);
+                    }
+
+                    foreach (Tree t in bigTreeTypeBottom)
+                    {
+                        t.DrawSprite(_spriteBatch, t.spriteTexture, camera);
+                    }
+
+                    foreach (Building b in houses)
+                    {
+                        b.DrawSprite(_spriteBatch, b.spriteTexture, camera);
+                    }
+
+                    foreach (Tree t in smallTrees)
+                    {
+                        t.DrawSprite(_spriteBatch, t.spriteTexture, camera);
+                    }
+
+                    //foreach (ReadableObject r in signPosts)
+                    //{
+                    //    r.DrawSprite(_spriteBatch, r.spriteTexture);
+                    //}
+
+                    foreach (Grass g in jokemonGrass)
+                    {
+                        g.DrawSprite(_spriteBatch, grassTexture, camera);
+                    }
+
+                    laboratory.DrawSprite(_spriteBatch, laboratory.spriteTexture, camera);
+
+                    player.DrawSprite(_spriteBatch, player.spriteTexture, camera);
+                }
+                else if (inJokemonBattle == true)
                 {
-                    t.DrawSprite(_spriteBatch, t.spriteTexture);
+                    GraphicsDevice.Clear(Color.Black);
                 }
-
-                foreach (Building b in houses)
-                {
-                    b.DrawSprite(_spriteBatch, b.spriteTexture);
-                }
-
-                foreach (Tree t in smallTrees)
-                {
-                    t.DrawSprite(_spriteBatch, t.spriteTexture);
-                }
-
-                //foreach (ReadableObject r in signPosts)
-                //{
-                //    r.DrawSprite(_spriteBatch, r.spriteTexture);
-                //}
-
-                foreach (Grass g in jokemonGrass)
-                {
-                    g.DrawSprite(_spriteBatch, grassTexture);
-                }
-
-                laboratory.DrawSprite(_spriteBatch, laboratory.spriteTexture);
-
-
-                player.DrawSprite(_spriteBatch, player.spriteTexture);
             }
-            else if(inJokemonBattle == true)
+            if(startMenu.hasStarted == false && settingsMenu.settingsHasStarted == true)
             {
                 GraphicsDevice.Clear(Color.Black);
-
-                for(int i = 0; i <= showJokemonInBattle.GetUpperBound(0); i++)
-                {
-                    showJokemonInBattle[i].DrawSprite(_spriteBatch, houseTexture);
-                }
             }
-
+            if (startMenu.hasStarted == false && settingsMenu.settingsHasStarted == false) //draws start menu
+            {
+                GraphicsDevice.Clear(Color.Purple);
+                playButton.DrawSprite(_spriteBatch, squareTexture, camera);
+                exitButton.DrawSprite(_spriteBatch, squareTexture, camera);
+                settingsButton.DrawSprite(_spriteBatch, squareTexture, camera);
+                playText.DrawText(_spriteBatch);
+                exitText.DrawText(_spriteBatch);
+                settingsText.DrawText(_spriteBatch);
+            }
             // TODO: Add your drawing code here
 
 

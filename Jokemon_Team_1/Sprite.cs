@@ -4,7 +4,6 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-
 namespace Jokemon_Team_1
 {
     class Sprite
@@ -12,6 +11,11 @@ namespace Jokemon_Team_1
         public Vector2 spritePosition { get; set; }
         public Vector2 spriteSize { get; set; }
         public Texture2D spriteTexture { get; set; }
+
+        public Rectangle playerRectangle
+        {
+            get { return new Rectangle((int)spritePosition.X, (int)spritePosition.Y, spriteTexture.Width, spriteTexture.Height); }
+        }
 
         public Color spriteColor = Color.White;
 
@@ -27,23 +31,16 @@ namespace Jokemon_Team_1
             this.spriteSize = size;
         }
 
-
-        public void DrawSprite(SpriteBatch s, Texture2D t)
+        public void DrawSprite(SpriteBatch s, Texture2D t, Camera m)
         {
             spriteTexture = t;
 
-            s.Begin();
+            s.Begin(transformMatrix: m.transform);
 
             s.Draw(spriteTexture, new Rectangle((int)spritePosition.X, (int)spritePosition.Y, (int)spriteSize.X, (int)spriteSize.Y), spriteColor);
 
             s.End();
 
-
         }
-
-
-
-
-
     }
 }
