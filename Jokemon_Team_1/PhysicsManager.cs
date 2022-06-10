@@ -7,8 +7,8 @@ namespace Jokemon_Team_1
 {
     internal class PhysicsManager
     {
-        private float speed = 0.5f;
-        private int collisionOffset = 3;
+        private float speed = 0.08f;
+        private int collisionOffset = 5;
         private Random randomJokemon = new Random();
         private int holdRandom;
         private bool jokemonAttack { get; set; }
@@ -31,6 +31,8 @@ namespace Jokemon_Team_1
                 {
                     goUp(p);
                     p.hasCollidedBottom = false;
+                    p.hasCollidedLeft = false;
+                    p.hasCollidedRight = false;
                 }
             }
 
@@ -46,7 +48,8 @@ namespace Jokemon_Team_1
                 {
                     goDown(p);
                     p.hasCollidedTop = false;
-
+                    p.hasCollidedLeft = false;
+                    p.hasCollidedRight = false;
                 }
             }
             else if (p.goingLeft)
@@ -61,7 +64,8 @@ namespace Jokemon_Team_1
                 {
                     goLeft(p);
                     p.hasCollidedRight = false;
-
+                    p.hasCollidedTop = false;
+                    p.hasCollidedBottom = false;
                 }
             }
             else if (p.goingRight)
@@ -76,7 +80,8 @@ namespace Jokemon_Team_1
                 {
                     goRight(p);
                     p.hasCollidedLeft = false;
-
+                    p.hasCollidedTop = false;
+                    p.hasCollidedBottom = false;
                 }
 
             }
@@ -86,25 +91,25 @@ namespace Jokemon_Team_1
             Rectangle BuildingRec = new Rectangle((int)b.spritePosition.X, (int)b.spritePosition.Y, (int)b.spriteSize.X, (int)b.spriteSize.Y);
             Rectangle projectedPlayerRect = new Rectangle((int)p.spritePosition.X - collisionOffset, (int)p.spritePosition.Y - collisionOffset, (int)p.spriteSize.X, (int)p.spriteSize.Y);
 
-            if (projectedPlayerRect.Intersects(BuildingRec))
-            {
-                if (p.goingUp)
-                {
-                    goUp(p);
-                }
-                else if (p.goingDown)
-                {
-                    goDown(p);
-                }
-                else if (p.goingLeft)
-                {
-                    goLeft(p);
-                }
-                else if (p.goingRight)
-                {
-                    goRight(p);
-                }
-            }
+            //if (projectedPlayerRect.Intersects(BuildingRec))
+            //{
+            //    if (p.goingUp)
+            //    {
+            //        goUp(p);
+            //    }
+            //    else if (p.goingDown)
+            //    {
+            //        goDown(p);
+            //    }
+            //    else if (p.goingLeft)
+            //    {
+            //        goLeft(p);
+            //    }
+            //    else if (p.goingRight)
+            //    {
+            //        goRight(p);
+            //    }
+            //}
 
             if (p.goingUp)
             {
@@ -119,6 +124,8 @@ namespace Jokemon_Team_1
                 {
                     goUp(p);
                     p.hasCollidedBottom = false;
+                    p.hasCollidedLeft = false;
+                    p.hasCollidedRight = false;
                 }
             }
 
@@ -134,6 +141,8 @@ namespace Jokemon_Team_1
                 {
                     goDown(p);
                     p.hasCollidedTop = false;
+                    p.hasCollidedLeft = false;
+                    p.hasCollidedRight = false;
 
                 }
             }
@@ -149,6 +158,8 @@ namespace Jokemon_Team_1
                 {
                     goLeft(p);
                     p.hasCollidedRight = false;
+                    p.hasCollidedTop = false;
+                    p.hasCollidedBottom = false;
                 }
             }
             else if (p.goingRight)
@@ -164,36 +175,44 @@ namespace Jokemon_Team_1
                     goRight(p);
                     p.hasCollidedLeft = false;
 
-                    //    }
+                    p.hasCollidedTop = false;
+                    p.hasCollidedBottom = false;
 
                 }
             }
         }
 
-            public bool checkCollision(Player p, Grass g)
-            {
-                Rectangle grassRect = new Rectangle((int)g.spritePosition.X, (int)g.spritePosition.Y, (int)g.spriteSize.X, (int)g.spriteSize.Y);
+            //public bool checkCollision(Player p, Grass g)
+            //{
+            //    Rectangle grassRect = new Rectangle((int)g.spritePosition.X, (int)g.spritePosition.Y, (int)g.spriteSize.X, (int)g.spriteSize.Y);
 
-                Rectangle projectedPlayerRect = new Rectangle((int)p.spritePosition.X, (int)p.spritePosition.Y, (int)p.spriteSize.X, (int)p.spriteSize.Y);
+            //    Rectangle projectedPlayerRect = new Rectangle((int)p.spritePosition.X, (int)p.spritePosition.Y, (int)p.spriteSize.X, (int)p.spriteSize.Y);
 
-                if (projectedPlayerRect.Intersects(grassRect))
-                {
-                    holdRandom = randomJokemon.Next(0, 100);
+            //    if (projectedPlayerRect.Intersects(grassRect))
+            //    {
+            //        holdRandom = randomJokemon.Next(0, 100);
 
-                    if (holdRandom >= 99)
-                    {
-                        jokemonAttack = true;
-                    }
-                    else
-                    {
-                        jokemonAttack = false;
-                    }
-                }
+            //        if (holdRandom >= 99)
+            //        {
+            //            jokemonAttack = true;
+            //        }
+            //        else
+            //        {
+            //            jokemonAttack = false;
+            //        }
+            //    }
 
-                return jokemonAttack;
-            }
+            //    return jokemonAttack;
+            //}
+            public bool checkGrass(Player p,Grass g)
+        {
+            Rectangle grassRect = new Rectangle((int)g.spritePosition.X, (int)g.spritePosition.Y, (int)g.spriteSize.X, (int)g.spriteSize.Y);
 
-            public void goLeft(Player playerSprite)
+              Rectangle projectedPlayerRect = new Rectangle((int)p.spritePosition.X, (int)p.spritePosition.Y, (int)p.spriteSize.X, (int)p.spriteSize.Y);
+
+            return false;
+        }
+        public void goLeft(Player playerSprite)
             {
                 playerSprite.spritePosition = new Vector2(playerSprite.spritePosition.X - speed, playerSprite.spritePosition.Y);
             }

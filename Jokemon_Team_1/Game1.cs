@@ -57,6 +57,10 @@ namespace Jokemon_Team_1
         private Text enemyhealth = new Text();
         private Text enemyattack = new Text();
         private Text showattackorder = new Text();
+        private Text encounterattack = new Text();
+        private Text encounterrun = new Text();
+        private Text encounteritem = new Text();
+        private Text encounterchange = new Text();
 
         private PhysicsManager pManager = new PhysicsManager();
         private InputManager iManager = new InputManager();
@@ -134,8 +138,10 @@ namespace Jokemon_Team_1
             playButton = new Sprite(squareTexture, new Vector2((screenWidth / 2) - 200, screenHeight / 3), new Vector2(400, 100));
             playText = new Text(fontPika, "Play", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 25), Color.Black);
 
-
-
+            encounterattack = new Text(fontPika, "Attack(T)", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 25), Color.Black);
+            encounterrun = new Text(fontPika, "Run(L)", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 125), Color.Black);
+            encounteritem = new Text(fontPika, "Item()", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 225), Color.Black);
+            encounterchange = new Text(fontPika, "Change Pokemon()", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 325), Color.Black);
 
             //The following are TREES
             for (int i = 0; i <= bigTreeTypeSide.GetUpperBound(0); i++)
@@ -310,6 +316,68 @@ namespace Jokemon_Team_1
             {
                 if (encounterenemy == false)
                 {
+
+                    if (Keyboard.GetState().IsKeyDown(Keys.G))
+                    {
+                        encounterenemy = true;
+                    }
+               
+
+                        iManager.checkKeyboard(player, PikaAchu);
+
+                        foreach (Tree t in treeObjectList)
+                        {
+                            pManager.checkCollision(player, t);
+                        }
+
+                        foreach (Building b in buildingObjectList)
+                        {
+                            pManager.checkCollision(player, b);
+                        }
+                        //if (!inJokemonBattle)
+                        //{
+                        //    if (Keyboard.GetState().IsKeyDown(Keys.T))
+                        //    {
+                        //        inJokemonBattle = true;
+                        //    }
+                        //}
+                        //else if (inJokemonBattle)
+                        //{
+                        //    if (Keyboard.GetState().IsKeyDown(Keys.Y))
+                        //    {
+                        //        inJokemonBattle = false;
+                        //    }
+
+                        //    battlesystem.Battling(PikaAchu, Enemy, true, skillbox1, skillbox2, skillbox3, skillbox4);
+                        //}
+
+        
+
+                        //foreach (Grass g in grassObjectList)
+                        //{
+                        //    if (countFrames % 10 == 0)
+                        //    {
+                        //        if (player.goingDown == true || player.goingLeft == true || player.goingRight == true || player.goingUp == true)
+                        //        {
+                        //            if (pManager.checkCollision(player, g) == true)
+                        //            {
+                        //                inJokemonBattle = true;
+                        //            }
+                        //        }
+                        //    }
+                        //}
+
+                        countFrames = countFrames + 1;
+
+                        if (countFrames >= 60)
+                        {
+                            countFrames = 0;
+                        }
+                    
+
+                }
+                else if (encounterenemy == true)
+                {
                     if (inJokemonBattle == false)
                     {
 
@@ -341,28 +409,27 @@ namespace Jokemon_Team_1
                             battlesystem.Battling(PikaAchu, Enemy, true, skillbox1, skillbox2, skillbox3, skillbox4);
                         }
 
-                        //foreach (ReadableObject r in readablesObjectList)
-                        //{
-                        //    pManager.checkCollision(player, r);
-                        //}
-
-                        //Semi-broken, for now.
-
                         foreach (Grass g in grassObjectList)
                         {
-                            if (countFrames % 10 == 0)
-                            {
-                                if (player.goingDown == true || player.goingLeft == true || player.goingRight == true || player.goingUp == true)
-                                {
-                                    if (pManager.checkCollision(player, g) == true)
-                                    {
-                                        inJokemonBattle = true;
-                                    }
-                                }
-                            }
+
                         }
 
-                        countFrames = countFrames + 1;
+
+                            //foreach (Grass g in grassObjectList)
+                            //{
+                            //    if (countFrames % 10 == 0)
+                            //    {
+                            //        if (player.goingDown == true || player.goingLeft == true || player.goingRight == true || player.goingUp == true)
+                            //        {
+                            //            if (pManager.checkCollision(player, g) == true)
+                            //            {
+                            //                inJokemonBattle = true;
+                            //            }
+                            //        }
+                            //    }
+                            //}
+
+                            countFrames = countFrames + 1;
 
                         if (countFrames >= 60)
                         {
@@ -383,7 +450,7 @@ namespace Jokemon_Team_1
                         Rectangle eskillbox2rec = new Rectangle((int)eskillbox2.spritePosition.X, (int)eskillbox2.spritePosition.Y, (int)eskillbox2.spriteSize.X, (int)eskillbox2.spriteSize.Y);
                         Rectangle eskillbox3rec = new Rectangle((int)eskillbox3.spritePosition.X, (int)eskillbox3.spritePosition.Y, (int)eskillbox3.spriteSize.X, (int)eskillbox3.spriteSize.Y);
                         Rectangle eskillbox4rec = new Rectangle((int)eskillbox4.spritePosition.X, (int)eskillbox4.spritePosition.Y, (int)eskillbox4.spriteSize.X, (int)eskillbox4.spriteSize.Y);
-                        if (Keyboard.GetState().IsKeyDown(Keys.X))
+                        if (Keyboard.GetState().IsKeyDown(Keys.Y))
                         {
                             inJokemonBattle = false;
                         }
@@ -419,14 +486,12 @@ namespace Jokemon_Team_1
                         if (PikaAchu.health <= 0 || Enemy.health <= 0)
                         {
                             inJokemonBattle = false;
+                            encounterenemy = false;
                         }
 
 
                     }
-                }
-                else if (encounterenemy == true)
-                {
-                    if (Keyboard.GetState().IsKeyDown(Keys.G))
+                    if (Keyboard.GetState().IsKeyDown(Keys.L))
                     {
                         encounterenemy = false;
                     }
@@ -441,8 +506,7 @@ namespace Jokemon_Team_1
             {
                 if (encounterenemy == false)
                 {
-                    if (inJokemonBattle == false)
-                    {
+                   
                         GraphicsDevice.Clear(Color.LawnGreen);
 
                         foreach (Tree t in bigTreeTypeSide)
@@ -478,8 +542,12 @@ namespace Jokemon_Team_1
                         laboratory.DrawSprite(_spriteBatch, laboratory.spriteTexture);
 
                         player.DrawSprite(_spriteBatch, player.spriteTexture);
-                    }
-                    else if (inJokemonBattle == true)
+                    
+                    
+                }
+                else if (encounterenemy == true)
+                {
+                    if (inJokemonBattle == true)
                     {
                         GraphicsDevice.Clear(Color.Black);
                         PikaAchu.DrawJokemon(_spriteBatch, pikaachuback);
@@ -509,12 +577,13 @@ namespace Jokemon_Team_1
                         enemyhealthbar.DrawHealth(_spriteBatch, Enemy);
                         showattackorder.DrawText(_spriteBatch);
                     }
-                }
-                else if (encounterenemy == true)
-                {
+                    else
                     {
-                        GraphicsDevice.Clear(Color.Green);
-
+                        GraphicsDevice.Clear(Color.DarkGreen);
+                        encounterattack.DrawText(_spriteBatch);
+                        encounterrun.DrawText(_spriteBatch);
+                        encounteritem.DrawText(_spriteBatch);
+                        encounterchange.DrawText(_spriteBatch);
                     }
                 }
             }
