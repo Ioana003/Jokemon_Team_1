@@ -265,7 +265,7 @@ namespace Jokemon_Team_1
                 if (inJokemonBattle == false)
                 {
 
-                    iManager.checkKeyboard(player); //,PikaAchu);
+                    iManager.checkKeyboard(player);
 
                     foreach (Tree t in treeObjectList)
                     {
