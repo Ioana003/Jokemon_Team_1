@@ -7,7 +7,7 @@ using System.IO;
 namespace Jokemon_Team_1
 {
     public class Game1 : Game
-    { //Plrease work
+    { //Please work
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private SpriteFont font;
@@ -42,9 +42,13 @@ namespace Jokemon_Team_1
         private Sprite playButton = new Sprite();
         private Sprite exitButton = new Sprite();
         private Sprite settingsButton = new Sprite();
+        private Sprite returnButton = new Sprite();
+        private Sprite pauseButton = new Sprite();
+
         private Text playText = new Text();
         private Text exitText = new Text();
         private Text settingsText = new Text();
+        private Text returnText = new Text();
 
         private SettingsMenu settingsMenu = new SettingsMenu();
 
@@ -67,7 +71,6 @@ namespace Jokemon_Team_1
 
         private Jokemon PikaAchu;
         private Jokemon Enemy;
-        private Stream music;
         private Texture2D pikaachuback;
         private Texture2D pikaachufront;
 
@@ -116,9 +119,13 @@ namespace Jokemon_Team_1
             playButton = new Sprite(squareTexture, new Vector2((screenWidth / 2) - 200, screenHeight / 3), new Vector2(400, 100));
             exitButton = new Sprite(squareTexture, new Vector2((screenWidth / 2) - 100, (screenHeight / 3) + 150), new Vector2(200, 100));
             settingsButton = new Sprite(squareTexture, new Vector2((screenWidth / 2) - 150, (screenHeight / 3) - 150), new Vector2(300, 100));
+            returnButton = new Sprite(squareTexture, new Vector2((screenWidth / 2) - 70, (screenHeight / 3) + 250), new Vector2(200, 100));
+            pauseButton = new Sprite(squareTexture, new Vector2(0, 0), new Vector2(40, 40));
+
             playText = new Text(font, "Play", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 25), Color.Black);
             exitText = new Text(font, "Exit", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 175), Color.Black);
             settingsText = new Text(font, "Settings", new Vector2((screenWidth / 2) - 85, (screenHeight / 3) -125), Color.Black);
+            returnText = new Text(font, "Return", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 275), Color.Black);
 
             settingsMenu.settingsHasStarted = false;
 
@@ -241,14 +248,11 @@ namespace Jokemon_Team_1
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
-
-
             // TODO: Add your update logic here
-
 
             if (startMenu.hasStarted == false && settingsMenu.settingsHasStarted == false) //wont show anything until space bar is pressed
             {
+                player.spritePosition = new Vector2(400, 400);
                 startMenu.hasStarted = iManager.CheckStart(screenWidth, screenHeight);
                 settingsMenu.settingsHasStarted = iManager.CheckSettings(screenWidth, screenHeight);
                 if(iManager.CheckEnd(screenWidth, screenHeight) == true)
@@ -256,12 +260,17 @@ namespace Jokemon_Team_1
                     Exit();
                 }
             }
-            else if (startMenu.hasStarted == false && settingsMenu.settingsHasStarted == true)
+            if (startMenu.hasStarted == false && settingsMenu.settingsHasStarted == true)
+            {
+                settingsMenu.settingsHasStarted = iManager.CheckReturn(screenHeight, screenWidth);
+            }
+            //if (startMenu.hasStarted == true && settingsMenu.settingsHasStarted == true)
+            //{
+            //    settingsMenu.settingsHasStarted = iManager.CheckReturn(screenHeight, screenWidth);
+            //}
+            if (startMenu.hasStarted == true && settingsMenu.settingsHasStarted == false) //start menu will disappear
             {
 
-            }
-            else if (startMenu.hasStarted == true && settingsMenu.settingsHasStarted == false) //start menu will disappear
-            {
                 if (inJokemonBattle == false)
                 {
 
@@ -379,10 +388,13 @@ namespace Jokemon_Team_1
                 {
                     GraphicsDevice.Clear(Color.Black);
                 }
+                pauseButton.DrawSprite(_spriteBatch, squareTexture, camera);
             }
             if(startMenu.hasStarted == false && settingsMenu.settingsHasStarted == true)
             {
-                GraphicsDevice.Clear(Color.Black);
+                GraphicsDevice.Clear(Color.Pink);
+                returnButton.DrawSprite(_spriteBatch, squareTexture, camera);
+                returnText.DrawText(_spriteBatch);
             }
             if (startMenu.hasStarted == false && settingsMenu.settingsHasStarted == false) //draws start menu
             {
@@ -395,10 +407,6 @@ namespace Jokemon_Team_1
                 settingsText.DrawText(_spriteBatch);
             }
             // TODO: Add your drawing code here
-
-
-
-
             base.Draw(gameTime);
         }
     }

@@ -7,7 +7,7 @@ namespace Jokemon_Team_1
 {
     internal class PhysicsManager
     {
-        private float speed = 1f;
+        private float speed = 0.2f;
         private int collisionOffset = 3;
         private Random randomJokemon = new Random();
         private int holdRandom;
