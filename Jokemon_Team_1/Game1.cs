@@ -250,7 +250,7 @@ namespace Jokemon_Team_1
 
         protected override void Update(GameTime gameTime)
         {
-            
+
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
@@ -264,7 +264,7 @@ namespace Jokemon_Team_1
             {
                 startMenu.hasStarted = iManager.CheckStart(screenWidth, screenHeight);
                 settingsMenu.settingsHasStarted = iManager.CheckSettings(screenWidth, screenHeight);
-                if(iManager.CheckEnd(screenWidth, screenHeight) == true)
+                if (iManager.CheckEnd(screenWidth, screenHeight) == true)
                 {
                     Exit();
                 }
@@ -272,74 +272,75 @@ namespace Jokemon_Team_1
             else if (startMenu.hasStarted == false && settingsMenu.settingsHasStarted == true)
             {
 
-            if (inJokemonBattle == false || inPauseMenu == false) //If we are doing NOTHING with menus, then allow the game to work normally!
-            {
-                if (inJokemonBattle == false)
+                if (inJokemonBattle == false || inPauseMenu == false) //If we are doing NOTHING with menus, then allow the game to work normally!
                 {
-
-                    iManager.checkKeyboard(player); //,PikaAchu);
-
-                foreach (Rectangle boxes in collisionBoxes)
-                {
-                    player.movePlayer(pManager, player); //Lets the player move
-                    pManager.CheckCollision(player, boxes); //Checks if the player collides with the collision boxes, then stop the player from moving
-                } //Uses the collision code in Physics Manager, plus Player to allow them to move
-
-                if (!inJokemonBattle)
-                {
-                    if (Keyboard.GetState().IsKeyDown(Keys.T))
+                    if (inJokemonBattle == false)
                     {
-                        inJokemonBattle = true;
-                    }
-                }
-                else if (inJokemonBattle)
-                {
-                    if (Keyboard.GetState().IsKeyDown(Keys.Y))
-                    {
-                        inJokemonBattle = false;
-                    }
-                }
 
-                    //foreach (ReadableObject r in readablesObjectList)
-                    //{
-                    //    pManager.checkCollision(player, r);
-                    //}
+                        iManager.checkKeyboard(player); //,PikaAchu);
 
-                    //Semi-broken, for now.
-
-                foreach (Grass g in grassObjectList)
-                {
-                    if (countFrames % 10 == 0)
-                    {
-                        if (player.goingDown == true || player.goingLeft == true || player.goingRight == true || player.goingUp == true)
+                        foreach (Rectangle boxes in collisionBoxes)
                         {
-                            if (pManager.checkCollision(player, g) == true)
+                            player.movePlayer(pManager, player); //Lets the player move
+                            pManager.CheckCollision(player, boxes); //Checks if the player collides with the collision boxes, then stop the player from moving
+                        } //Uses the collision code in Physics Manager, plus Player to allow them to move
+
+                        if (!inJokemonBattle)
+                        {
+                            if (Keyboard.GetState().IsKeyDown(Keys.T))
                             {
                                 inJokemonBattle = true;
                             }
                         }
+                        else if (inJokemonBattle)
+                        {
+                            if (Keyboard.GetState().IsKeyDown(Keys.Y))
+                            {
+                                inJokemonBattle = false;
+                            }
+                        }
+
+                        //foreach (ReadableObject r in readablesObjectList)
+                        //{
+                        //    pManager.checkCollision(player, r);
+                        //}
+
+                        ////Semi-broken, for now.
+
+                        //foreach (Grass g in grassObjectList)
+                        //{
+                        //    if (countFrames % 10 == 0)
+                        //    {
+                        //        if (player.goingDown == true || player.goingLeft == true || player.goingRight == true || player.goingUp == true)
+                        //        {
+                        //            if (pManager.checkCollision(player, g) == true)
+                        //            {
+                        //                inJokemonBattle = true;
+                        //            }
+                        //        }
+                        //    }
+                        //}
+
+                        countFrames = countFrames + 1;
+
+                        if (countFrames >= 60)
+                        {
+                            countFrames = 0;
+                        }
                     }
-                }
 
-                    countFrames = countFrames + 1;
-
-                    if (countFrames >= 60)
+                    else if (inJokemonBattle == true)
                     {
-                        countFrames = 0;
+                        if (Keyboard.GetState().IsKeyDown(Keys.X))
+                        {
+                            inJokemonBattle = false;
+                        }
                     }
                 }
+                camera.Follow(player);
 
-                else if (inJokemonBattle == true)
-                {
-                    if (Keyboard.GetState().IsKeyDown(Keys.X))
-                    {
-                        inJokemonBattle = false;
-                    }
-                }
+                base.Update(gameTime);
             }
-            camera.Follow(player);
-
-            base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
