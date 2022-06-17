@@ -13,15 +13,17 @@ namespace Jokemon_Team_1
         private SpriteFont fontP;
         private SpriteFont battlingfont;
         private SpriteFont statsfont;
+        private SpriteFont font;
 
-        private const int screenWidth = 800;
-        private const int screenHeight = 800;
+        public const int screenWidth = 800;
+        public const int screenHeight = 800;
 
         private Tree[,] bigTreeTypeSide = new Tree[2, 14];
         private Tree[,] bigTreeTypeBottom = new Tree[2, 16];
         private Tree[,] smallTrees = new Tree[2, 6];
-        private List<Tree> treeObjectList = new List<Tree>();
+        //All of these are the trees, plus tree collision
 
+        private Camera camera;
 
         private Building[] houses = new Building[2];
         private Building laboratory;
@@ -43,6 +45,8 @@ namespace Jokemon_Team_1
 
         private StartMenu startMenu = new StartMenu();
         private Sprite playButton = new Sprite();
+        private Sprite exitButton = new Sprite();
+        private Sprite settingsButton = new Sprite();
         private Text playText = new Text();
         private Text skill1text = new Text();
         private Text skill2text = new Text();
@@ -61,6 +65,10 @@ namespace Jokemon_Team_1
         private Text encounterrun = new Text();
         private Text encounteritem = new Text();
         private Text encounterchange = new Text();
+        private Text exitText = new Text();
+        private Text settingsText = new Text();
+
+        private SettingsMenu settingsMenu = new SettingsMenu();
 
         private PhysicsManager pManager = new PhysicsManager();
         private InputManager iManager = new InputManager();
@@ -73,12 +81,18 @@ namespace Jokemon_Team_1
         private Texture2D signTextureWood;
         private Texture2D postBoxTexture;
         private Texture2D grassTexture;
+        private Texture2D pikaAchuTextureBack;
+        private Texture2D pikaAchyTextureFront;
+        //Various textures to be used later
         private Texture2D squareTexture;
         private Texture2D skillbox;
 
         public bool inJokemonBattle = false;
         private bool inPauseMenu = false;
         private int countFrames = 0;
+        //Different booleans used here
+        //Additionally, countFrames is used to make sure most people don't constantly get harassed by JokeMons
+        
         private bool userattacking = true, enemyattacking = false;
         private bool encounterenemy = false;
 
@@ -87,6 +101,10 @@ namespace Jokemon_Team_1
         private Stream music;
         private Texture2D pikaachuback;
         private Texture2D pikaachufront;
+        //Jokemon textures, plus JokeMon stuff
+
+        private List<Rectangle> collisionBoxes = new List<Rectangle>();
+        //List of collision boxes used for collision
 
         private Sprite skillbox1,skillbox2,skillbox3,skillbox4, eskillbox1, eskillbox2, eskillbox3, eskillbox4;
 
@@ -106,6 +124,7 @@ namespace Jokemon_Team_1
             _graphics.PreferredBackBufferHeight = screenHeight;
             //It's supposed to be 800, 800 // is now a constant go got line 14 & 15
             _graphics.ApplyChanges();
+            //Changes the size of the window
 
 
 
@@ -117,7 +136,8 @@ namespace Jokemon_Team_1
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            fontP = Content.Load<SpriteFont>("File");
+            
+            font = Content.Load<SpriteFont>("File");
             labTexture = Content.Load<Texture2D>("LabFixed");
             bigTreeTexture = Content.Load<Texture2D>("TreeFixed");
             houseTexture = Content.Load<Texture2D>("HouseFixed");
@@ -125,6 +145,7 @@ namespace Jokemon_Team_1
             smallTreeTexture = Content.Load<Texture2D>("TreeFixed");
             grassTexture = Content.Load<Texture2D>("GrassFixed");
             squareTexture = Content.Load<Texture2D>("square");
+            camera = new Camera();
             //pausemenuTexture = Content.Load<Texture2D>("PauseMenuBox");
             //signTextureWood = Content.Load<Texture2D>("Sign_Little");
             //postBoxTexture = Content.Load<Texture2D>("Postbox");
@@ -136,12 +157,18 @@ namespace Jokemon_Team_1
             statsfont = Content.Load<SpriteFont>("FontbyCharles");
             startMenu.hasStarted = false; //makes start menu show when game starts
             playButton = new Sprite(squareTexture, new Vector2((screenWidth / 2) - 200, screenHeight / 3), new Vector2(400, 100));
-            playText = new Text(fontPika, "Play", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 25), Color.Black);
+            exitButton = new Sprite(squareTexture, new Vector2((screenWidth / 2) - 100, (screenHeight / 3) + 150), new Vector2(200, 100));
+            settingsButton = new Sprite(squareTexture, new Vector2((screenWidth / 2) - 150, (screenHeight / 3) - 150), new Vector2(300, 100));
+            playText = new Text(font, "Play", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 25), Color.Black);
+            exitText = new Text(font, "Exit", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 175), Color.Black);
+            settingsText = new Text(font, "Settings", new Vector2((screenWidth / 2) - 85, (screenHeight / 3) -125), Color.Black);
 
             encounterattack = new Text(fontPika, "Attack(T)", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 25), Color.Black);
             encounterrun = new Text(fontPika, "Run(L)", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 125), Color.Black);
             encounteritem = new Text(fontPika, "Item()", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 225), Color.Black);
             encounterchange = new Text(fontPika, "Change Pokemon()", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 325), Color.Black);
+            
+            settingsMenu.settingsHasStarted = false;
 
             //The following are TREES
             for (int i = 0; i <= bigTreeTypeSide.GetUpperBound(0); i++)
@@ -151,14 +178,17 @@ namespace Jokemon_Team_1
                     if (i == 0)
                     {
                         bigTreeTypeSide[i, j] = new Tree(bigTreeTexture, new Vector2(0, j * Window.ClientBounds.Height / bigTreeTypeSide.GetUpperBound(1)), new Vector2(bigTreeTexture.Width * 2, bigTreeTexture.Height * 2));
+                        //If we're using the first half of the array, then place it on the left side
                     }
                     else
                     {
                         bigTreeTypeSide[i, j] = new Tree(bigTreeTexture, new Vector2(Window.ClientBounds.Width - bigTreeTexture.Width * 2, j * Window.ClientBounds.Height / bigTreeTypeSide.GetUpperBound(1)), new Vector2(bigTreeTexture.Width * 2, bigTreeTexture.Height * 2));
+                        //If we're using the second half of the array, place the trees on the right side
                     }
-
-                    treeObjectList.Add(bigTreeTypeSide[i, j]);
                 }
+                collisionBoxes.Add(new Rectangle((int)bigTreeTypeSide[i, 0].spritePosition.X, (int)bigTreeTypeSide[i, 0].spritePosition.Y, bigTreeTexture.Width * 2 * bigTreeTypeSide.GetUpperBound(1), bigTreeTexture.Height * 2));
+                //Regardless of which side, make a rectangle box for each column
+                //Add them to the list to be used later for collision
             }
 
             for (int i = 0; i <= bigTreeTypeBottom.GetUpperBound(0); i++)
@@ -168,18 +198,18 @@ namespace Jokemon_Team_1
                     if (i == 0)
                     {
                         bigTreeTypeBottom[i, j] = new Tree(bigTreeTexture, new Vector2(j * Window.ClientBounds.Width / bigTreeTypeBottom.GetUpperBound(1), 0), new Vector2(bigTreeTexture.Width * 2, bigTreeTexture.Height * 2));
+                        //First half, place the trees on the top
 
                     }
                     else
                     {
                         bigTreeTypeBottom[i, j] = new Tree(bigTreeTexture, new Vector2(j * Window.ClientBounds.Width / bigTreeTypeBottom.GetUpperBound(1), Window.ClientBounds.Height - bigTreeTexture.Height * 2), new Vector2(bigTreeTexture.Width * 2, bigTreeTexture.Height * 2));
-                    }
-
-                    if(j != 8)
-                    {
-                        treeObjectList.Add(bigTreeTypeBottom[i, j]);
+                        //Second half, place the trees on the bottom
                     }
                 }
+                collisionBoxes.Add(new Rectangle((int)bigTreeTypeBottom[i, 0].spritePosition.X, (int)bigTreeTypeBottom[i, 0].spritePosition.Y, bigTreeTexture.Width * 2, bigTreeTexture.Height * 2 * bigTreeTypeBottom.GetUpperBound(1)));
+                //Make rectangles of all of the tree rows
+                //Add them to the list so they can be used for collision
             }
 
             for (int i = 0; i <= smallTrees.GetUpperBound(0); i++)
@@ -194,9 +224,8 @@ namespace Jokemon_Team_1
                     {
                         smallTrees[i, j] = new Tree(smallTreeTexture, new Vector2(440 + j * smallTreeTexture.Width * 2, 660), new Vector2(smallTreeTexture.Width * 2, smallTreeTexture.Height));
                     }
-
-                    treeObjectList.Add(smallTrees[i, j]);
                 }
+                collisionBoxes.Add(new Rectangle((int)smallTrees[i, 0].spritePosition.X, (int)smallTrees[i, 0].spritePosition.Y, smallTreeTexture.Width * 2 * smallTrees.GetUpperBound(1), smallTreeTexture.Height));
             }
             //Trees end HERE
             // Jokemon                            - by charles(just in case of merging error, ignore)
@@ -298,6 +327,8 @@ namespace Jokemon_Team_1
 
         protected override void Update(GameTime gameTime)
         {
+
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
@@ -306,13 +337,20 @@ namespace Jokemon_Team_1
                 encounterenemy = true;
                 // TODO: Add your update logic here
             if (startMenu.hasStarted == false) //wont show anything until space bar is pressed
+
+            // TODO: Add your update logic here
+
+
+            if (startMenu.hasStarted == false && settingsMenu.settingsHasStarted == false) //wont show anything until space bar is pressed
             {
-                if (Keyboard.GetState().IsKeyDown(Keys.Space))
+                startMenu.hasStarted = iManager.CheckStart(screenWidth, screenHeight);
+                settingsMenu.settingsHasStarted = iManager.CheckSettings(screenWidth, screenHeight);
+                if (iManager.CheckEnd(screenWidth, screenHeight) == true)
                 {
-                    startMenu.hasStarted = true;
+                    Exit();
                 }
             }
-            else if (startMenu.hasStarted == true) //start menu will disappear
+            else if (startMenu.hasStarted == false && settingsMenu.settingsHasStarted == true)
             {
                 if (encounterenemy == false)
                 {
@@ -405,7 +443,7 @@ namespace Jokemon_Team_1
                             {
                                 inJokemonBattle = false;
                             }
-
+                            
                             battlesystem.Battling(PikaAchu, Enemy, true, skillbox1, skillbox2, skillbox3, skillbox4);
                         }
 
@@ -496,13 +534,15 @@ namespace Jokemon_Team_1
                         encounterenemy = false;
                     }
                 }
+                camera.Follow(player);
+
+                base.Update(gameTime);
             }
-            base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            if (startMenu.hasStarted == true) //only drwas everything else when the tart menu disappears
+            if (startMenu.hasStarted == true && settingsMenu.settingsHasStarted == false) //only draws everything else when the tart menu disappears
             {
                 if (encounterenemy == false)
                 {
@@ -534,16 +574,14 @@ namespace Jokemon_Team_1
                         //    r.DrawSprite(_spriteBatch, r.spriteTexture);
                         //}
 
-                        foreach (Grass g in jokemonGrass)
-                        {
-                            g.DrawSprite(_spriteBatch, grassTexture);
-                        }
+                    foreach (Grass g in jokemonGrass)
+                    {
+                        g.DrawSprite(_spriteBatch, grassTexture, camera);
+                    }
 
-                        laboratory.DrawSprite(_spriteBatch, laboratory.spriteTexture);
+                    laboratory.DrawSprite(_spriteBatch, laboratory.spriteTexture, camera);
 
-                        player.DrawSprite(_spriteBatch, player.spriteTexture);
-                    
-                    
+                    player.DrawSprite(_spriteBatch, player.spriteTexture, camera);
                 }
                 else if (encounterenemy == true)
                 {
@@ -587,12 +625,19 @@ namespace Jokemon_Team_1
                     }
                 }
             }
-            if (startMenu.hasStarted == false) //draws start menu
+            if(startMenu.hasStarted == false && settingsMenu.settingsHasStarted == true)
+            {
+                GraphicsDevice.Clear(Color.Black);
+            }
+            if (startMenu.hasStarted == false && settingsMenu.settingsHasStarted == false) //draws start menu
             {
                 GraphicsDevice.Clear(Color.Purple);
-                startMenu.DrawStartMenu(_spriteBatch);
-                playButton.DrawSprite(_spriteBatch, squareTexture);
+                playButton.DrawSprite(_spriteBatch, squareTexture, camera);
+                exitButton.DrawSprite(_spriteBatch, squareTexture, camera);
+                settingsButton.DrawSprite(_spriteBatch, squareTexture, camera);
                 playText.DrawText(_spriteBatch);
+                exitText.DrawText(_spriteBatch);
+                settingsText.DrawText(_spriteBatch);
             }
             // TODO: Add your drawing code here
 
