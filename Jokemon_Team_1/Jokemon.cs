@@ -31,6 +31,7 @@ namespace Jokemon_Team_1
         }
         public Jokemon(Texture2D tex, Vector2 pos, Vector2 size, int HP, int atk, int def, int spAtk, int spDef, int spd, string m1, string m2, string m3, string m4) : base(tex, pos, size)
         {
+            attack = atk;
             health = HP;
             defense = def;
             specialattack = spAtk;
@@ -81,6 +82,17 @@ namespace Jokemon_Team_1
                 spriteTexture = opposingJokemon;
                 spritePosition = new Vector2(window.ClientBounds.Width - window.ClientBounds.Width / 5, window.ClientBounds.Height / 4);
             }
+        }
+        public void DrawJokemon(SpriteBatch s, Texture2D t)
+        {
+            spriteTexture = t;
+
+            s.Begin();
+
+            s.Draw(spriteTexture, new Rectangle((int)spritePosition.X, (int)spritePosition.Y, (int)spriteSize.X, (int)spriteSize.Y), spriteColor);
+
+            s.End();
+
         }
 
     }

@@ -31,6 +31,8 @@ namespace Jokemon_Team_1
                 {
                     goUp(p);
                     p.hasCollidedBottom = false;
+                    p.hasCollidedLeft = false;
+                    p.hasCollidedRight = false;
                 }
             }
 
@@ -46,6 +48,8 @@ namespace Jokemon_Team_1
                 {
                     goDown(p);
                     p.hasCollidedTop = false;
+                    p.hasCollidedLeft = false;
+                    p.hasCollidedRight = false;
 
                 }
             }
@@ -53,7 +57,7 @@ namespace Jokemon_Team_1
             {
                 p.projectedPos = new Vector2((int)p.spritePosition.X - collisionOffset, (int)p.spritePosition.Y);
                 Rectangle projectedPlayerRec = new Rectangle((int)p.projectedPos.X, (int)p.projectedPos.Y, (int)p.spriteSize.X, (int)p.spriteSize.Y);
-                if (projectedPlayerRec.Intersects(treeRec))
+                if (projectedPlayerRec.Intersects(BuildingRec))
                 {
                     p.hasCollidedLeft = true;
                 }
@@ -61,7 +65,8 @@ namespace Jokemon_Team_1
                 {
                     goLeft(p);
                     p.hasCollidedRight = false;
-
+                    p.hasCollidedTop = false;
+                    p.hasCollidedBottom = false;
                 }
             }
             else if (p.goingRight)
@@ -77,6 +82,8 @@ namespace Jokemon_Team_1
                     goRight(p);
                     p.hasCollidedLeft = false;
 
+                    p.hasCollidedTop = false;
+                    p.hasCollidedBottom = false;
                 }
 
             }
@@ -108,53 +115,37 @@ namespace Jokemon_Team_1
                     allowMovement = false;
                 }
             }
-
         }
 
-        public bool checkCollision(Player p, Grass g)
         {
             Rectangle grassRect = new Rectangle((int)g.spritePosition.X, (int)g.spritePosition.Y, (int)g.spriteSize.X, (int)g.spriteSize.Y);
 
-            Rectangle projectedPlayerRect = new Rectangle((int)p.spritePosition.X, (int)p.spritePosition.Y, (int)p.spriteSize.X, (int)p.spriteSize.Y);
+              Rectangle projectedPlayerRect = new Rectangle((int)p.spritePosition.X, (int)p.spritePosition.Y, (int)p.spriteSize.X, (int)p.spriteSize.Y);
 
-            if(projectedPlayerRect.Intersects(grassRect))
+            return false;
+        }
+        public void goLeft(Player playerSprite)
             {
-                holdRandom = randomJokemon.Next(0, 100);
-
-                if(holdRandom >= 99)
-                {
-                    jokemonAttack = true;
-                }
-                else
-                {
-                    jokemonAttack = false;
-                }
+                playerSprite.spritePosition = new Vector2(playerSprite.spritePosition.X - speed, playerSprite.spritePosition.Y);
             }
 
-            return jokemonAttack;
+            public void goRight(Player playerSprite)
+            {
+                playerSprite.spritePosition = new Vector2(playerSprite.spritePosition.X + speed, playerSprite.spritePosition.Y);
+            }
+
+            public void goDown(Player playerSprite)
+            {
+                playerSprite.spritePosition = new Vector2(playerSprite.spritePosition.X, playerSprite.spritePosition.Y + speed);
+            }
+
+            public void goUp(Player playerSprite)
+            {
+                playerSprite.spritePosition = new Vector2(playerSprite.spritePosition.X, playerSprite.spritePosition.Y - speed);
+            }
+
+
+
         }
-
-        public void goLeft(Player playerSprite)
-        {
-            playerSprite.spritePosition = new Vector2(playerSprite.spritePosition.X - speed, playerSprite.spritePosition.Y);
-        }
-
-        public void goRight(Player playerSprite)
-        {
-            playerSprite.spritePosition = new Vector2(playerSprite.spritePosition.X + speed, playerSprite.spritePosition.Y);
-        }
-
-        public void goDown(Player playerSprite)
-        {
-            playerSprite.spritePosition = new Vector2(playerSprite.spritePosition.X, playerSprite.spritePosition.Y + speed);
-        }
-
-        public void goUp(Player playerSprite)
-        {
-            playerSprite.spritePosition = new Vector2(playerSprite.spritePosition.X, playerSprite.spritePosition.Y - speed);
-        }
-
-
-
     }
-}
+

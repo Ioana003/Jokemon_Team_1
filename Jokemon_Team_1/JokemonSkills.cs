@@ -12,7 +12,8 @@ namespace Jokemon_Team_1
         public int specialdamagedealt { get; set; }
 
         public int powerpoint { get; set; }
-        public JokemonSkills(bool spdamage, int damagepoint, int spdamagepoint)
+        //where types of skills are stored
+        public JokemonSkills( bool spdamage, int damagepoint, int spdamagepoint)
 
         {
             damagedealt = damagepoint;
