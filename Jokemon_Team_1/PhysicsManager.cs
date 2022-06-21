@@ -14,7 +14,7 @@ namespace Jokemon_Team_1
         private bool jokemonAttack { get; set; }
         public bool allowMovement = true;
 
-        public void CheckCollision(Player p, Rectangle t)
+        public void CheckCollisionTrees(Player p, Rectangle t)
         {
             Rectangle playerProjectedPos = new Rectangle((int)p.spritePosition.X - 3, (int)p.spritePosition.Y - 3, (int)p.spriteSize.X + 3, (int)p.spriteSize.Y + 3);
 
@@ -23,7 +23,7 @@ namespace Jokemon_Team_1
                 p.projectedPos = new Vector2(p.spritePosition.X, p.spritePosition.Y - collisionOffset);
                 Rectangle projectedPlayerRect = new Rectangle((int)p.projectedPos.X, (int)p.projectedPos.Y, (int)p.spriteSize.X, (int)p.spriteSize.Y);
 
-                if (projectedPlayerRect.Intersects(treeRec))
+                if (projectedPlayerRect.Intersects(t))
                 {
                     p.hasCollidedTop = true;
                 }
@@ -40,7 +40,7 @@ namespace Jokemon_Team_1
             {
                 p.projectedPos = new Vector2((int)p.spritePosition.X, (int)p.spritePosition.Y + collisionOffset);
                 Rectangle projectedPlayerRec = new Rectangle((int)p.projectedPos.X, (int)p.projectedPos.Y, (int)p.spriteSize.X, (int)p.spriteSize.Y);
-                if (projectedPlayerRec.Intersects(treeRec))
+                if (projectedPlayerRec.Intersects(t))
                 {
                     p.hasCollidedBottom = true;
                 }
@@ -57,7 +57,7 @@ namespace Jokemon_Team_1
             {
                 p.projectedPos = new Vector2((int)p.spritePosition.X - collisionOffset, (int)p.spritePosition.Y);
                 Rectangle projectedPlayerRec = new Rectangle((int)p.projectedPos.X, (int)p.projectedPos.Y, (int)p.spriteSize.X, (int)p.spriteSize.Y);
-                if (projectedPlayerRec.Intersects(BuildingRec))
+                if (projectedPlayerRec.Intersects(t))
                 {
                     p.hasCollidedLeft = true;
                 }
@@ -73,7 +73,7 @@ namespace Jokemon_Team_1
             {
                 p.projectedPos = new Vector2((int)p.spritePosition.X + collisionOffset, (int)p.spritePosition.Y);
                 Rectangle projectedPlayerRec = new Rectangle((int)p.projectedPos.X, (int)p.projectedPos.Y, (int)p.spriteSize.X, (int)p.spriteSize.Y);
-                if (projectedPlayerRec.Intersects(treeRec))
+                if (projectedPlayerRec.Intersects(t))
                 {
                     p.hasCollidedRight = true;
                 }
@@ -93,30 +93,30 @@ namespace Jokemon_Team_1
             Rectangle BuildingRec = new Rectangle((int)b.spritePosition.X, (int)b.spritePosition.Y, (int)b.spriteSize.X, (int)b.spriteSize.Y);
             Rectangle projectedPlayerRect = new Rectangle((int)p.spritePosition.X - collisionOffset, (int)p.spritePosition.Y - collisionOffset, (int)p.spriteSize.X, (int)p.spriteSize.Y);
 
-                if (playerProjectedPos.Intersects(t))
-                {
-                    if (t.Y >= playerProjectedPos.Y + playerProjectedPos.Height)
-                    {
-                        p.hasCollidedBottom = true;
-                    }
-                    if (t.X + t.Width <= playerProjectedPos.X)
-                    {
-                        p.hasCollidedLeft = true;
-                    }
-                    if (t.X >= playerProjectedPos.X + playerProjectedPos.Width)
-                    {
-                        p.hasCollidedRight = true;
-                    }
-                    if (t.Y + t.Height <= playerProjectedPos.Y)
-                    {
-                        p.hasCollidedTop = true;
-                    }
+                //if (playerProjectedPos.Intersects(t))
+                //{
+                //    if (t.Y >= playerProjectedPos.Y + playerProjectedPos.Height)
+                //    {
+                //        p.hasCollidedBottom = true;
+                //    }
+                //    if (t.X + t.Width <= playerProjectedPos.X)
+                //    {
+                //        p.hasCollidedLeft = true;
+                //    }
+                //    if (t.X >= playerProjectedPos.X + playerProjectedPos.Width)
+                //    {
+                //        p.hasCollidedRight = true;
+                //    }
+                //    if (t.Y + t.Height <= playerProjectedPos.Y)
+                //    {
+                //        p.hasCollidedTop = true;
+                //    }
 
-                    allowMovement = false;
-                }
-            }
+                //    allowMovement = false;
+                //}
         }
 
+        public bool GrassCollision(Sprite g, Player p)
         {
             Rectangle grassRect = new Rectangle((int)g.spritePosition.X, (int)g.spritePosition.Y, (int)g.spriteSize.X, (int)g.spriteSize.Y);
 
