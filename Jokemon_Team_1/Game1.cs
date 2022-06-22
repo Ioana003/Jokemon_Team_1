@@ -7,7 +7,7 @@ using System.IO;
 namespace Jokemon_Team_1
 {
     public class Game1 : Game
-    { //Plrease work
+    { //Please work
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private SpriteFont battlingfont;
