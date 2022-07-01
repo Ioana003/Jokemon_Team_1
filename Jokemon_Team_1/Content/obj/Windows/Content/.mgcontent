@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SourceFileCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Profile>Reach</Profile>
+  <Platform>Windows</Platform>
+  <Config />
+  <SourceFiles>
+    <File>C:/Users/Year12/Source/Repos/Jokemon_Team_1/Jokemon_Team_1/Content/Battling font.spritefont</File>
+    <File>C:/Users/Year12/Source/Repos/Jokemon_Team_1/Jokemon_Team_1/Content/box.png</File>
+    <File>C:/Users/Year12/Source/Repos/Jokemon_Team_1/Jokemon_Team_1/Content/File.spritefont</File>
+    <File>C:/Users/Year12/Source/Repos/Jokemon_Team_1/Jokemon_Team_1/Content/FontbyCharles.spritefont</File>
+    <File>C:/Users/Year12/Source/Repos/Jokemon_Team_1/Jokemon_Team_1/Content/GrassFixed.png</File>
+    <File>C:/Users/Year12/Source/Repos/Jokemon_Team_1/Jokemon_Team_1/Content/House.png</File>
+    <File>C:/Users/Year12/Source/Repos/Jokemon_Team_1/Jokemon_Team_1/Content/HouseFixed.png</File>
+    <File>C:/Users/Year12/Source/Repos/Jokemon_Team_1/Jokemon_Team_1/Content/Lab.png</File>
+    <File>C:/Users/Year12/Source/Repos/Jokemon_Team_1/Jokemon_Team_1/Content/LabFixed.png</File>
+    <File>C:/Users/Year12/Source/Repos/Jokemon_Team_1/Jokemon_Team_1/Content/PauseMenuBox.png</File>
+    <File>C:/Users/Year12/Source/Repos/Jokemon_Team_1/Jokemon_Team_1/Content/Pika_Back.png</File>
+    <File>C:/Users/Year12/Source/Repos/Jokemon_Team_1/Jokemon_Team_1/Content/Pika-A-chu.png</File>
+    <File>C:/Users/Year12/Source/Repos/Jokemon_Team_1/Jokemon_Team_1/Content/Pika-A-chu-fixed.png</File>
+    <File>C:/Users/Year12/Source/Repos/Jokemon_Team_1/Jokemon_Team_1/Content/PlayerFixed.png</File>
+    <File>C:/Users/Year12/Source/Repos/Jokemon_Team_1/Jokemon_Team_1/Content/PokeballFinal.png</File>
+    <File>C:/Users/Year12/Source/Repos/Jokemon_Team_1/Jokemon_Team_1/Content/square.jpg</File>
+    <File>C:/Users/Year12/Source/Repos/Jokemon_Team_1/Jokemon_Team_1/Content/Tree.png</File>
+    <File>C:/Users/Year12/Source/Repos/Jokemon_Team_1/Jokemon_Team_1/Content/TreeFixed.png</File>
+  </SourceFiles>
+  <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+  </DestFiles>
+</SourceFileCollection>
