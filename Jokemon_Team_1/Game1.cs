@@ -3,7 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System.IO;
-
+using System;
+using System.Threading;
 namespace Jokemon_Team_1
 {
     public class Game1 : Game
@@ -235,8 +236,8 @@ namespace Jokemon_Team_1
             Enemy = new Jokemon(pikaachufront, new Vector2(450, -75), new Vector2(500, 500), 100, 10, 5, 10, 5, 5, "Normal Attack", "Iron Tail", "Nuzzle", "Sneeze");
             ownhealth = new Text(statsfont,"health =" + PikaAchu.health.ToString(), new Vector2(0, 550), Color.White);
             ownattack = new Text(statsfont, "atk =" + PikaAchu.attack.ToString(), new Vector2(0, 500), Color.White);
-            enemyhealth = new Text(statsfont, "health =" + Enemy.health.ToString(), new Vector2(600, 300), Color.White);
-            enemyattack = new Text(statsfont, "atk =" + Enemy.attack.ToString(), new Vector2(600, 350), Color.White);
+            enemyhealth = new Text(statsfont, "health =" + Enemy.health.ToString(), new Vector2(500, 300), Color.White);
+            enemyattack = new Text(statsfont, "atk =" + Enemy.attack.ToString(), new Vector2(500, 350), Color.White);
 
 
 
@@ -482,12 +483,19 @@ namespace Jokemon_Team_1
                             {
                                 countFrames = 0;
                             }
+                        PikaAchu.health = 100;
+                        PikaAchu.attack = 10;
+                        Enemy.health = 100;
+                        Enemy.attack = 10;
                         }
 
                         else if (inJokemonBattle == true)
                         {
+                            player.spritePosition = new Vector2(screenWidth / 2 - player.spriteSize.X / 2, screenHeight / 2 - player.spriteSize.Y / 2);
                             enemyhealth.textContent = "health =" + Enemy.health.ToString();
                             ownhealth.textContent = "health =" + PikaAchu.health.ToString();
+                            enemyattack.textContent = "atk =" + Enemy.attack.ToString();
+                            ownattack.textContent = "atk =" + PikaAchu.attack.ToString();
                             Rectangle mouserec = new Rectangle(Mouse.GetState().X, Mouse.GetState().Y, 1, 1);
                             Rectangle skillbox1rec = new Rectangle((int)skillbox1.spritePosition.X, (int)skillbox1.spritePosition.Y, (int)skillbox1.spriteSize.X, (int)skillbox1.spriteSize.Y);
                             Rectangle skillbox2rec = new Rectangle((int)skillbox2.spritePosition.X, (int)skillbox2.spritePosition.Y, (int)skillbox2.spriteSize.X, (int)skillbox2.spriteSize.Y);
@@ -501,7 +509,6 @@ namespace Jokemon_Team_1
                             {
                                 inJokemonBattle = false;
                             }
-
                             if (userattacking)
                             {
                                 showattackorder = new Text(fontPika, "User turn", new Vector2(300, 400), Color.White);
@@ -510,27 +517,49 @@ namespace Jokemon_Team_1
                                     if (Mouse.GetState().LeftButton == ButtonState.Pressed)
                                     {
                                         Enemy.health -= 10;
-
-                                        userattacking = false;
+                                        enemyhealth.textContent = "health =" + Enemy.health.ToString();
+                                        ownhealth.textContent = "health =" + PikaAchu.health.ToString();
+                                        enemyattack.textContent = "atk =" + Enemy.attack.ToString();
+                                        ownattack.textContent = "atk =" + PikaAchu.attack.ToString();
+                                    userattacking = false;
                                         enemyattacking = true;
                                     }
                                 }
                             }
+
                             else if (enemyattacking)
                             {
+                                Thread.Sleep(1000);
                                 showattackorder = new Text(fontPika, "Enemy turn", new Vector2(300, 400), Color.White);
-                                if (mouserec.Intersects(eskillbox1rec) || mouserec.Intersects(eskillbox2rec) || mouserec.Intersects(eskillbox3rec) || mouserec.Intersects(eskillbox4rec))
+                                Random rand = new Random();
+                                int randomnum = rand.Next(5);
+                                if (randomnum == 1)
                                 {
-                                    if (Mouse.GetState().LeftButton == ButtonState.Pressed)
-                                    {
-                                        PikaAchu.health -= 10;
-                                        userattacking = true;
-                                        enemyattacking = false;
-
-                                    }
+                                    PikaAchu.health -= Enemy.attack / 2;
+                                    Enemy.health += 2;
                                 }
+                                else if (randomnum == 2)
+                                {
+                                    PikaAchu.health -= Enemy.attack;
+                                }
+                                else if (randomnum == 3)
+                                {
+                                    Enemy.attack += 6;
+                                }
+                                else if (randomnum == 4)
+                                {
+                                    Enemy.health += 5;
+                                }
+                            else
+                            {
+                                PikaAchu.health -= Enemy.attack;
                             }
-                            if (PikaAchu.health <= 0 || Enemy.health <= 0)
+                                
+                                userattacking = true;
+                                enemyattacking = false;
+                                Thread.Sleep(100);
+                            }
+                        if (PikaAchu.health <= 0 || Enemy.health <= 0)
                             {
                                 inJokemonBattle = false;
                                 encounterenemy = false;
@@ -596,7 +625,7 @@ namespace Jokemon_Team_1
                 {
                     if (inJokemonBattle == true)
                     {
-                        GraphicsDevice.Clear(Color.Black);
+                        GraphicsDevice.Clear(Color.DarkBlue);
                         PikaAchu.DrawJokemon(_spriteBatch, pikaachuback);
                         Enemy.DrawJokemon(_spriteBatch, pikaachufront);
 
