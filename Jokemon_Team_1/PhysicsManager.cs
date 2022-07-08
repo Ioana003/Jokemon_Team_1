@@ -31,9 +31,11 @@ namespace Jokemon_Team_1
                 {
                     goUp(p);
                     p.hasCollidedBottom = false;
-                    p.hasCollidedLeft = false;
-                    p.hasCollidedRight = false;
+                    //p.hasCollidedLeft = false;
+                    //p.hasCollidedRight = false;
                 }
+                //need p.hascollidedtop to turn false once no longer collided
+                
             }
 
             else if (p.goingDown)
@@ -48,8 +50,8 @@ namespace Jokemon_Team_1
                 {
                     goDown(p);
                     p.hasCollidedTop = false;
-                    p.hasCollidedLeft = false;
-                    p.hasCollidedRight = false;
+                    //p.hasCollidedLeft = false;
+                    //p.hasCollidedRight = false;
 
                 }
             }
@@ -65,8 +67,8 @@ namespace Jokemon_Team_1
                 {
                     goLeft(p);
                     p.hasCollidedRight = false;
-                    p.hasCollidedTop = false;
-                    p.hasCollidedBottom = false;
+                    //p.hasCollidedTop = false;
+                    //p.hasCollidedBottom = false;
                 }
             }
             else if (p.goingRight)
@@ -81,9 +83,8 @@ namespace Jokemon_Team_1
                 {
                     goRight(p);
                     p.hasCollidedLeft = false;
-
-                    p.hasCollidedTop = false;
-                    p.hasCollidedBottom = false;
+                    //p.hasCollidedTop = false;
+                    //p.hasCollidedBottom = false;
                 }
 
             }
