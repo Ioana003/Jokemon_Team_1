@@ -124,6 +124,14 @@ namespace Jokemon_Team_1
 
             return false;
         }
+
+        public void CollisionWithDoor(Player p,Sprite door)
+        {
+            Rectangle projectedPlayerRect = new Rectangle((int)p.spritePosition.X, (int)p.spritePosition.Y, (int)p.spriteSize.X, (int)p.spriteSize.Y);
+            Rectangle doorRect = new Rectangle((int)door.spritePosition.X, (int)door.spritePosition.Y, (int)door.spriteSize.X, (int)door.spriteSize.Y);
+            if(projectedPlayerRect.Intersects(doorRect))
+                p.spritePosition = new Vector2(1500, 1500);
+        }
         public void goLeft(Player playerSprite)
             {
                 playerSprite.spritePosition = new Vector2(playerSprite.spritePosition.X - speed, playerSprite.spritePosition.Y);

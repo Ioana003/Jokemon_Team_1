@@ -22,6 +22,9 @@ namespace Jokemon_Team_1
         private Tree[,] bigTreeTypeSide = new Tree[2, 14];
         private Tree[,] bigTreeTypeBottom = new Tree[2, 16];
         private Tree[,] smallTrees = new Tree[2, 6];
+
+        private Tree[,] bigTreeRoomHorizontal = new Tree[2, 10];
+        private Tree[,] bigTreeRoomVertical = new Tree[2, 10];
         //All of these are the trees, plus tree collision
 
         private Camera camera;
@@ -68,6 +71,7 @@ namespace Jokemon_Team_1
         private Text encounterchange = new Text();
         private Text exitText = new Text();
         private Text settingsText = new Text();
+        private Sprite door = new Sprite();
 
         private SettingsMenu settingsMenu = new SettingsMenu();
 
@@ -164,7 +168,7 @@ namespace Jokemon_Team_1
             playText = new Text(font, "Play", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 25), Color.Black);
             exitText = new Text(font, "Exit", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 175), Color.Black);
             settingsText = new Text(font, "Settings", new Vector2((screenWidth / 2) - 85, (screenHeight / 3) -125), Color.Black);
-
+            door = new Sprite(squareTexture, new Vector2(410, 525), new Vector2(50, 50));
             encounterattack = new Text(fontPika, "Attack(T)", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 25), Color.Black);
             encounterrun = new Text(fontPika, "Run(L)", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 125), Color.Black);
             encounteritem = new Text(fontPika, "Item()", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 225), Color.Black);
@@ -214,6 +218,50 @@ namespace Jokemon_Team_1
                 //Make rectangles of all of the tree rows
                 //Add them to the list so they can be used for collision
             }
+
+            for (int i = 0; i <= bigTreeRoomHorizontal.GetUpperBound(0); i++)
+            {
+                for (int j = 0; j <= bigTreeRoomHorizontal.GetUpperBound(1); j++)
+                {
+                    if (i == 0)
+                    {
+                        bigTreeRoomHorizontal[i, j] = new Tree(bigTreeTexture, new Vector2(1000 + j * Window.ClientBounds.Width / bigTreeRoomHorizontal.GetUpperBound(1), 1000), new Vector2(bigTreeTexture.Width * 2, bigTreeTexture.Height * 2));
+                        //First half, place the trees on the top
+
+                    }
+                    else
+                    {
+                        bigTreeRoomHorizontal[i, j] = new Tree(bigTreeTexture, new Vector2(1000+j * Window.ClientBounds.Width / bigTreeRoomHorizontal.GetUpperBound(1),1000+ Window.ClientBounds.Height - bigTreeTexture.Height * 2), new Vector2(bigTreeTexture.Width * 2, bigTreeTexture.Height * 2));
+                        //Second half, place the trees on the bottom
+                    }
+                }
+                collisionBoxes.Add(new Rectangle((int)bigTreeRoomHorizontal[i, 0].spritePosition.X, (int)bigTreeRoomHorizontal[i, 0].spritePosition.Y, bigTreeTexture.Width * 2, bigTreeTexture.Height * 2 * bigTreeRoomHorizontal.GetUpperBound(1)));
+                //Make rectangles of all of the tree rows
+                //Add them to the list so they can be used for collision
+            }
+
+
+            for (int i = 0; i <= bigTreeRoomVertical.GetUpperBound(0); i++)
+            {
+                for (int j = 0; j <= bigTreeRoomVertical.GetUpperBound(1); j++)
+                {
+                    if (i == 0)
+                    {
+                        bigTreeRoomVertical[i, j] = new Tree(bigTreeTexture, new Vector2(1000, 1000+j * Window.ClientBounds.Height / bigTreeRoomVertical.GetUpperBound(1)), new Vector2(bigTreeTexture.Width * 2, bigTreeTexture.Height * 2));
+                        //If we're using the first half of the array, then place it on the left side
+                    }
+                    else
+                    {
+                        bigTreeRoomVertical[i, j] = new Tree(bigTreeTexture, new Vector2(1000+Window.ClientBounds.Width - bigTreeTexture.Width * 2, 1000+ j * Window.ClientBounds.Height / bigTreeRoomVertical.GetUpperBound(1)), new Vector2(bigTreeTexture.Width * 2, bigTreeTexture.Height * 2));
+                        //If we're using the second half of the array, place the trees on the right side
+                    }
+
+                }
+                collisionBoxes.Add(new Rectangle((int)bigTreeRoomVertical[i, 0].spritePosition.X, (int)bigTreeRoomVertical[i, 0].spritePosition.Y, bigTreeTexture.Width * 2 * bigTreeRoomVertical.GetUpperBound(1), bigTreeTexture.Height * 5));
+                //Regardless of which side, make a rectangle box for each column
+                //Add them to the list to be used later for collision
+            }
+
 
             for (int i = 0; i <= smallTrees.GetUpperBound(0); i++)
             {
@@ -369,18 +417,18 @@ namespace Jokemon_Team_1
                             encounterenemy = true;
                         }
 
-
+                        pManager.CollisionWithDoor(player, door);
                         iManager.checkKeyboard(player);
 
-                    foreach (Rectangle t in collisionBoxes)
-                    {
-                        pManager.CheckCollisionTrees(player, t);
-                    }
-
-                    foreach (Building b in buildingObjectList)
+                        foreach (Rectangle t in collisionBoxes)
                         {
-                            pManager.checkCollision(player, b);
+                            pManager.CheckCollisionTrees(player, t);
                         }
+
+                        foreach (Building b in buildingObjectList)
+                            {
+                                pManager.checkCollision(player, b);
+                            }
                         //if (!inJokemonBattle)
                         //{
                         //    if (Keyboard.GetState().IsKeyDown(Keys.T))
@@ -586,7 +634,7 @@ namespace Jokemon_Team_1
                 {
                    
                         GraphicsDevice.Clear(Color.LawnGreen);
-
+                    
                         foreach (Tree t in bigTreeTypeSide)
                         {
                             t.DrawSprite(_spriteBatch, t.spriteTexture, camera);
@@ -596,8 +644,17 @@ namespace Jokemon_Team_1
                         {
                             t.DrawSprite(_spriteBatch, t.spriteTexture, camera);
                         }
+                    foreach (Tree t in bigTreeRoomVertical)
+                    {
+                        t.DrawSprite(_spriteBatch, t.spriteTexture, camera);
+                    }
 
-                        foreach (Building b in houses)
+                    foreach (Tree t in bigTreeRoomHorizontal)
+                    {
+                        t.DrawSprite(_spriteBatch, bigTreeTexture, camera);
+                    }
+
+                    foreach (Building b in houses)
                         {
                             b.DrawSprite(_spriteBatch, b.spriteTexture, camera);
                         }
@@ -619,7 +676,10 @@ namespace Jokemon_Team_1
 
                     laboratory.DrawSprite(_spriteBatch, laboratory.spriteTexture, camera);
 
+                    door.DrawSprite(_spriteBatch, door.spriteTexture, camera);
                     player.DrawSprite(_spriteBatch, player.spriteTexture, camera);
+
+
                 }
                 else if (encounterenemy == true)
                 {
