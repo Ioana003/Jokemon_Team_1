@@ -19,7 +19,7 @@ namespace Jokemon_Team_1
                 return false;
             }
         }
-            public bool CheckEnd(int width, int height)
+        public bool CheckEnd(int width, int height)
         {
             mouse = Mouse.GetState();
             if (mouse.X <= (width / 2) + 100 && mouse.X >= (width / 2) - 100 && mouse.Y <= height / 3 + 250 && mouse.Y >= height / 3 + 150 && mouse.LeftButton == ButtonState.Pressed)
@@ -41,6 +41,18 @@ namespace Jokemon_Team_1
             else
             {
                 return false;
+            }
+        }
+        public bool CheckReturn(int width, int height)
+        {
+            mouse = Mouse.GetState();
+            if (mouse.X <= (width / 2) + 100 && mouse.X >= (width / 2) - 70 && mouse.Y <= (height / 3) + 350 && mouse.Y >= (height / 3) + 250 && mouse.LeftButton == ButtonState.Pressed)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
             }
         }
         public void checkKeyboard(Player playerSprite)
@@ -70,11 +82,13 @@ namespace Jokemon_Team_1
             {
                 playerSprite.goingDown = true;
             }
-  
-            
+
+
         }
 
 
 
     }
 }
+
+
