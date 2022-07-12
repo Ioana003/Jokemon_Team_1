@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <SourceFile>C:/Users/Year12/source/repos/Jokemon_Team_1/Jokemon_Team_1/Content/PokeballFinal.png</SourceFile>
-  <SourceTime>2022-04-01T14:56:53.9985408+01:00</SourceTime>
-  <DestFile>C:/Users/Year12/source/repos/Jokemon_Team_1/Jokemon_Team_1/Content/bin/Windows/Content/PokeballFinal.xnb</DestFile>
-  <DestTime>2022-07-08T14:51:01.4702008+01:00</DestTime>
+
+  <SourceFile>C:/Users/Year12/Source/Repos/Jokemon_Team_1c/Jokemon_Team_1/Content/PokeballFinal.png</SourceFile>
+  <SourceTime>2022-07-08T15:08:30.5259381+01:00</SourceTime>
+  <DestFile>C:/Users/Year12/Source/Repos/Jokemon_Team_1c/Jokemon_Team_1/Content/bin/Windows/Content/PokeballFinal.xnb</DestFile>
+  <DestTime>2022-07-08T15:09:30.9389223+01:00</DestTime>
+
   <Importer>TextureImporter</Importer>
   <ImporterTime>2020-08-10T17:17:54+01:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
