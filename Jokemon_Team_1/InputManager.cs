@@ -55,6 +55,18 @@ namespace Jokemon_Team_1
                 return true;
             }
         }
+        public bool CheckIsPause(int width, int height)
+        {
+            mouse = Mouse.GetState();
+            if (mouse.X <= 50 && mouse.X >= 0 && mouse.Y <= 50 && mouse.Y >= 0 && mouse.LeftButton == ButtonState.Pressed)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         public void checkKeyboard(Player playerSprite)
         {
             state = Keyboard.GetState();
