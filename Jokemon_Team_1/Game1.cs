@@ -48,7 +48,8 @@ namespace Jokemon_Team_1
         private Sprite playButton = new Sprite();
         private Sprite exitButton = new Sprite();
         private Sprite settingsButton = new Sprite();
-        private Text playText = new Text();
+        private Sprite returnButton = new Sprite();
+
         private Text skill1text = new Text();
         private Text skill2text = new Text();
         private Text skill3text = new Text();
@@ -66,8 +67,11 @@ namespace Jokemon_Team_1
         private Text encounterrun = new Text();
         private Text encounteritem = new Text();
         private Text encounterchange = new Text();
+
+        private Text playText = new Text();
         private Text exitText = new Text();
         private Text settingsText = new Text();
+        private Text returnText = new Text();
 
         private SettingsMenu settingsMenu = new SettingsMenu();
 
@@ -158,12 +162,16 @@ namespace Jokemon_Team_1
             fontPika = Content.Load<SpriteFont>("File");
             statsfont = Content.Load<SpriteFont>("File");
             startMenu.hasStarted = false; //makes start menu show when game starts
+
             playButton = new Sprite(squareTexture, new Vector2((screenWidth / 2) - 200, screenHeight / 3), new Vector2(400, 100));
             exitButton = new Sprite(squareTexture, new Vector2((screenWidth / 2) - 100, (screenHeight / 3) + 150), new Vector2(200, 100));
             settingsButton = new Sprite(squareTexture, new Vector2((screenWidth / 2) - 150, (screenHeight / 3) - 150), new Vector2(300, 100));
+            returnButton = new Sprite(squareTexture, new Vector2((screenWidth / 2) - 100, (screenHeight / 3) + 250), new Vector2(200, 100));
+
             playText = new Text(font, "Play", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 25), Color.Black);
             exitText = new Text(font, "Exit", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 175), Color.Black);
-            settingsText = new Text(font, "Settings", new Vector2((screenWidth / 2) - 85, (screenHeight / 3) -125), Color.Black);
+            settingsText = new Text(font, "Settings", new Vector2((screenWidth / 2) - 85, (screenHeight / 3) - 125), Color.Black);
+            returnText = new Text(font, "Return", new Vector2((screenWidth / 2) - 85, (screenHeight / 3) + 250), Color.Black);
 
             encounterattack = new Text(fontPika, "Attack(T)", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 25), Color.Black);
             encounterrun = new Text(fontPika, "Run(L)", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 125), Color.Black);
@@ -331,56 +339,56 @@ namespace Jokemon_Team_1
 
         protected override void Update(GameTime gameTime)
         {
-
-
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
 
             if (Keyboard.GetState().IsKeyDown(Keys.G))
                 encounterenemy = true;
 
-                // TODO: Add your update logic here
+            // TODO: Add your update logic here
 
-
-                if (startMenu.hasStarted == false && settingsMenu.settingsHasStarted == false) //wont show anything until space bar is pressed
+            if (startMenu.hasStarted == false && settingsMenu.settingsHasStarted == false) //wont show anything until space bar is pressed
+            {
+                startMenu.hasStarted = iManager.CheckStart(screenWidth, screenHeight);
+                settingsMenu.settingsHasStarted = iManager.CheckSettings(screenWidth, screenHeight);
+                if (iManager.CheckEnd(screenWidth, screenHeight) == true)
                 {
-                    startMenu.hasStarted = iManager.CheckStart(screenWidth, screenHeight);
-                    settingsMenu.settingsHasStarted = iManager.CheckSettings(screenWidth, screenHeight);
-                    if (iManager.CheckEnd(screenWidth, screenHeight) == true)
-                    {
-                        Exit();
-                    }
+                    Exit();
                 }
-                else if (startMenu.hasStarted == false && settingsMenu.settingsHasStarted == true)
-                {
-                    //Do settings
-                }
+            }
+            else if (startMenu.hasStarted == false && settingsMenu.settingsHasStarted == true)
+            {
+            //Do settings
+                settingsMenu.settingsHasStarted = iManager.CheckReturn(screenWidth, screenHeight);
+            }
+            else if (startMenu.hasStarted == true && settingsMenu.settingsHasStarted == true)
+            {
 
+            }
                 //This is INGAME
-                else if (startMenu.hasStarted == true && settingsMenu.settingsHasStarted == false)
+            else if (startMenu.hasStarted == true && settingsMenu.settingsHasStarted == false)
+            {
+
+                if (encounterenemy == false)
                 {
 
-                    if (encounterenemy == false)
+                    if (Keyboard.GetState().IsKeyDown(Keys.G))
                     {
-
-                        if (Keyboard.GetState().IsKeyDown(Keys.G))
-                        {
-                            encounterenemy = true;
-                        }
-
-
-                        iManager.checkKeyboard(player);
-
-                    foreach (Rectangle t in collisionBoxes)
-                    {
-                        pManager.CheckCollisionTrees(player, t);
+                        encounterenemy = true;
                     }
 
-                    foreach (Building b in buildingObjectList)
-                        {
-                            pManager.checkCollision(player, b);
-                        }
+
+                    iManager.checkKeyboard(player);
+                        
+                foreach (Rectangle t in collisionBoxes)
+                {
+                    pManager.CheckCollisionTrees(player, t);
+                }
+
+                foreach (Building b in buildingObjectList)
+                    {
+                        pManager.checkCollision(player, b);
+                    }
                         //if (!inJokemonBattle)
                         //{
                         //    if (Keyboard.GetState().IsKeyDown(Keys.T))
@@ -575,7 +583,7 @@ namespace Jokemon_Team_1
                     camera.Follow(player);
 
                     base.Update(gameTime);
-                }
+            }
         }
 
         protected override void Draw(GameTime gameTime)
@@ -665,7 +673,9 @@ namespace Jokemon_Team_1
             }
             if(startMenu.hasStarted == false && settingsMenu.settingsHasStarted == true)
             {
-                GraphicsDevice.Clear(Color.Black);
+                GraphicsDevice.Clear(Color.OrangeRed);
+                returnButton.DrawSprite(_spriteBatch, squareTexture, camera);
+                returnText.DrawText(_spriteBatch);
             }
             if (startMenu.hasStarted == false && settingsMenu.settingsHasStarted == false) //draws start menu
             {
