@@ -4,6 +4,7 @@
   <Platform>Windows</Platform>
   <Config />
   <SourceFiles>
+
     <File>C:/Users/Year12/Source/Repos/Jokemon_Team_1d/Jokemon_Team_1/Content/Battling font.spritefont</File>
     <File>C:/Users/Year12/Source/Repos/Jokemon_Team_1d/Jokemon_Team_1/Content/box.png</File>
     <File>C:/Users/Year12/Source/Repos/Jokemon_Team_1d/Jokemon_Team_1/Content/File.spritefont</File>
@@ -22,8 +23,10 @@
     <File>C:/Users/Year12/Source/Repos/Jokemon_Team_1d/Jokemon_Team_1/Content/square.jpg</File>
     <File>C:/Users/Year12/Source/Repos/Jokemon_Team_1d/Jokemon_Team_1/Content/Tree.png</File>
     <File>C:/Users/Year12/Source/Repos/Jokemon_Team_1d/Jokemon_Team_1/Content/TreeFixed.png</File>
+
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

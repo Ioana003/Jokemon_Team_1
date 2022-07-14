@@ -214,3 +214,9 @@
 /processorParam:TextureFormat=Color
 /build:TreeFixed.png
 
+#begin Wii Music - Background Music.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Wii Music - Background Music.mp3
+
