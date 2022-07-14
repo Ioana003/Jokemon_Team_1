@@ -27,22 +27,6 @@ namespace Jokemon_Team_1
 
         }
 
-        //public int NormalAttack() // every jokemon attack
-        //{
-        //    damagedealt = 20;
-        //    return damagedealt;
-        //}
 
-        //public int IronTail()  // pika a chu skill
-        //{
-
-        //    defensedecrease = 10;
-        //    return defensedecrease;
-        //}
-
-        //public void Nuzzle()   // pika a chu skill
-        //{
-
-        //}
     }
 }

@@ -33,42 +33,6 @@ namespace Jokemon_Team_1
                 }
 
 
-
-                //        if (jokemonskillselected == "Nuzzle")
-                //        {
-                //    enemy.health = enemy.health - jokemon.specialattack;
-                //        }
-                //        if (jokemonskillselected == "Iron Tail")
-                //        {
-                //    enemy.health = enemy.health - jokemon.attack;
-                //        }
-                //        if (jokemonskillselected == "Sneeze")
-                //        {
-                //    enemy.health = enemy.health - jokemon.specialattack;
-                //        }
-                //        if (jokemonskillselected == "Normal Attack")
-                //        {
-                //    enemy.health = enemy.health - jokemon.attack;
-                //        }
-                //        if (enemyskillselected == "Iron Tail")
-                //        {
-                //    jokemon.health -= enemy.attack;
-                //        }
-                //        if (enemyskillselected == "Normal Attack")
-                //        {
-                //    jokemon.health -= enemy.attack;
-                //}
-                //        if (enemyskillselected == "Nuzzle")
-                //        {
-                //    jokemon.health -= enemy.specialattack;
-                //}
-
-                        
-
-
-                
-
-
                 if (jokemon.health <= 0 || enemy.health <= 0)
                 {
                     battleOver = true;
