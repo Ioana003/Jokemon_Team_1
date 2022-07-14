@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <SourceFile>C:/Users/Year12/source/repos/Jokemon_Team_1/Jokemon_Team_1/Content/Pika-A-chu-fixed.png</SourceFile>
-  <SourceTime>2022-06-21T11:17:32.495966+01:00</SourceTime>
+  <SourceTime>2022-06-22T12:33:15.8108585+01:00</SourceTime>
   <DestFile>C:/Users/Year12/source/repos/Jokemon_Team_1/Jokemon_Team_1/Content/bin/Windows/Pika-A-chu-fixed.xnb</DestFile>
-  <DestTime>2022-07-14T09:19:17.9709794+01:00</DestTime>
+  <DestTime>2022-07-14T09:55:28.8384632+01:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2020-08-10T17:17:54+01:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
