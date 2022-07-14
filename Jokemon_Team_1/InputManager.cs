@@ -46,7 +46,7 @@ namespace Jokemon_Team_1
         public bool CheckReturn(int width, int height)
         {
             mouse = Mouse.GetState();
-            if (mouse.X <= (width / 2) + 100 && mouse.X >= (width / 2) - 70 && mouse.Y <= (height / 3) + 350 && mouse.Y >= (height / 3) + 250 && mouse.LeftButton == ButtonState.Pressed)
+            if (mouse.X <= (width / 2) + 100 && mouse.X >= (width / 2) - 70 && mouse.Y <= 150 && mouse.Y >= 50 && mouse.LeftButton == ButtonState.Pressed)
             {
                 return false;
             }

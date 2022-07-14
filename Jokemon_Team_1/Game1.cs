@@ -159,7 +159,7 @@ namespace Jokemon_Team_1
             playText = new Text(font, "Play", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 25), Color.Black);
             exitText = new Text(font, "Exit", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 175), Color.Black);
             settingsText = new Text(font, "Settings", new Vector2((screenWidth / 2) - 85, (screenHeight / 3) - 125), Color.Black);
-            returnText = new Text(font, "Return", new Vector2((screenWidth / 2) - 85, (screenHeight / 3) + 250), Color.Black);
+            returnText = new Text(font, "Return", new Vector2((screenWidth / 2) - 85, 75), Color.Black);
 
             encounterattack = new Text(fontPika, "Attack(T)", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 25), Color.Black);
             encounterrun = new Text(fontPika, "Run(L)", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 125), Color.Black);
@@ -330,6 +330,10 @@ namespace Jokemon_Team_1
             else if (startMenu.hasStarted == true && settingsMenu.settingsHasStarted == true)
             {
                 settingsMenu.settingsHasStarted = iManager.CheckReturn(screenWidth, screenHeight);
+                if (iManager.CheckEnd(screenWidth, screenHeight) == true)
+                {
+                    Exit();
+                }
             }
             //This is INGAME
             else if (startMenu.hasStarted == true && settingsMenu.settingsHasStarted == false)
@@ -592,7 +596,7 @@ namespace Jokemon_Team_1
             {
                 GraphicsDevice.Clear(Color.OrangeRed);
                 _spriteBatch.Begin();
-                _spriteBatch.Draw(squareTexture, new Rectangle((screenWidth / 2) - 100, (screenHeight / 3) + 250, 200, 100), Color.White); //return button
+                _spriteBatch.Draw(squareTexture, new Rectangle((screenWidth / 2) - 100, 50, 200, 100), Color.White); //return button
                 _spriteBatch.End();
 
                 returnText.DrawText(_spriteBatch);
@@ -601,9 +605,11 @@ namespace Jokemon_Team_1
             {
                 GraphicsDevice.Clear(Color.OrangeRed);
                 _spriteBatch.Begin();
-                _spriteBatch.Draw(squareTexture, new Rectangle((screenWidth / 2) - 90, (screenHeight / 3) + 240, 200, 100), Color.White); //return button
+                _spriteBatch.Draw(squareTexture, new Rectangle((screenWidth / 2) - 100, 50, 200, 100), Color.White); //return button
+                _spriteBatch.Draw(squareTexture, new Rectangle((screenWidth / 2) - 100, (screenHeight / 3) + 150, 200, 100), Color.White); //exit button
                 _spriteBatch.End();
 
+                exitText.DrawText(_spriteBatch);
                 returnText.DrawText(_spriteBatch);
             }
             if (startMenu.hasStarted == false && settingsMenu.settingsHasStarted == false) //draws start menu
