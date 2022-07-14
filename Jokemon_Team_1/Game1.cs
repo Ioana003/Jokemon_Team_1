@@ -47,11 +47,6 @@ namespace Jokemon_Team_1
         private BattleSystem battlesystem = new BattleSystem();
 
         private StartMenu startMenu = new StartMenu();
-        private Sprite playButton = new Sprite();
-        private Sprite exitButton = new Sprite();
-        private Sprite settingsButton = new Sprite();
-        private Sprite returnButton = new Sprite();
-        private Sprite pauseButton = new Sprite();
 
         private Text skill1text = new Text();
         private Text skill2text = new Text();
@@ -133,7 +128,7 @@ namespace Jokemon_Team_1
             _graphics.ApplyChanges();
             //Changes the size of the window
 
-            
+
 
             base.Initialize();
         }
@@ -160,12 +155,6 @@ namespace Jokemon_Team_1
             fontPika = Content.Load<SpriteFont>("File");
             statsfont = Content.Load<SpriteFont>("File");
             startMenu.hasStarted = false; //makes start menu show when game starts
-
-            playButton = new Sprite(squareTexture, new Vector2((screenWidth / 2) - 200, screenHeight / 3), new Vector2(400, 100));
-            exitButton = new Sprite(squareTexture, new Vector2((screenWidth / 2) - 100, (screenHeight / 3) + 150), new Vector2(200, 100));
-            settingsButton = new Sprite(squareTexture, new Vector2((screenWidth / 2) - 150, (screenHeight / 3) - 150), new Vector2(300, 100));
-            returnButton = new Sprite(squareTexture, new Vector2((screenWidth / 2) - 100, (screenHeight / 3) + 250), new Vector2(200, 100));
-            //pauseButton = new Sprite(squareTexture, new Vector2(0, 0), new Vector2(50, 50));
 
             playText = new Text(font, "Play", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 25), Color.Black);
             exitText = new Text(font, "Exit", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 175), Color.Black);
@@ -293,7 +282,6 @@ namespace Jokemon_Team_1
             skill3text = new Text(battlingfont, "Normal Attack", new Vector2(500, 500), Color.Black);
             skill4text = new Text(battlingfont, "Sneeze", new Vector2(500, 650), Color.Black);
 
-
             eskillbox1 = new Sprite(skillbox, new Vector2(50, 50), new Vector2(150, 50));
             eskillbox2 = new Sprite(skillbox, new Vector2(50, 200), new Vector2(150, 50));
             eskillbox3 = new Sprite(skillbox, new Vector2(250, 50), new Vector2(150, 50));
@@ -307,7 +295,6 @@ namespace Jokemon_Team_1
             showattackorder = new Text(fontPika, "test", new Vector2(300, 350), Color.White);
             healthbar = new HealthBar(skillbox, PikaAchu, new Vector2(10, 400));
             enemyhealthbar = new HealthBar(skillbox, Enemy, new Vector2(690, 400));
-
         }
 
         protected override void Update(GameTime gameTime)
@@ -598,27 +585,36 @@ namespace Jokemon_Team_1
             if(startMenu.hasStarted == true)
             {
                 _spriteBatch.Begin();
-                _spriteBatch.Draw(squareTexture, new Rectangle(0, 0, 50, 50), Color.HotPink);
+                _spriteBatch.Draw(squareTexture, new Rectangle(0, 0, 50, 50), Color.HotPink); //pause button
                 _spriteBatch.End();
             }
             if(startMenu.hasStarted == false && settingsMenu.settingsHasStarted == true)
             {
                 GraphicsDevice.Clear(Color.OrangeRed);
-                returnButton.DrawSprite(_spriteBatch, squareTexture, camera);
+                _spriteBatch.Begin();
+                _spriteBatch.Draw(squareTexture, new Rectangle((screenWidth / 2) - 100, (screenHeight / 3) + 250, 200, 100), Color.White); //return button
+                _spriteBatch.End();
+
                 returnText.DrawText(_spriteBatch);
             }
             if (startMenu.hasStarted == true && settingsMenu.settingsHasStarted == true)
             {
                 GraphicsDevice.Clear(Color.OrangeRed);
-                returnButton.DrawSprite(_spriteBatch, squareTexture, camera);
+                _spriteBatch.Begin();
+                _spriteBatch.Draw(squareTexture, new Rectangle((screenWidth / 2) - 90, (screenHeight / 3) + 240, 200, 100), Color.White); //return button
+                _spriteBatch.End();
+
                 returnText.DrawText(_spriteBatch);
             }
             if (startMenu.hasStarted == false && settingsMenu.settingsHasStarted == false) //draws start menu
             {
                 GraphicsDevice.Clear(Color.Purple);
-                playButton.DrawSprite(_spriteBatch, squareTexture, camera);
-                exitButton.DrawSprite(_spriteBatch, squareTexture, camera);
-                settingsButton.DrawSprite(_spriteBatch, squareTexture, camera);
+                _spriteBatch.Begin();
+                _spriteBatch.Draw(squareTexture, new Rectangle((screenWidth / 2) - 200, screenHeight / 3, 400, 100), Color.HotPink); //play button
+                _spriteBatch.Draw(squareTexture, new Rectangle((screenWidth / 2) - 100, (screenHeight / 3) + 150, 200, 100), Color.White); //exit button
+                _spriteBatch.Draw(squareTexture, new Rectangle((screenWidth / 2) - 150, (screenHeight / 3) - 150, 300, 100), Color.White); //settings button
+                _spriteBatch.End();
+
                 playText.DrawText(_spriteBatch);
                 exitText.DrawText(_spriteBatch);
                 settingsText.DrawText(_spriteBatch);
