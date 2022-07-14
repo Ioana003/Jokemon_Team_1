@@ -112,6 +112,9 @@ namespace Jokemon_Team_1
 
         private Song backgroundMusic;
 
+        private Random randomNumber = new Random();
+        private int holdRandom;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -368,6 +371,17 @@ namespace Jokemon_Team_1
                           countFrames = 0;
                      }
 
+                    foreach (Grass g in grassObjectList)
+                    {
+                        if (pManager.GrassCollision(g, player) == true)
+                        {
+                            holdRandom = randomNumber.Next(0, 100);
+                            if (holdRandom >= 70 && countFrames == 1)
+                            {
+                                encounterenemy = true;
+                            }
+                        }
+                    }
 
                 }
 
@@ -399,10 +413,7 @@ namespace Jokemon_Team_1
                                 battlesystem.Battling(PikaAchu, Enemy, true, skillbox1, skillbox2, skillbox3, skillbox4);
                             }
 
-                            foreach (Grass g in grassObjectList)
-                            {
-
-                            }                       
+                                        
 
                             countFrames = countFrames + 1;
 
@@ -410,10 +421,10 @@ namespace Jokemon_Team_1
                             {
                                 countFrames = 0;
                             }
-                        PikaAchu.health = 100;
-                        PikaAchu.attack = 10;
-                        Enemy.health = 100;
-                        Enemy.attack = 10;
+                            PikaAchu.health = 100;
+                            PikaAchu.attack = 10;
+                            Enemy.health = 100;
+                            Enemy.attack = 10;
                         }
 
                         else if (inJokemonBattle == true)
