@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Media;
 namespace Jokemon_Team_1
 {
     public class Game1 : Game
-    { //Please work
+    { 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private SpriteFont battlingfont;
@@ -86,9 +86,6 @@ namespace Jokemon_Team_1
         private Texture2D houseTexture;
         private Texture2D playerTexture;
         private Texture2D smallTreeTexture; //Comment here please work oh my god
-
-        private Texture2D signTextureWood;
-        private Texture2D postBoxTexture;
         //Textures to be used later
 
         private Texture2D grassTexture;
@@ -97,7 +94,6 @@ namespace Jokemon_Team_1
         private Texture2D skillbox;
 
         public bool inJokemonBattle = false;
-        private bool inPauseMenu = false;
         private int countFrames = 0;
         //Different booleans used here
         //Additionally, countFrames is used to make sure most people don't constantly get harassed by JokeMons
@@ -157,9 +153,6 @@ namespace Jokemon_Team_1
             grassTexture = Content.Load<Texture2D>("GrassFixed");
             squareTexture = Content.Load<Texture2D>("square");
             camera = new Camera();
-            //pausemenuTexture = Content.Load<Texture2D>("PauseMenuBox");
-            //signTextureWood = Content.Load<Texture2D>("Sign_Little");
-            //postBoxTexture = Content.Load<Texture2D>("Postbox");
             pikaachufront = Content.Load<Texture2D>("Pika-A-chu-fixed");
             pikaachuback= Content.Load<Texture2D>("Pika_Back");
             skillbox = Content.Load<Texture2D>("box");
@@ -221,7 +214,6 @@ namespace Jokemon_Team_1
                     {
                         bigTreeTypeBottom[i, j] = new Tree(bigTreeTexture, new Vector2(j * Window.ClientBounds.Width / bigTreeTypeBottom.GetUpperBound(1), 0), new Vector2(bigTreeTexture.Width * 2, bigTreeTexture.Height * 2));
                         //First half, place the trees on the top
-
                     }
                     else
                     {
@@ -258,17 +250,6 @@ namespace Jokemon_Team_1
             enemyhealth = new Text(statsfont, "health =" + Enemy.health.ToString(), new Vector2(500, 300), Color.White);
             enemyattack = new Text(statsfont, "atk =" + Enemy.attack.ToString(), new Vector2(500, 350), Color.White);
 
-
-
-
-
-
-
-
-
-
-
-
             //The following are BUILDINGS
             laboratory = new Building(labTexture, new Vector2(400, 500), new Vector2(labTexture.Width * 2, labTexture.Height * 2));
             buildingObjectList.Add(laboratory);
@@ -281,23 +262,6 @@ namespace Jokemon_Team_1
             houses[0].spritePosition = new Vector2(Window.ClientBounds.Width / 3 - houses[0].spriteTexture.Width, 200);
             houses[1].spritePosition = new Vector2(2 * Window.ClientBounds.Width / 3 - houses[1].spriteTexture.Width, 200);
             //Buildings end HERE -- RIGHT HERE!
-
-            //The following are READABLE OBJECTS
-            //for (int i = 0; i <= signPosts.GetUpperBound(0); i++)
-            //{
-            //    signPosts[i] = new ReadableObject(signTextureWood, new Vector2(), new Vector2(signTextureWood.Width * 2, signTextureWood.Height * 2));
-            //    readablesObjectList.Add(signPosts[i]);
-            //}
-            //signPosts[0].spritePosition = new Vector2(smallTrees[0, smallTrees.GetUpperBound(1)].spritePosition.X + signPosts[0].spriteTexture.Width * 2, smallTrees[0, smallTrees.GetUpperBound(1)].spritePosition.Y);
-            //signPosts[1].spritePosition = new Vector2(smallTrees[1, smallTrees.GetUpperBound(1)].spritePosition.X + signPosts[1].spriteTexture.Width * 2, smallTrees[1, smallTrees.GetUpperBound(1)].spritePosition.Y);
-
-            //for (int i = 0; i <= postBoxes.GetUpperBound(0); i++)
-            //{
-            //    postBoxes[i] = new ReadableObject(postBoxTexture, new Vector2(), new Vector2(postBoxTexture.Width * 2, postBoxTexture.Height * 2));
-            //    readablesObjectList.Add(postBoxes[i]);
-            //}
-            //postBoxes[0].spritePosition = new Vector2(houses[1].spritePosition.X - postBoxes[1].spriteTexture.Width);
-            //Readable Objects end HERE
 
             //Grass goes HERE
 
@@ -318,8 +282,6 @@ namespace Jokemon_Team_1
                 }
 
             player = new Player(playerTexture, new Vector2(200, 100), new Vector2(playerTexture.Width * 2, playerTexture.Height * 2));
-            //pausemenu = new PauseMenu(pausemenuTexture, new Vector2(400-pausemenuTexture.Width/2, 400-pausemenuTexture.Height/2), new Vector2(pausemenuTexture.Width, pausemenuTexture.Height), false);
-
 
             skillbox1 = new Sprite(skillbox, new Vector2(300, 500), new Vector2(150, 50));
             skillbox2 = new Sprite(skillbox, new Vector2(300, 650), new Vector2(150, 50));
@@ -397,57 +359,26 @@ namespace Jokemon_Team_1
 
                     iManager.checkKeyboard(player);
                         
-                foreach (Rectangle t in collisionBoxes)
-                {
-                    pManager.CheckCollisionTrees(player, t);
-                }
+                      foreach (Rectangle t in collisionBoxes)
+                      {
+                          pManager.CheckCollisionTrees(player, t);
+                      }
 
-                foreach (Building b in buildingObjectList)
+                    foreach (Building b in buildingObjectList)
                     {
                         pManager.checkCollision(player, b);
                     }
-                        //if (!inJokemonBattle)
-                        //{
-                        //    if (Keyboard.GetState().IsKeyDown(Keys.T))
-                        //    {
-                        //        inJokemonBattle = true;
-                        //    }
-                        //}
-                        //else if (inJokemonBattle)
-                        //{
-                        //    if (Keyboard.GetState().IsKeyDown(Keys.Y))
-                        //    {
-                        //        inJokemonBattle = false;
-                        //    }
 
-                        //    battlesystem.Battling(PikaAchu, Enemy, true, skillbox1, skillbox2, skillbox3, skillbox4);
-                        //}
-
-
-
-                        //foreach (Grass g in grassObjectList)
-                        //{
-                        //    if (countFrames % 10 == 0)
-                        //    {
-                        //        if (player.goingDown == true || player.goingLeft == true || player.goingRight == true || player.goingUp == true)
-                        //        {
-                        //            if (pManager.checkCollision(player, g) == true)
-                        //            {
-                        //                inJokemonBattle = true;
-                        //            }
-                        //        }
-                        //    }
-                        //}
 
                         countFrames = countFrames + 1;
 
-                        if (countFrames >= 60)
-                        {
-                            countFrames = 0;
-                        }
+                     if (countFrames >= 60)
+                     {
+                          countFrames = 0;
+                     }
 
 
-                    }
+                }
 
                     else if (encounterenemy == true)
                     {
@@ -455,11 +386,6 @@ namespace Jokemon_Team_1
                         {
 
                             iManager.checkKeyboard(player);
-
-                            //foreach (Tree t in /*rectangle here*/)
-                            //{
-                            //    pManager.checkCollision(player, t);
-                            //}
 
                             foreach (Building b in buildingObjectList)
                             {
@@ -485,22 +411,7 @@ namespace Jokemon_Team_1
                             foreach (Grass g in grassObjectList)
                             {
 
-                            }
-
-
-                            //foreach (Grass g in grassObjectList)
-                            //{
-                            //    if (countFrames % 10 == 0)
-                            //    {
-                            //        if (player.goingDown == true || player.goingLeft == true || player.goingRight == true || player.goingUp == true)
-                            //        {
-                            //            if (pManager.checkCollision(player, g) == true)
-                            //            {
-                            //                inJokemonBattle = true;
-                            //            }
-                            //        }
-                            //    }
-                            //}
+                            }                       
 
                             countFrames = countFrames + 1;
 
@@ -632,10 +543,6 @@ namespace Jokemon_Team_1
                             t.DrawSprite(_spriteBatch, t.spriteTexture, camera);
                         }
 
-                        //foreach (ReadableObject r in signPosts)
-                        //{
-                        //    r.DrawSprite(_spriteBatch, r.spriteTexture);
-                        //}
 
                     foreach (Grass g in jokemonGrass)
                     {

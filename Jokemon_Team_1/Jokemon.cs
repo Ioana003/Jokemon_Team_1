@@ -44,25 +44,6 @@ namespace Jokemon_Team_1
         }
 
 
-        //public void Battle(JokemonSkills jokemonskills, JokemonSkills enemyjokemonskills, Jokemon enemyjokemon)
-        //{
-
-        //    if (attacked == true)
-        //    {
-        //        //health -= enemyjokemonskills.NormalAttack();
-        //    }
-        //    if (health <= 0)
-        //    {
-        //        enemyjokemon.attacked = false;
-        //        //jokemon died
-        //    }
-        //    if (attacking == true)
-        //    {
-        //        //let player choose skills
-        //        enemyjokemon.attacked = true;
-        //    }
-        //}
-
         public void Catching()
         {
             //higher catchrate the easier to catch
