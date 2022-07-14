@@ -51,6 +51,7 @@ namespace Jokemon_Team_1
         private Sprite exitButton = new Sprite();
         private Sprite settingsButton = new Sprite();
         private Sprite returnButton = new Sprite();
+        private Sprite pauseButton = new Sprite();
 
         private Text skill1text = new Text();
         private Text skill2text = new Text();
@@ -171,6 +172,7 @@ namespace Jokemon_Team_1
             exitButton = new Sprite(squareTexture, new Vector2((screenWidth / 2) - 100, (screenHeight / 3) + 150), new Vector2(200, 100));
             settingsButton = new Sprite(squareTexture, new Vector2((screenWidth / 2) - 150, (screenHeight / 3) - 150), new Vector2(300, 100));
             returnButton = new Sprite(squareTexture, new Vector2((screenWidth / 2) - 100, (screenHeight / 3) + 250), new Vector2(200, 100));
+            //pauseButton = new Sprite(squareTexture, new Vector2(0, 0), new Vector2(50, 50));
 
             playText = new Text(font, "Play", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 25), Color.Black);
             exitText = new Text(font, "Exit", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 175), Color.Black);
@@ -355,7 +357,13 @@ namespace Jokemon_Team_1
                 encounterenemy = true;
 
             // TODO: Add your update logic here
-
+            if (startMenu.hasStarted == true)
+            {
+                if (iManager.CheckIsPause(screenWidth, screenHeight) == true)
+                {
+                    settingsMenu.settingsHasStarted = true;
+                }
+            }
             if (startMenu.hasStarted == false && settingsMenu.settingsHasStarted == false) //wont show anything until space bar is pressed
             {
                 startMenu.hasStarted = iManager.CheckStart(screenWidth, screenHeight);
@@ -372,9 +380,9 @@ namespace Jokemon_Team_1
             }
             else if (startMenu.hasStarted == true && settingsMenu.settingsHasStarted == true)
             {
-
+                settingsMenu.settingsHasStarted = iManager.CheckReturn(screenWidth, screenHeight);
             }
-                //This is INGAME
+            //This is INGAME
             else if (startMenu.hasStarted == true && settingsMenu.settingsHasStarted == false)
             {
 
@@ -680,7 +688,19 @@ namespace Jokemon_Team_1
                     }
                 }
             }
+            if(startMenu.hasStarted == true)
+            {
+                _spriteBatch.Begin();
+                _spriteBatch.Draw(squareTexture, new Rectangle(0, 0, 50, 50), Color.HotPink);
+                _spriteBatch.End();
+            }
             if(startMenu.hasStarted == false && settingsMenu.settingsHasStarted == true)
+            {
+                GraphicsDevice.Clear(Color.OrangeRed);
+                returnButton.DrawSprite(_spriteBatch, squareTexture, camera);
+                returnText.DrawText(_spriteBatch);
+            }
+            if (startMenu.hasStarted == true && settingsMenu.settingsHasStarted == true)
             {
                 GraphicsDevice.Clear(Color.OrangeRed);
                 returnButton.DrawSprite(_spriteBatch, squareTexture, camera);

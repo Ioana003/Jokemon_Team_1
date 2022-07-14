@@ -3,7 +3,9 @@
   <SourceFile>C:/Users/Year12/Source/Repos/Jokemon_Team_1/Jokemon_Team_1/Content/square.jpg</SourceFile>
   <SourceTime>2022-06-21T11:17:32.5059391+01:00</SourceTime>
   <DestFile>C:/Users/Year12/Source/Repos/Jokemon_Team_1/Jokemon_Team_1/Content/bin/Windows/Content/square.xnb</DestFile>
+
   <DestTime>2022-07-14T09:19:17.8084099+01:00</DestTime>
+
   <Importer>TextureImporter</Importer>
   <ImporterTime>2020-08-10T17:17:54+01:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

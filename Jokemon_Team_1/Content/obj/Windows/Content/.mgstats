@@ -1,4 +1,5 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
+
 "C:/Users/Year12/Source/Repos/Jokemon_Team_1/Jokemon_Team_1/Content/Battling font.spritefont","C:/Users/Year12/Source/Repos/Jokemon_Team_1/Jokemon_Team_1/Content/bin/Windows/Content/Battling font.xnb","FontDescriptionProcessor","SpriteFontContent",2065,21538,0.4858862
 "C:/Users/Year12/Source/Repos/Jokemon_Team_1/Jokemon_Team_1/Content/box.png","C:/Users/Year12/Source/Repos/Jokemon_Team_1/Jokemon_Team_1/Content/bin/Windows/Content/box.xnb","TextureProcessor","Texture2DContent",186,10085,0.0444537
 "C:/Users/Year12/Source/Repos/Jokemon_Team_1/Jokemon_Team_1/Content/File.spritefont","C:/Users/Year12/Source/Repos/Jokemon_Team_1/Jokemon_Team_1/Content/bin/Windows/Content/File.xnb","FontDescriptionProcessor","SpriteFontContent",2068,136226,0.0598227
@@ -18,3 +19,4 @@ Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Siz
 "C:/Users/Year12/Source/Repos/Jokemon_Team_1/Jokemon_Team_1/Content/Tree.png","C:/Users/Year12/Source/Repos/Jokemon_Team_1/Jokemon_Team_1/Content/bin/Windows/Content/Tree.xnb","TextureProcessor","Texture2DContent",290,3157,0.0134512
 "C:/Users/Year12/Source/Repos/Jokemon_Team_1/Jokemon_Team_1/Content/TreeFixed.png","C:/Users/Year12/Source/Repos/Jokemon_Team_1/Jokemon_Team_1/Content/bin/Windows/Content/TreeFixed.xnb","TextureProcessor","Texture2DContent",1081,3157,0.0145275
 "C:/Users/Year12/Source/Repos/Jokemon_Team_1/Jokemon_Team_1/Content/Wii Music - Background Music.mp3","C:/Users/Year12/Source/Repos/Jokemon_Team_1/Jokemon_Team_1/Content/bin/Windows/Content/Wii Music - Background Music.xnb","SongProcessor","SongContent",2085962,146,8.893796
+
