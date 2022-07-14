@@ -86,11 +86,18 @@ namespace Jokemon_Team_1
 
         public bool GrassCollision(Sprite g, Player p)
         {
+            bool inGrass = false;
+
             Rectangle grassRect = new Rectangle((int)g.spritePosition.X, (int)g.spritePosition.Y, (int)g.spriteSize.X, (int)g.spriteSize.Y);
 
               Rectangle projectedPlayerRect = new Rectangle((int)p.spritePosition.X, (int)p.spritePosition.Y, (int)p.spriteSize.X, (int)p.spriteSize.Y);
 
-            return false;
+            if(projectedPlayerRect.Intersects(grassRect))
+            {
+                inGrass = true;
+            }
+
+            return inGrass;
         }
         public void goLeft(Player playerSprite)
             {
