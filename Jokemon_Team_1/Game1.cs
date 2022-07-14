@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.IO;
 using System;
 using System.Threading;
+using Microsoft.Xna.Framework.Media;
+
 namespace Jokemon_Team_1
 {
     public class Game1 : Game
@@ -117,6 +119,8 @@ namespace Jokemon_Team_1
         private HealthBar healthbar;
         private HealthBar enemyhealthbar;
 
+        private Song backgroundMusic;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -133,7 +137,7 @@ namespace Jokemon_Team_1
             _graphics.ApplyChanges();
             //Changes the size of the window
 
-
+            
 
             base.Initialize();
         }
@@ -181,6 +185,11 @@ namespace Jokemon_Team_1
             encounterchange = new Text(fontPika, "Change Pokemon()", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 325), Color.Black);
             
             settingsMenu.settingsHasStarted = false;
+
+            backgroundMusic = Content.Load<Song>("Wii Music - Background Music");
+
+            MediaPlayer.IsRepeating = true;
+            MediaPlayer.Play(backgroundMusic);
 
             //The following are TREES
             for (int i = 0; i <= bigTreeTypeSide.GetUpperBound(0); i++)
