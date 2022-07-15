@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <SourceFile>C:/Users/Year12/Source/Repos/Jokemon_Team_1/Jokemon_Team_1/Content/House.png</SourceFile>
-  <SourceTime>2022-03-24T10:06:49.6827286+00:00</SourceTime>
+  <SourceTime>2022-03-25T14:58:05.1409708+00:00</SourceTime>
   <DestFile>C:/Users/Year12/Source/Repos/Jokemon_Team_1/Jokemon_Team_1/Content/bin/Windows/Content/House.xnb</DestFile>
-  <DestTime>2022-07-14T09:50:20.5735788+01:00</DestTime>
+
+  <DestTime>2022-07-14T09:53:47.6499062+01:00</DestTime>
+
   <Importer>TextureImporter</Importer>
   <ImporterTime>2020-08-10T17:17:54+01:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

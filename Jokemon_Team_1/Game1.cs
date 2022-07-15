@@ -358,7 +358,13 @@ namespace Jokemon_Team_1
                           pManager.CheckCollisionTrees(player, t);
                       }
 
-                    foreach (Building b in buildingObjectList)
+                    pManager.CheckCollisionTrees(player, laboratory.playerRectangle);
+                    foreach (Building h in houses)
+                    {
+                        pManager.CheckCollisionTrees(player, h.playerRectangle);
+                    }
+
+                foreach (Building b in buildingObjectList)
                     {
                         pManager.checkCollision(player, b);
                     }
