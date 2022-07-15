@@ -3,7 +3,9 @@
   <SourceFile>C:/Users/Year12/Source/Repos/Jokemon_Team_1/Jokemon_Team_1/Content/Battling font.spritefont</SourceFile>
   <SourceTime>2022-06-22T12:33:15.8004895+01:00</SourceTime>
   <DestFile>C:/Users/Year12/Source/Repos/Jokemon_Team_1/Jokemon_Team_1/Content/bin/Windows/Content/Battling font.xnb</DestFile>
+
   <DestTime>2022-07-14T09:53:47.4872239+01:00</DestTime>
+
   <Importer>FontDescriptionImporter</Importer>
   <ImporterTime>2020-08-10T17:17:54+01:00</ImporterTime>
   <Processor>FontDescriptionProcessor</Processor>

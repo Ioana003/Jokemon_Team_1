@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Media;
 namespace Jokemon_Team_1
 {
     public class Game1 : Game
-    { //Please work
+    { 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private SpriteFont battlingfont;
@@ -47,11 +47,6 @@ namespace Jokemon_Team_1
         private BattleSystem battlesystem = new BattleSystem();
 
         private StartMenu startMenu = new StartMenu();
-        private Sprite playButton = new Sprite();
-        private Sprite exitButton = new Sprite();
-        private Sprite settingsButton = new Sprite();
-        private Sprite returnButton = new Sprite();
-        private Sprite pauseButton = new Sprite();
 
         private Text skill1text = new Text();
         private Text skill2text = new Text();
@@ -86,9 +81,6 @@ namespace Jokemon_Team_1
         private Texture2D houseTexture;
         private Texture2D playerTexture;
         private Texture2D smallTreeTexture; //Comment here please work oh my god
-
-        private Texture2D signTextureWood;
-        private Texture2D postBoxTexture;
         //Textures to be used later
 
         private Texture2D grassTexture;
@@ -97,7 +89,6 @@ namespace Jokemon_Team_1
         private Texture2D skillbox;
 
         public bool inJokemonBattle = false;
-        private bool inPauseMenu = false;
         private int countFrames = 0;
         //Different booleans used here
         //Additionally, countFrames is used to make sure most people don't constantly get harassed by JokeMons
@@ -121,6 +112,9 @@ namespace Jokemon_Team_1
 
         private Song backgroundMusic;
 
+        private Random randomNumber = new Random();
+        private int holdRandom;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -137,7 +131,7 @@ namespace Jokemon_Team_1
             _graphics.ApplyChanges();
             //Changes the size of the window
 
-            
+
 
             base.Initialize();
         }
@@ -157,9 +151,6 @@ namespace Jokemon_Team_1
             grassTexture = Content.Load<Texture2D>("GrassFixed");
             squareTexture = Content.Load<Texture2D>("square");
             camera = new Camera();
-            //pausemenuTexture = Content.Load<Texture2D>("PauseMenuBox");
-            //signTextureWood = Content.Load<Texture2D>("Sign_Little");
-            //postBoxTexture = Content.Load<Texture2D>("Postbox");
             pikaachufront = Content.Load<Texture2D>("Pika-A-chu-fixed");
             pikaachuback= Content.Load<Texture2D>("Pika_Back");
             skillbox = Content.Load<Texture2D>("box");
@@ -168,16 +159,10 @@ namespace Jokemon_Team_1
             statsfont = Content.Load<SpriteFont>("File");
             startMenu.hasStarted = false; //makes start menu show when game starts
 
-            playButton = new Sprite(squareTexture, new Vector2((screenWidth / 2) - 200, screenHeight / 3), new Vector2(400, 100));
-            exitButton = new Sprite(squareTexture, new Vector2((screenWidth / 2) - 100, (screenHeight / 3) + 150), new Vector2(200, 100));
-            settingsButton = new Sprite(squareTexture, new Vector2((screenWidth / 2) - 150, (screenHeight / 3) - 150), new Vector2(300, 100));
-            returnButton = new Sprite(squareTexture, new Vector2((screenWidth / 2) - 100, (screenHeight / 3) + 250), new Vector2(200, 100));
-            //pauseButton = new Sprite(squareTexture, new Vector2(0, 0), new Vector2(50, 50));
-
             playText = new Text(font, "Play", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 25), Color.Black);
             exitText = new Text(font, "Exit", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 175), Color.Black);
             settingsText = new Text(font, "Settings", new Vector2((screenWidth / 2) - 85, (screenHeight / 3) - 125), Color.Black);
-            returnText = new Text(font, "Return", new Vector2((screenWidth / 2) - 85, (screenHeight / 3) + 250), Color.Black);
+            returnText = new Text(font, "Return", new Vector2((screenWidth / 2) - 85, 75), Color.Black);
 
             encounterattack = new Text(fontPika, "Attack(T)", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 25), Color.Black);
             encounterrun = new Text(fontPika, "Run(L)", new Vector2((screenWidth / 2) - 50, (screenHeight / 3) + 125), Color.Black);
@@ -221,7 +206,6 @@ namespace Jokemon_Team_1
                     {
                         bigTreeTypeBottom[i, j] = new Tree(bigTreeTexture, new Vector2(j * Window.ClientBounds.Width / bigTreeTypeBottom.GetUpperBound(1), 0), new Vector2(bigTreeTexture.Width * 2, bigTreeTexture.Height * 2));
                         //First half, place the trees on the top
-
                     }
                     else
                     {
@@ -258,17 +242,6 @@ namespace Jokemon_Team_1
             enemyhealth = new Text(statsfont, "health =" + Enemy.health.ToString(), new Vector2(500, 300), Color.White);
             enemyattack = new Text(statsfont, "atk =" + Enemy.attack.ToString(), new Vector2(500, 350), Color.White);
 
-
-
-
-
-
-
-
-
-
-
-
             //The following are BUILDINGS
             laboratory = new Building(labTexture, new Vector2(400, 500), new Vector2(labTexture.Width * 2, labTexture.Height * 2));
             buildingObjectList.Add(laboratory);
@@ -281,23 +254,6 @@ namespace Jokemon_Team_1
             houses[0].spritePosition = new Vector2(Window.ClientBounds.Width / 3 - houses[0].spriteTexture.Width, 200);
             houses[1].spritePosition = new Vector2(2 * Window.ClientBounds.Width / 3 - houses[1].spriteTexture.Width, 200);
             //Buildings end HERE -- RIGHT HERE!
-
-            //The following are READABLE OBJECTS
-            //for (int i = 0; i <= signPosts.GetUpperBound(0); i++)
-            //{
-            //    signPosts[i] = new ReadableObject(signTextureWood, new Vector2(), new Vector2(signTextureWood.Width * 2, signTextureWood.Height * 2));
-            //    readablesObjectList.Add(signPosts[i]);
-            //}
-            //signPosts[0].spritePosition = new Vector2(smallTrees[0, smallTrees.GetUpperBound(1)].spritePosition.X + signPosts[0].spriteTexture.Width * 2, smallTrees[0, smallTrees.GetUpperBound(1)].spritePosition.Y);
-            //signPosts[1].spritePosition = new Vector2(smallTrees[1, smallTrees.GetUpperBound(1)].spritePosition.X + signPosts[1].spriteTexture.Width * 2, smallTrees[1, smallTrees.GetUpperBound(1)].spritePosition.Y);
-
-            //for (int i = 0; i <= postBoxes.GetUpperBound(0); i++)
-            //{
-            //    postBoxes[i] = new ReadableObject(postBoxTexture, new Vector2(), new Vector2(postBoxTexture.Width * 2, postBoxTexture.Height * 2));
-            //    readablesObjectList.Add(postBoxes[i]);
-            //}
-            //postBoxes[0].spritePosition = new Vector2(houses[1].spritePosition.X - postBoxes[1].spriteTexture.Width);
-            //Readable Objects end HERE
 
             //Grass goes HERE
 
@@ -318,8 +274,6 @@ namespace Jokemon_Team_1
                 }
 
             player = new Player(playerTexture, new Vector2(200, 100), new Vector2(playerTexture.Width * 2, playerTexture.Height * 2));
-            //pausemenu = new PauseMenu(pausemenuTexture, new Vector2(400-pausemenuTexture.Width/2, 400-pausemenuTexture.Height/2), new Vector2(pausemenuTexture.Width, pausemenuTexture.Height), false);
-
 
             skillbox1 = new Sprite(skillbox, new Vector2(300, 500), new Vector2(150, 50));
             skillbox2 = new Sprite(skillbox, new Vector2(300, 650), new Vector2(150, 50));
@@ -330,7 +284,6 @@ namespace Jokemon_Team_1
             skill2text = new Text(battlingfont, "Nuzzle", new Vector2(300, 650), Color.Black);
             skill3text = new Text(battlingfont, "Normal Attack", new Vector2(500, 500), Color.Black);
             skill4text = new Text(battlingfont, "Sneeze", new Vector2(500, 650), Color.Black);
-
 
             eskillbox1 = new Sprite(skillbox, new Vector2(50, 50), new Vector2(150, 50));
             eskillbox2 = new Sprite(skillbox, new Vector2(50, 200), new Vector2(150, 50));
@@ -345,7 +298,6 @@ namespace Jokemon_Team_1
             showattackorder = new Text(fontPika, "test", new Vector2(300, 350), Color.White);
             healthbar = new HealthBar(skillbox, PikaAchu, new Vector2(10, 400));
             enemyhealthbar = new HealthBar(skillbox, Enemy, new Vector2(690, 400));
-
         }
 
         protected override void Update(GameTime gameTime)
@@ -381,6 +333,10 @@ namespace Jokemon_Team_1
             else if (startMenu.hasStarted == true && settingsMenu.settingsHasStarted == true)
             {
                 settingsMenu.settingsHasStarted = iManager.CheckReturn(screenWidth, screenHeight);
+                if (iManager.CheckEnd(screenWidth, screenHeight) == true)
+                {
+                    Exit();
+                }
             }
             //This is INGAME
             else if (startMenu.hasStarted == true && settingsMenu.settingsHasStarted == false)
@@ -397,10 +353,10 @@ namespace Jokemon_Team_1
 
                     iManager.checkKeyboard(player);
                         
-                foreach (Rectangle t in collisionBoxes)
-                {
-                    pManager.CheckCollisionTrees(player, t);
-                }
+                      foreach (Rectangle t in collisionBoxes)
+                      {
+                          pManager.CheckCollisionTrees(player, t);
+                      }
 
                     pManager.CheckCollisionTrees(player, laboratory.playerRectangle);
                     foreach (Building h in houses)
@@ -412,48 +368,28 @@ namespace Jokemon_Team_1
                     {
                         pManager.checkCollision(player, b);
                     }
-                        //if (!inJokemonBattle)
-                        //{
-                        //    if (Keyboard.GetState().IsKeyDown(Keys.T))
-                        //    {
-                        //        inJokemonBattle = true;
-                        //    }
-                        //}
-                        //else if (inJokemonBattle)
-                        //{
-                        //    if (Keyboard.GetState().IsKeyDown(Keys.Y))
-                        //    {
-                        //        inJokemonBattle = false;
-                        //    }
 
-                        //    battlesystem.Battling(PikaAchu, Enemy, true, skillbox1, skillbox2, skillbox3, skillbox4);
-                        //}
-
-
-
-                        //foreach (Grass g in grassObjectList)
-                        //{
-                        //    if (countFrames % 10 == 0)
-                        //    {
-                        //        if (player.goingDown == true || player.goingLeft == true || player.goingRight == true || player.goingUp == true)
-                        //        {
-                        //            if (pManager.checkCollision(player, g) == true)
-                        //            {
-                        //                inJokemonBattle = true;
-                        //            }
-                        //        }
-                        //    }
-                        //}
 
                         countFrames = countFrames + 1;
 
-                        if (countFrames >= 60)
+                     if (countFrames >= 60)
+                     {
+                          countFrames = 0;
+                     }
+
+                    foreach (Grass g in grassObjectList)
+                    {
+                        if (pManager.GrassCollision(g, player) == true)
                         {
-                            countFrames = 0;
+                            holdRandom = randomNumber.Next(0, 100);
+                            if (holdRandom >= 70 && countFrames == 1)
+                            {
+                                encounterenemy = true;
+                            }
                         }
-
-
                     }
+
+                }
 
                     else if (encounterenemy == true)
                     {
@@ -461,11 +397,6 @@ namespace Jokemon_Team_1
                         {
 
                             iManager.checkKeyboard(player);
-
-                            //foreach (Tree t in /*rectangle here*/)
-                            //{
-                            //    pManager.checkCollision(player, t);
-                            //}
 
                             foreach (Building b in buildingObjectList)
                             {
@@ -488,25 +419,7 @@ namespace Jokemon_Team_1
                                 battlesystem.Battling(PikaAchu, Enemy, true, skillbox1, skillbox2, skillbox3, skillbox4);
                             }
 
-                            foreach (Grass g in grassObjectList)
-                            {
-
-                            }
-
-
-                            //foreach (Grass g in grassObjectList)
-                            //{
-                            //    if (countFrames % 10 == 0)
-                            //    {
-                            //        if (player.goingDown == true || player.goingLeft == true || player.goingRight == true || player.goingUp == true)
-                            //        {
-                            //            if (pManager.checkCollision(player, g) == true)
-                            //            {
-                            //                inJokemonBattle = true;
-                            //            }
-                            //        }
-                            //    }
-                            //}
+                                        
 
                             countFrames = countFrames + 1;
 
@@ -514,10 +427,10 @@ namespace Jokemon_Team_1
                             {
                                 countFrames = 0;
                             }
-                        PikaAchu.health = 100;
-                        PikaAchu.attack = 10;
-                        Enemy.health = 100;
-                        Enemy.attack = 10;
+                            PikaAchu.health = 100;
+                            PikaAchu.attack = 10;
+                            Enemy.health = 100;
+                            Enemy.attack = 10;
                         }
 
                         else if (inJokemonBattle == true)
@@ -638,10 +551,6 @@ namespace Jokemon_Team_1
                             t.DrawSprite(_spriteBatch, t.spriteTexture, camera);
                         }
 
-                        //foreach (ReadableObject r in signPosts)
-                        //{
-                        //    r.DrawSprite(_spriteBatch, r.spriteTexture);
-                        //}
 
                     foreach (Grass g in jokemonGrass)
                     {
@@ -697,27 +606,38 @@ namespace Jokemon_Team_1
             if(startMenu.hasStarted == true)
             {
                 _spriteBatch.Begin();
-                _spriteBatch.Draw(squareTexture, new Rectangle(0, 0, 50, 50), Color.HotPink);
+                _spriteBatch.Draw(squareTexture, new Rectangle(0, 0, 50, 50), Color.HotPink); //pause button
                 _spriteBatch.End();
             }
             if(startMenu.hasStarted == false && settingsMenu.settingsHasStarted == true)
             {
                 GraphicsDevice.Clear(Color.OrangeRed);
-                returnButton.DrawSprite(_spriteBatch, squareTexture, camera);
+                _spriteBatch.Begin();
+                _spriteBatch.Draw(squareTexture, new Rectangle((screenWidth / 2) - 100, 50, 200, 100), Color.White); //return button
+                _spriteBatch.End();
+
                 returnText.DrawText(_spriteBatch);
             }
             if (startMenu.hasStarted == true && settingsMenu.settingsHasStarted == true)
             {
                 GraphicsDevice.Clear(Color.OrangeRed);
-                returnButton.DrawSprite(_spriteBatch, squareTexture, camera);
+                _spriteBatch.Begin();
+                _spriteBatch.Draw(squareTexture, new Rectangle((screenWidth / 2) - 100, 50, 200, 100), Color.White); //return button
+                _spriteBatch.Draw(squareTexture, new Rectangle((screenWidth / 2) - 100, (screenHeight / 3) + 150, 200, 100), Color.White); //exit button
+                _spriteBatch.End();
+
+                exitText.DrawText(_spriteBatch);
                 returnText.DrawText(_spriteBatch);
             }
             if (startMenu.hasStarted == false && settingsMenu.settingsHasStarted == false) //draws start menu
             {
                 GraphicsDevice.Clear(Color.Purple);
-                playButton.DrawSprite(_spriteBatch, squareTexture, camera);
-                exitButton.DrawSprite(_spriteBatch, squareTexture, camera);
-                settingsButton.DrawSprite(_spriteBatch, squareTexture, camera);
+                _spriteBatch.Begin();
+                _spriteBatch.Draw(squareTexture, new Rectangle((screenWidth / 2) - 200, screenHeight / 3, 400, 100), Color.HotPink); //play button
+                _spriteBatch.Draw(squareTexture, new Rectangle((screenWidth / 2) - 100, (screenHeight / 3) + 150, 200, 100), Color.White); //exit button
+                _spriteBatch.Draw(squareTexture, new Rectangle((screenWidth / 2) - 150, (screenHeight / 3) - 150, 300, 100), Color.White); //settings button
+                _spriteBatch.End();
+
                 playText.DrawText(_spriteBatch);
                 exitText.DrawText(_spriteBatch);
                 settingsText.DrawText(_spriteBatch);
