@@ -634,8 +634,8 @@ namespace Jokemon_Team_1
                 GraphicsDevice.Clear(Color.Purple);
                 _spriteBatch.Begin();
                 _spriteBatch.Draw(squareTexture, new Rectangle((screenWidth / 2) - 200, screenHeight / 3, 400, 100), Color.HotPink); //play button
-                _spriteBatch.Draw(squareTexture, new Rectangle((screenWidth / 2) - 100, (screenHeight / 3) + 150, 200, 100), Color.White); //exit button
-                _spriteBatch.Draw(squareTexture, new Rectangle((screenWidth / 2) - 150, (screenHeight / 3) - 150, 300, 100), Color.White); //settings button
+                _spriteBatch.Draw(squareTexture, new Rectangle((screenWidth / 2) - 100, (screenHeight / 3) + 150, 200, 100), Color.Yellow); //exit button
+                _spriteBatch.Draw(squareTexture, new Rectangle((screenWidth / 2) - 150, (screenHeight / 3) - 150, 300, 100), Color.DarkOliveGreen); //settings button
                 _spriteBatch.End();
 
                 playText.DrawText(_spriteBatch);
